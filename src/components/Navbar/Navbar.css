@@ -1,0 +1,19 @@
+.site-layout-content {
+    min-height: 280px;
+    padding: 24px;
+    background: #fff;
+}
+
+.logo {
+    line-height: 0px;
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 24px 16px 0;
+}
+
+.logo .brand {
+    margin-left: 5px;
+    color: #FFFFFF;
+    text-decoration: none;
+}

@@ -1,57 +1,84 @@
-import React from "react";
+import React, {Component} from "react";
 import icon from "./favicon-32x32.png";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {Layout, Menu} from 'antd';
+import "./Navbar.css"
 
-const Navbar = () => {
-  return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
-      <div className="container">
-        <img src={icon} alt="" />
-        <Link to="/" className="navbar-brand ml-2">
-          NFT's
-        </Link>
-        <button
-          className="navbar-toggler"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div id="navbarNav" className="collapse navbar-collapse">
-          <ul
-            style={{ fontSize: "0.8rem", letterSpacing: "0.2rem" }}
-            className="navbar-nav ml-auto"
-          >
-            <li className="nav-item">
-              <Link to="/" className="nav-link">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/mint" className="nav-link">
-                Mint NFT
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/marketplace" className="nav-link">
-                Marketplace
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/my-tokens" className="nav-link">
-                My Tokens
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/queries" className="nav-link">
-                Queries
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  );
+
+const {Header} = Layout;
+//菜单项数据
+const tabItems = [
+    {
+        toPath: '/',
+        title: 'Home',
+    },
+    {
+        toPath: '/mint',
+        title: 'Mint NFT',
+    },
+    {
+        toPath: '/color_mint',
+        title: 'Mint Color NFT',
+    },
+    {
+        toPath: '/upload_mint',
+        title: 'Upload File To NFT',
+    },
+    {
+        toPath: '/marketplace',
+        title: 'Marketplace',
+    },
+    {
+        toPath: '/my-tokens',
+        title: 'My Tokens',
+    },
+    {
+        toPath: '/queries',
+        title: 'Queries',
+    },
+    {
+        toPath: '/museum',
+        title: 'NTF博物馆',
+    },
+    {
+        toPath: '/my',
+        title: '我的',
+    }
+]
+
+class Navbar extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    //渲染菜单栏数据方法
+    renderTabBarItems() {
+        return tabItems.map(item =>
+            <Menu.Item key={item.toPath}>
+                <Link to={item.toPath}>
+                    {item.title}
+                </Link>
+            </Menu.Item>)
+    }
+
+    render() {
+        return (
+            <Layout className="layout">
+                <Header>
+                    <div className="logo">
+                        <img src={icon} alt="logo"/>
+                        <Link to="/" className="brand">
+                            NFT's
+                        </Link>
+                    </div>
+                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                        {/*代码重构封装*/}
+                        {this.renderTabBarItems()}
+                    </Menu>
+                </Header>
+            </Layout>
+        );
+    }
 };
 
 export default Navbar;

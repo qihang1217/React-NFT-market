@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import CryptoBoyNFTImage from "../CryptoBoyNFTImage/CryptoBoyNFTImage";
 
 // source: https://stackoverflow.com/questions/1484506/random-color-generator
+//随机设定颜色
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
