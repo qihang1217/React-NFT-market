@@ -1,4 +1,5 @@
-# Crypto Boy NFT Marketplace
+#  React-NTF-market
+
 <i>NFT marketplace DApp where users mint ERC721 implemented Crypto Boy NFTs.</i>
 #
 <img align="right" width="350" src="./image.png"></img>
