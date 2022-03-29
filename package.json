@@ -52,13 +52,5 @@
   "directories": {
     "test": "test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/devpavan04/cryptoboys-nft-marketplace.git"
-  },
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/devpavan04/cryptoboys-nft-marketplace/issues"
-  },
   "keywords": []
 }
