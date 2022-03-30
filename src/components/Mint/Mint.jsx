@@ -2,80 +2,95 @@ import React, {Component} from "react";
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 import StepThree from "./stepThree";
-import {Button, Steps} from "antd";
-import "antd/dist/antd.css";
+import {Steps, Button, message} from 'antd';
+import "./Mint.css"
+import ConnectToMetamask from "../ConnectMetamask/ConnectToMetamask";
+import ContractNotDeployed from "../ContractNotDeployed/ContractNotDeployed";
+import Loading from "../Loading/Loading";
 
-function getSteps() {
-    return [
-        "step one",
-        "step two",
-        "step three"
-    ];
-}
+const {Step} = Steps;
+
+
+const steps = [
+    {
+        title: 'First',
+        content: 'First-content',
+    },
+    {
+        title: 'Second',
+        content: 'Second-content',
+    },
+    {
+        title: 'Last',
+        content: 'Last-content',
+    },
+];
+
 
 class Mint extends Component {
-    state = {
-        activeStep: 0
-    };
-
-    getStepContent(stepIndex) {
-        switch (stepIndex) {
-            case 0:
-                return <StepOne/>;
-            case 1:
-                return <StepTwo/>;
-            case 2:
-                return <StepThree/>;
-            default:
-                return "Unknown stepIndex";
-        }
+    constructor(props) {
+        super(props);
+        this.state = {
+            current: 0,
+        };
     }
 
-    handleNext = () => {
-        if (this.state.state === 2) {
-            this.setState({activeStep: 0})
-        } else {
-            this.setState({activeStep: this.state.activeStep + 1})
-        }
+    setCurrent = (value) => {
+        this.setState(
+            {current: value}
+        )
+    }
+
+    next = () => {
+        this.setCurrent(this.state.current + 1);
     };
-    handleBack = () => {
-        this.setState({activeStep: this.state.activeStep - 1})
+
+    prev = () => {
+        this.setCurrent(this.state.current - 1);
     };
 
     render() {
-        const steps = getSteps();
-        const {activeStep} = this.state;
         return (
-            <div style={{paddingTop: 70}}>
-                <Steps size="small" current={activeStep}>
-                    {steps.map(label => (
-                        <Steps.Step key={label} title={label}></Steps.Step>
-                    ))}
-                </Steps>
-                <div>
-                    {this.getStepContent(activeStep)}
-                    {
-                        activeStep > 0 && activeStep <= 2 ?
-                            <Button
-                                disabled={activeStep === 0}
-                                onClick={this.handleBack}
-                            >
-                                Back
-                            </Button> : null
-                    }
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleNext}
-                    >
-                        {activeStep === 2
-                            ? "Finish"
-                            : "Next"}
-                    </Button>
-                </div>
+            <div>
+                {
+                    !this.props.metamaskConnected ? (
+                        <ConnectToMetamask connectToMetamask={this.props.connectToMetamask}/>
+                    ) : !this.props.contractDetected ? (
+                        <ContractNotDeployed/>
+                    ) : this.props.loading ? (
+                        <Loading/>
+                    ) : (
+                        <div className="top">
+                            <Steps current={this.state.current}>
+                                {steps.map(item => (
+                                    <Step key={item.title} title={item.title}/>
+                                ))}
+                            </Steps>
+                            <div className="steps-content">{steps[this.state.current].content}</div>
+                            <div className="steps-action">
+                                {this.state.current < steps.length - 1 && (
+                                    <Button type="primary" onClick={() => this.next()}>
+                                        Next
+                                    </Button>
+                                )}
+                                {this.state.current === steps.length - 1 && (
+                                    <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                                        Done
+                                    </Button>
+                                )}
+                                {this.state.current > 0 && (
+                                    <Button style={{margin: '0 8px'}} onClick={() => this.prev()}>
+                                        Previous
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    )
+                }
             </div>
-        );
+        )
     }
+
 }
 
 export default Mint;

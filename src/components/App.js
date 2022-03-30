@@ -3,15 +3,14 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Web3 from "web3";
 
 import CryptoBoys from "../abis/CryptoBoys.json";
+import "antd/dist/antd.css";
 import "./App.css";
 import {Layout} from 'antd';
 
 import FormAndPreview from "./FormAndPreview/FormAndPreview";
 import AllCryptoBoys from "./AllCryptoBoys/AllCryptoBoys";
 import Home from "./Home/Home";
-import ContractNotDeployed from "./ContractNotDeployed/ContractNotDeployed";
 import ConnectToMetamask from "./ConnectMetamask/ConnectToMetamask";
-import Loading from "./Loading/Loading";
 import Navbar from "./Navbar/Navbar";
 import MyCryptoBoys from "./MyCryptoBoys/MyCryptoBoys";
 import Queries from "./Queries/Queries";
@@ -345,106 +344,113 @@ class App extends Component {
     render() {
         return (
             <div>
-                {!this.state.metamaskConnected ? (
-                    <ConnectToMetamask connectToMetamask={this.connectToMetamask}/>
-                ) : !this.state.contractDetected ? (
-                    <ContractNotDeployed/>
-                ) : this.state.loading ? (
-                    <Loading/>
-                ) : (
-                    <>
-                        <Router basename="/">
-                            {/*导航菜单*/}
-                            <Navbar/>
-                            {/*路由配置*/}
-                            <Switch>
-                                <Route
-                                    exact path="/"
-                                    render={() => (
-                                        <Home/>
-                                    )}
-                                />
-                                <Route
-                                    path="/mint"
-                                    render={() => (
-                                        <Mint
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/color_mint"
-                                    render={() => (
-                                        <FormAndPreview
-                                            mintMyNFT={this.mintMyNFT}
-                                            nameIsUsed={this.state.nameIsUsed}
-                                            colorIsUsed={this.state.colorIsUsed}
-                                            colorsUsed={this.state.colorsUsed}
-                                            setMintBtnTimer={this.setMintBtnTimer}
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/upload_mint"
-                                    render={() => (
-                                        <UploadFile
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/marketplace"
-                                    render={() => (
-                                        <AllCryptoBoys
-                                            accountAddress={this.state.accountAddress}
-                                            cryptoBoys={this.state.cryptoBoys}
-                                            totalTokensMinted={this.state.totalTokensMinted}
-                                            changeTokenPrice={this.changeTokenPrice}
-                                            toggleForSale={this.toggleForSale}
-                                            buyCryptoBoy={this.buyCryptoBoy}
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/my-tokens"
-                                    render={() => (
-                                        <MyCryptoBoys
-                                            accountAddress={this.state.accountAddress}
-                                            cryptoBoys={this.state.cryptoBoys}
-                                            totalTokensOwnedByAccount={
-                                                this.state.totalTokensOwnedByAccount
-                                            }
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/queries"
-                                    render={() => (
-                                        <Queries cryptoBoysContract={this.state.cryptoBoysContract}/>
-                                    )}
-                                />
-                                <Route
-                                    path="/museum"
-                                    render={() => (
-                                        <Museum
-                                            delete_footer={this.delete_footer}
-                                            revive_footer={this.revive_footer}
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/my"
-                                    render={() => (
-                                        <MyAccount
-                                            accountAddress={this.state.accountAddress}
-                                            accountBalance={this.state.accountBalance}
-                                        />
-                                    )}
-                                />
-                            </Switch>
-                            <Footer style={{textAlign: 'center', display: this.state.footerVisable}}>Ant Design ©2018
-                                Created by Ant UED</Footer>
-                        </Router>
-                    </>
-                )}
+                <>
+                    <Router basename="/">
+                        {/*导航菜单*/}
+                        <Navbar/>
+                        {/*路由配置*/}
+                        <Switch>
+                            <Route
+                                exact path="/"
+                                render={() => (
+                                    <Home/>
+                                )}
+                            />
+                            <Route
+                                path="/mint"
+                                render={() => (
+                                    <Mint
+                                        connectToMetamask={this.connectToMetamask}
+                                        metamaskConnected={this.state.metamaskConnected}
+                                        contractDetected={this.state.contractDetected}
+                                        loading={this.state.loading}
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/color_mint"
+                                render={() => (
+                                    <FormAndPreview
+                                        mintMyNFT={this.mintMyNFT}
+                                        nameIsUsed={this.state.nameIsUsed}
+                                        colorIsUsed={this.state.colorIsUsed}
+                                        colorsUsed={this.state.colorsUsed}
+                                        setMintBtnTimer={this.setMintBtnTimer}
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/upload_mint"
+                                render={() => (
+                                    <UploadFile
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/marketplace"
+                                render={() => (
+                                    <AllCryptoBoys
+                                        accountAddress={this.state.accountAddress}
+                                        cryptoBoys={this.state.cryptoBoys}
+                                        totalTokensMinted={this.state.totalTokensMinted}
+                                        changeTokenPrice={this.changeTokenPrice}
+                                        toggleForSale={this.toggleForSale}
+                                        buyCryptoBoy={this.buyCryptoBoy}
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/my-tokens"
+                                render={() => (
+                                    <MyCryptoBoys
+                                        accountAddress={this.state.accountAddress}
+                                        cryptoBoys={this.state.cryptoBoys}
+                                        totalTokensOwnedByAccount={
+                                            this.state.totalTokensOwnedByAccount
+                                        }
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/queries"
+                                render={() => (
+                                    <Queries cryptoBoysContract={this.state.cryptoBoysContract}/>
+                                )}
+                            />
+                            <Route
+                                path="/museum"
+                                render={() => (
+                                    <Museum
+                                        delete_footer={this.delete_footer}
+                                        revive_footer={this.revive_footer}
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/my"
+                                render={() => (
+                                    <MyAccount
+                                        connectToMetamask={this.connectToMetamask}
+                                        metamaskConnected={this.state.metamaskConnected}
+                                        contractDetected={this.state.contractDetected}
+                                        loading={this.state.loading}
+                                        accountAddress={this.state.accountAddress}
+                                        accountBalance={this.state.accountBalance}
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/test"
+                                render={() => (
+                                    <ConnectToMetamask
+                                    />
+                                )}
+                            />
+                        </Switch>
+                        <Footer style={{textAlign: 'center', display: this.state.footerVisable}}>Ant Design ©2018
+                            Created by Ant UED</Footer>
+                    </Router>
+                </>
             </div>
         );
     }

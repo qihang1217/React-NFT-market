@@ -18,7 +18,7 @@ const props = {
     name: 'file',
     multiple: false,
     action: 'http://127.0.0.1:5001/api/upload',
-    accept: "image/*,video/*",
+    accept: "image/*,video/*,audio/*",
     maxCount: 1,
     onChange(info) {
         const {status} = info.file;
@@ -45,9 +45,10 @@ var formData = new FormData();
 const normFile = (e) => {
     let size = e.file.size;
     let sizeM = size / 1024 / 1024;
-    const isSatisfy = (e.file.type.indexOf('image') === 0 || e.file.type.indexOf('video') === 0);
+    // console.log(e.file.type)
+    const isSatisfy = (e.file.type.indexOf('image') === 0 || e.file.type.indexOf('video') === 0|| e.file.type.indexOf('audio') === 0);
     if (!isSatisfy) {
-        message.error(`${e.file.name} 需为图片或视频`);
+        message.error(`${e.file.name} 需为图片、视频或音频`);
         return [];
     }
     // console.log(sizeM)
@@ -57,6 +58,15 @@ const normFile = (e) => {
         if (!isLt) {
             // setFileLists([]);
             message.error(`${e.file.name} 图片文件大小不能超过${image_limit}M`);
+            return [];
+        }
+    }
+    const audio_limit = 10;
+    if (e.file.type.indexOf('audio') === 0) {
+        const isLt = sizeM <= audio_limit;
+        if (!isLt) {
+            // setFileLists([]);
+            message.error(`${e.file.name} 音频文件大小不能超过${audio_limit}M`);
             return [];
         }
     }

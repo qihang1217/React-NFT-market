@@ -42,4 +42,8 @@ export const mainRouters = [
         path: "/my",
         component: App,
     },
+    {
+        path: "/test",
+        component: App,
+    },
 ]

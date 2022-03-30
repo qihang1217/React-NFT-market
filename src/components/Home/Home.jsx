@@ -1,6 +1,7 @@
 import React from "react";
 import {Avatar, Button, Card} from "antd";
 import "./Home.css"
+import homeBackground from "./background.jpg";
 
 const {Meta} = Card;
 
@@ -9,7 +10,7 @@ class Home extends React.Component {
         return (
             <div>
                 <div className="background"
-                     style={{'backgroundImage': 'url(http://127.0.0.1:5001/image/background.jpg)'}}>
+                     style={{'backgroundImage': `url(${homeBackground})`}}>
                 </div>
                 <div className="top">
                     <div className="left_title">
@@ -29,9 +30,10 @@ class Home extends React.Component {
                     <div className="right_image">
                         <a href="./my">
                             <Card
-                                style={{"border-radius": "10px"}}
+                                style={{"border-radius": "10px","width":"500px"}}
                                 cover={
-                                    <img style={{"border-radius": "10px"}}
+                                    <img
+                                         className="card_image"
                                          alt="example"
                                          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
                                     />
