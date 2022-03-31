@@ -37,38 +37,40 @@ const tailFormItemLayout = {
     },
 };
 
-const selectAfter = (
-    <Select defaultValue="@qq.com" className="select-after">
-        <Option value="@aliyun.com">@aliyun.com</Option>
-        <Option value="@163.com">@163.com</Option>
-        <Option value="@126.com">@126.com</Option>
-        <Option value="@139.com">@139.com</Option>
-    </Select>
-);
-
-const handleClick = (e) => {
-    // console.log(e)
-    // let md5 = require("./model/md5.js"); //引入md5加密模块
-    // let md5Password = md5(e.password);
-    // e.password = md5Password
-    HttpUtil.post(ApiUtil.API_REGISTER, e).then(function (response) {
-        if (response.status === 200) {
-            message.success('注册成功~');
-            this.props.history.push("/login")
-        } else {
-            message.error('注册失败,请稍后重试~');
-        }
-    }).catch(function (error) {
-        // console.log(error);
-    });
-}
 
 const Register = () => {
     const [value, setValue] = React.useState('');
+    const [email_end, setEmail_end] = React.useState('@qq.com');
     const [form] = Form.useForm();
 
+    const selectAfter = (
+        <Select defaultValue="@qq.com" className="select-after"
+                onChange={(selected_value) => { setEmail_end(selected_value) }}
+        >
+            <Option value="@aliyun.com">@aliyun.com</Option>
+            <Option value="@163.com">@163.com</Option>
+            <Option value="@126.com">@126.com</Option>
+            <Option value="@139.com">@139.com</Option>
+        </Select>
+    );
+
     const onFinish = (values) => {
-        // console.log('Received values of form: ', values);
+        let md5 = require("./model/md5.js"); //引入md5加密模块
+        values.password = md5(values.password);
+        console.log(typeof values);
+        values['email_end']=email_end;
+        console.log('Received values of form: ', values);
+        HttpUtil.post(ApiUtil.API_REGISTER, values).then(function (response) {
+            console.log(response)
+            if (response.status === 200) {
+                message.success('注册成功~');
+                window.location.href="/login";
+            } else {
+                message.error('注册失败,请稍后重试~');
+            }
+        }).catch(function (error) {
+            // console.log(error);
+        });
     };
 
     const prefixSelector = (
@@ -200,15 +202,15 @@ const Register = () => {
                     },
                 ]}
             >
-                <Select placeholder="select your gender">
-                    <Option value="male">Male</Option>
-                    <Option value="female">Female</Option>
-                    <Option value="other">Other</Option>
+                <Select placeholder="请输入您的性别">
+                    <Option value="男">男</Option>
+                    <Option value="女">女</Option>
+                    <Option value="其他">其他</Option>
                 </Select>
             </Form.Item>
 
             <Form.Item
-                name="User_name"
+                name="user_name"
                 label="用户名"
                 rules={[
                     {
@@ -275,7 +277,7 @@ const Register = () => {
                 </Checkbox>
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit" onClick={handleClick}>
+                <Button type="primary" htmlType="submit">
                     Register
                 </Button>
             </Form.Item>

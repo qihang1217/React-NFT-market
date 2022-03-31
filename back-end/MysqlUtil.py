@@ -7,6 +7,20 @@ from run import app
 pymysql.install_as_MySQLdb()
 db = SQLAlchemy(app)
 
+# {
+#   "real_name": "1",
+#   "id_number": "1",
+#   "age": "1",
+#   "email": "1",
+#   "prefix": "86",
+#   "phone_number": "1",
+#   "gender": "男",
+#   "user_name": "1",
+#   "password": "tF0l/p7VDxtzFoAijp2kEQ==",
+#   "confirm": "1",
+#   "agreement": true,
+#   "email_end": "@qq.com"
+# }
 
 # 创建模型类 - Models
 class CreateUsers(db.Model):
@@ -15,11 +29,19 @@ class CreateUsers(db.Model):
     # 创建字段： id， 主键和自增涨
     id = db.Column(db.Integer, primary_key=True)
     # 创建字段：username， 长度为20的字符串，不允许为空
-    username = db.Column(db.String(20), nullable=False)
+    real_name=db.Column(db.String(20), nullable=False)
+    # 创建字段：id_name， 长度为18的字符串，不允许为空
+    id_name=db.Column(db.String(18), nullable=False)
     # 创建字段：age，整数
     age = db.Column(db.Integer)
     # 创建字段：email，长度为30的字符串
     email = db.Column(db.String(30))
+    # 创建字段：phone_number， 长度为20的字符串，不允许为空
+    phone_number=db.Column(db.String(20), nullable=False)
+
+    gender=db.Column(db.String(2), nullable=False)
+    # 创建字段：user_name， 长度为20的字符串，不允许为空
+    user_name = db.Column(db.String(20), nullable=False)
     # 创建字段：password，长度为50的字符串
     password = db.Column(db.String(44))
 

@@ -3,12 +3,17 @@ import time
 
 from flask import Flask, send_from_directory, request, jsonify, render_template
 from flask_cors import CORS
+import MysqlUtil as DBUtil
 
-# import SqliteUtil as DBUtil
 
-# 设置项目的根目录作为静态文件的文件夹
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:root@localhost:3306/ntf-market"
+USERNAME = 'root'
+PASSWORD = 'root'
+HOST = 'localhost'
+PORT = '3306'
+DATABASE = 'nft_market'
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://%s:%s@%s:%s/%s?charset=utf8"%(USERNAME,PASSWORD,HOST,PORT,DATABASE)
+# 解决cors问题
 cors = CORS(app)
 
 # api接口前缀
@@ -38,7 +43,7 @@ def api_upload():
         unix_time = int(time.time())
         new_filename = str(unix_time) + '.' + ext  # 修改文件名
         f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
-        return jsonify({"errno": 0, "errmsg": "上传成功"})
+        return jsonify({"errno": 0, "errmsg": "上传成功", "status": 200})
     else:
         return jsonify({"errno": 1001, "errmsg": "上传失败"})
 
@@ -93,11 +98,11 @@ def api_museum():
 
 
 ########## 注册接口
-@app.route(apiPrefix + 'register', methods=['POST'])
+@app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
 def register_user():
     data = request.get_data(as_text=True)
     print(data)
-    return
+    return jsonify({"errno": 0, "errmsg": "注册成功", "status": 200})
 
 
 ########## Staff接口
