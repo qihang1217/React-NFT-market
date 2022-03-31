@@ -1,10 +1,9 @@
 import React from 'react';
-import {Button, Checkbox, Form, Input, message, Select,} from 'antd';
+import {Button, Checkbox, Form, Input, message, Select,InputNumber,Space} from 'antd';
 import HttpUtil from "../Utils/HttpUtil";
 import ApiUtil from "../Utils/ApiUtil";
 
 const {Option} = Select;
-
 
 const formItemLayout = {
     labelCol: {
@@ -49,9 +48,9 @@ const selectAfter = (
 
 const handleClick = (e) => {
     console.log(e)
-    let md5 = require("./model/md5.js"); //引入md5加密模块
-    let md5Password = md5(e.password);
-    e.password = md5Password
+    // let md5 = require("./model/md5.js"); //引入md5加密模块
+    // let md5Password = md5(e.password);
+    // e.password = md5Password
     HttpUtil.post(ApiUtil.API_REGISTER, e).then(function (response) {
         if (response.status === 200) {
             message.success('注册成功~');
@@ -65,6 +64,7 @@ const handleClick = (e) => {
 }
 
 const Register = () => {
+    const [value, setValue] = React.useState('18');
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
@@ -119,30 +119,45 @@ const Register = () => {
                         required: true,
                         message: '请输入您的身份证号!',
                         whitespace: true,
-                    }, ({getFieldValue}) => ({
-                        validator(_, value) {
-                            if ((value.length === 15 && value.match(/^([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}$/))
-                                ||
-                                (value.length === 18 && value.match(/^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/))
-                            ) {
-                                return Promise.resolve();
-                            }
-
-                            return Promise.reject(new Error('身份号码格式错误!'));
-                        },
-                    }),
+                    },
+                    // ({getFieldValue}) => ({
+                    //     validator(_, value) {
+                    //         if ((value.length === 15 && value.match(/^([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}$/))
+                    //             ||
+                    //             (value.length === 18 && value.match(/^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/))
+                    //         ) {
+                    //             return Promise.resolve();
+                    //         }
+                    //
+                    //         return Promise.reject(new Error('身份号码格式错误!'));
+                    //     },
+                    // }),
                 ]}
             >
                 <Input/>
             </Form.Item>
             <Form.Item
+                name="age"
+                label="年龄"
+                rules={[
+                    {
+                        required: true,
+                        message: '请输入您的年龄!',
+                    },
+                ]}
+            >
+                <Space>
+                    <InputNumber min={1} max={99} value={value} onChange={setValue} />
+                </Space>
+            </Form.Item>
+            <Form.Item
                 name="email"
                 label="E-mail"
                 rules={[
-                    {
-                        type: 'email',
-                        message: 'The input is not valid E-mail!',
-                    },
+                    // {
+                    //     type: 'email',
+                    //     message: 'The input is not valid E-mail!',
+                    // },
                     {
                         required: true,
                         message: 'Please input your E-mail!',
@@ -160,10 +175,10 @@ const Register = () => {
                         required: true,
                         message: 'Please input your phone number!',
                     },
-                    {
-                        pattern: "[1][34578][0-9]{9}",
-                        message: '手机号码格式不正确!',
-                    }
+                    // {
+                    //     pattern: "[1][34578][0-9]{9}",
+                    //     message: '手机号码格式不正确!',
+                    // }
                 ]}
             >
                 <Input
