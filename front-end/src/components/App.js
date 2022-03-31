@@ -332,12 +332,14 @@ class App extends Component {
     };
 
     delete_footer = () => {
+        console.log('delete',this.state.footerVisible)
         this.setState({
             footerVisible: 'none',
         })
     }
 
     revive_footer = () => {
+        console.log('revive',this.state.footerVisible)
         this.setState({
             footerVisible: '',
         })
@@ -453,7 +455,7 @@ class App extends Component {
                                 )}
                             />
                         </Switch>
-                        <Footer style={{textAlign: 'center', display: this.state.footerVisable}}>Ant Design ©2018
+                        <Footer style={{textAlign: 'center', display: this.state.footerVisible}}>Ant Design ©2018
                             Created by Ant UED</Footer>
                     </Router>
                 </>

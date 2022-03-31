@@ -64,7 +64,7 @@ const handleClick = (e) => {
 }
 
 const Register = () => {
-    const [value, setValue] = React.useState('18');
+    const [value, setValue] = React.useState('');
     const [form] = Form.useForm();
 
     const onFinish = (values) => {

@@ -68,7 +68,7 @@ def send_css(filename):
 
 ########## React访问flask上的NTF博物馆
 
-@app.route(apiPrefix + 'museum', methods=['GET'], strict_slashes=False)
+@app.route('/api/museum', methods=['GET'], strict_slashes=False)
 def api_museum():
     if request.method == 'GET':
         return render_template('index.html')
