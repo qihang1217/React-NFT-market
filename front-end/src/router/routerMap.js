@@ -1,7 +1,7 @@
 import App from "../components/App";
 import ErrorPage from "../components/ErrorPage/ErrorPage";
 import Login from "../pages/Login";
-import register from "../pages/register"
+import register from "../pages/Register"
 
 export const routerMap = [
     {

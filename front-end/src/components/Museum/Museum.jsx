@@ -1,4 +1,5 @@
 import React from "react";
+import ApiUtil from "../../Utils/ApiUtil";
 
 class Museum extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class Museum extends React.Component {
             <>
                 <iframe
                     title="resg"
-                    src="http://127.0.0.1:5001/api/museum"
+                    src={ApiUtil.API_MUSEUM}
                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                     scrolling="auto"
                     frameBorder="0"
