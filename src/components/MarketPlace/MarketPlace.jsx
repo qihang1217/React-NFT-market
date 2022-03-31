@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import CryptoBoyNFTImage from "../CryptoBoyNFTImage/CryptoBoyNFTImage";
 import CryptoBoyNFTDetails from "../CryptoBoyNFTDetails/CryptoBoyNFTDetails";
 import Loading from "../Loading/Loading";
 
-const AllCryptoBoys = ({
-  cryptoBoys,
-  accountAddress,
-  totalTokensMinted,
-  changeTokenPrice,
-  toggleForSale,
-  buyCryptoBoy,
-}) => {
+const MarketPlace = ({
+                       cryptoBoys,
+                       accountAddress,
+                       totalTokensMinted,
+                       changeTokenPrice,
+                       toggleForSale,
+                       buyCryptoBoy,
+                     }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -66,4 +66,4 @@ const AllCryptoBoys = ({
   );
 };
 
-export default AllCryptoBoys;
+export default MarketPlace;

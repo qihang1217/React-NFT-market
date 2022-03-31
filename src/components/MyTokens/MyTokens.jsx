@@ -6,11 +6,11 @@ import Loading from "../Loading/Loading";
 import {Button, Empty} from 'antd';
 
 
-const MyCryptoBoys = ({
-                          accountAddress,
-                          cryptoBoys,
-                          totalTokensOwnedByAccount,
-                      }) => {
+const MyTokens = ({
+                      accountAddress,
+                      cryptoBoys,
+                      totalTokensOwnedByAccount,
+                  }) => {
     const [loading, setLoading] = useState(false);
     const [myCryptoBoys, setMyCryptoBoys] = useState([]);
 
@@ -91,4 +91,4 @@ const MyCryptoBoys = ({
     );
 };
 
-export default MyCryptoBoys;
+export default MyTokens;

@@ -7,17 +7,17 @@ import "antd/dist/antd.css";
 import "./App.css";
 import {Layout} from 'antd';
 
-import FormAndPreview from "./FormAndPreview/FormAndPreview";
-import AllCryptoBoys from "./AllCryptoBoys/AllCryptoBoys";
+import ColorMint from "./ColorMint/ColorMint";
+import MarketPlace from "./MarketPlace/MarketPlace";
 import Home from "./Home/Home";
-import ConnectToMetamask from "./ConnectMetamask/ConnectToMetamask";
 import Navbar from "./Navbar/Navbar";
-import MyCryptoBoys from "./MyCryptoBoys/MyCryptoBoys";
+import MyTokens from "./MyTokens/MyTokens";
 import Queries from "./Queries/Queries";
-import UploadFile from "./UploadFile/UploadFile";
+import UploadMint from "./UploadMint/UploadMint";
 import MyAccount from "./MyAccount/MyAccount";
 import Mint from "./Mint/Mint";
 import Museum from "./Museum/Museum";
+import Login from "../pages/Login";
 
 const {Footer} = Layout;
 const ipfsClient = require("ipfs-http-client");
@@ -45,7 +45,8 @@ class App extends Component {
             colorIsUsed: false,
             colorsUsed: [],
             lastMintTime: null,
-            footerVisable: '',
+            footerVisible: '',
+            isAuthenticated: false,
         };
     }
 
@@ -54,6 +55,8 @@ class App extends Component {
         await this.loadBlockchainData();
         await this.setMetaData();
         await this.setMintBtnTimer();
+        let isAuthenticated = sessionStorage.getItem("userName") ? true : false;
+        this.setState({isAuthenticated: isAuthenticated})
     };
 
     //检测与连接web3浏览器用户
@@ -330,13 +333,13 @@ class App extends Component {
 
     delete_footer = () => {
         this.setState({
-            footerVisable: 'none',
+            footerVisible: 'none',
         })
     }
 
     revive_footer = () => {
         this.setState({
-            footerVisable: '',
+            footerVisible: '',
         })
     }
 
@@ -359,37 +362,43 @@ class App extends Component {
                             <Route
                                 path="/mint"
                                 render={() => (
-                                    <Mint
-                                        connectToMetamask={this.connectToMetamask}
-                                        metamaskConnected={this.state.metamaskConnected}
-                                        contractDetected={this.state.contractDetected}
-                                        loading={this.state.loading}
-                                    />
+                                    this.state.isAuthenticated ? (
+                                        <Mint
+                                            connectToMetamask={this.connectToMetamask}
+                                            metamaskConnected={this.state.metamaskConnected}
+                                            contractDetected={this.state.contractDetected}
+                                            loading={this.state.loading}
+                                        />
+                                    ) : <Login/>
                                 )}
                             />
                             <Route
                                 path="/color_mint"
                                 render={() => (
-                                    <FormAndPreview
-                                        mintMyNFT={this.mintMyNFT}
-                                        nameIsUsed={this.state.nameIsUsed}
-                                        colorIsUsed={this.state.colorIsUsed}
-                                        colorsUsed={this.state.colorsUsed}
-                                        setMintBtnTimer={this.setMintBtnTimer}
-                                    />
+                                    this.state.isAuthenticated ? (
+                                        <ColorMint
+                                            mintMyNFT={this.mintMyNFT}
+                                            nameIsUsed={this.state.nameIsUsed}
+                                            colorIsUsed={this.state.colorIsUsed}
+                                            colorsUsed={this.state.colorsUsed}
+                                            setMintBtnTimer={this.setMintBtnTimer}
+                                        />
+                                    ) : <Login/>
                                 )}
                             />
                             <Route
                                 path="/upload_mint"
                                 render={() => (
-                                    <UploadFile
-                                    />
+                                    this.state.isAuthenticated ? (
+                                        <UploadMint
+                                        />
+                                    ) : <Login/>
                                 )}
                             />
                             <Route
                                 path="/marketplace"
                                 render={() => (
-                                    <AllCryptoBoys
+                                    <MarketPlace
                                         accountAddress={this.state.accountAddress}
                                         cryptoBoys={this.state.cryptoBoys}
                                         totalTokensMinted={this.state.totalTokensMinted}
@@ -402,13 +411,15 @@ class App extends Component {
                             <Route
                                 path="/my-tokens"
                                 render={() => (
-                                    <MyCryptoBoys
-                                        accountAddress={this.state.accountAddress}
-                                        cryptoBoys={this.state.cryptoBoys}
-                                        totalTokensOwnedByAccount={
-                                            this.state.totalTokensOwnedByAccount
-                                        }
-                                    />
+                                    this.state.isAuthenticated ? (
+                                        <MyTokens
+                                            accountAddress={this.state.accountAddress}
+                                            cryptoBoys={this.state.cryptoBoys}
+                                            totalTokensOwnedByAccount={
+                                                this.state.totalTokensOwnedByAccount
+                                            }
+                                        />
+                                    ) : <Login/>
                                 )}
                             />
                             <Route
@@ -429,21 +440,16 @@ class App extends Component {
                             <Route
                                 path="/my"
                                 render={() => (
-                                    <MyAccount
-                                        connectToMetamask={this.connectToMetamask}
-                                        metamaskConnected={this.state.metamaskConnected}
-                                        contractDetected={this.state.contractDetected}
-                                        loading={this.state.loading}
-                                        accountAddress={this.state.accountAddress}
-                                        accountBalance={this.state.accountBalance}
-                                    />
-                                )}
-                            />
-                            <Route
-                                path="/test"
-                                render={() => (
-                                    <ConnectToMetamask
-                                    />
+                                    this.state.isAuthenticated ? (
+                                        <MyAccount
+                                            connectToMetamask={this.connectToMetamask}
+                                            metamaskConnected={this.state.metamaskConnected}
+                                            contractDetected={this.state.contractDetected}
+                                            loading={this.state.loading}
+                                            accountAddress={this.state.accountAddress}
+                                            accountBalance={this.state.accountBalance}
+                                        />
+                                    ) : <Login/>
                                 )}
                             />
                         </Switch>

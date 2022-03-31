@@ -2,20 +2,17 @@ import React from "react";
 
 import "./bootstrap.min.css";
 import 'antd/dist/antd.css';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {mainRouters} from "./router/router.js"
-import ErrorPage from "./components/ErrorPage/ErrorPage";
+import {BrowserRouter as Router, Switch} from "react-router-dom";
+import routerMap from "./router/routerMap.js"
 import ReactDOM from "react-dom";
+import FrontendAuth from "./router/FrontendAuth";
 
 
 ReactDOM.render(
     <React.StrictMode>
         <Router>
             <Switch>
-                {mainRouters.map(route => {
-                    return <Route key={route.path} {...route}/>
-                })}
-                <Route component={ErrorPage}/>
+                <FrontendAuth routerConfig={routerMap}/>
             </Switch>
         </Router>
     </React.StrictMode>,

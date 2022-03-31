@@ -1,26 +1,27 @@
 import App from "../components/App";
+import ErrorPage from "../components/ErrorPage/ErrorPage";
+import Login from "../pages/Login";
+import register from "../pages/register"
 
-export const mainRouters = [
+export const routerMap = [
     {
         path: "/",
         component: App,
-        exact: true,
     },
     {
         path: "/mint",
         component: App,
+        auth: true,
     },
     {
         path: "/upload_mint",
         component: App,
+        auth: true,
     },
     {
         path: "/color_mint",
         component: App,
-    },
-    {
-        path: "/upload",
-        component: App,
+        auth: true,
     },
     {
         path: "/marketplace",
@@ -29,6 +30,7 @@ export const mainRouters = [
     {
         path: "/my-tokens",
         component: App,
+        auth: true,
     },
     {
         path: "/queries",
@@ -41,9 +43,20 @@ export const mainRouters = [
     {
         path: "/my",
         component: App,
+        auth: true,
     },
     {
-        path: "/test",
-        component: App,
+        path: "/404",
+        component: ErrorPage,
     },
+    {
+        path: "/login",
+        component: Login,
+    },
+    {
+        path: "/register",
+        component: register,
+    }
 ]
+
+export default routerMap;

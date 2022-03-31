@@ -1,6 +1,7 @@
 import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
 import {Button, Form, Input, message, Upload} from 'antd';
+import ApiUtil from "../../Utils/ApiUtil";
 
 const {Dragger} = Upload;
 // const client = ipfsClient('https://ipfs.infura.io:5001/api/v0')
@@ -80,14 +81,13 @@ const normFile = (e) => {
         }
     }
     formData.append('file', e.file)
-    // console.log('Upload event:', e);
+    // console.log('UploadMint event:', e);
     return e && e.fileList;
 };
 
 const onSubmit = (values) => {
     console.log(values)
-    let url = "http://127.0.0.1:5001/api/upload"
-    fetch(url, {
+    fetch(ApiUtil.API_UPLOAD, {
         //fetch请求
         method: 'POST',
         body: formData,
@@ -103,7 +103,7 @@ const onSubmit = (values) => {
 };
 
 
-const UploadFile = () => {
+const UploadMint = () => {
     return (
         <div>
             <div className="card mt-1">
@@ -162,4 +162,4 @@ const UploadFile = () => {
 
 }
 
-export default UploadFile;
+export default UploadMint;

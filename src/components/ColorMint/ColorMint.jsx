@@ -12,7 +12,7 @@ function getRandomColor() {
   return color;
 }
 
-class FormAndPreview extends Component {
+class ColorMint extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -514,4 +514,4 @@ class FormAndPreview extends Component {
   }
 }
 
-export default FormAndPreview;
+export default ColorMint;
