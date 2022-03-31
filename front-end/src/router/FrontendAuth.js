@@ -3,7 +3,7 @@ import {Redirect, Route} from "react-router-dom";
 
 class FrontendAuth extends Component {
     render() {
-        console.log('this.props', this.props)
+        // console.log('this.props', this.props)
         const {routerConfig, location} = this.props;
         const {pathname} = location;
         const isLogin = sessionStorage.getItem("userName");
@@ -22,7 +22,7 @@ class FrontendAuth extends Component {
             return <Route exact path={pathname} component={component}/>;
         }
         if (isLogin) {
-            console.log('isLogin', isLogin);
+            // console.log('isLogin', isLogin);
             // 如果是登陆状态，想要跳转到登陆，重定向到主页
             if (pathname === "/login") {
                 return <Redirect to="/"/>;
@@ -38,7 +38,7 @@ class FrontendAuth extends Component {
                 }
             }
         } else {
-            console.log('targetRouterConfig', targetRouterConfig);
+            // console.log('targetRouterConfig', targetRouterConfig);
             // 非登陆状态下，当路由合法时且需要权限校验时，跳转到登陆页面，要求登陆
             if (targetRouterConfig && targetRouterConfig.auth) {
                 return <Redirect to="/login"/>;

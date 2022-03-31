@@ -332,14 +332,14 @@ class App extends Component {
     };
 
     delete_footer = () => {
-        console.log('delete',this.state.footerVisible)
+        // console.log('delete',this.state.footerVisible)
         this.setState({
             footerVisible: 'none',
         })
     }
 
     revive_footer = () => {
-        console.log('revive',this.state.footerVisible)
+        // console.log('revive',this.state.footerVisible)
         this.setState({
             footerVisible: '',
         })

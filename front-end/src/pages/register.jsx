@@ -47,7 +47,7 @@ const selectAfter = (
 );
 
 const handleClick = (e) => {
-    console.log(e)
+    // console.log(e)
     // let md5 = require("./model/md5.js"); //引入md5加密模块
     // let md5Password = md5(e.password);
     // e.password = md5Password
@@ -59,7 +59,7 @@ const handleClick = (e) => {
             message.error('注册失败,请稍后重试~');
         }
     }).catch(function (error) {
-        console.log(error);
+        // console.log(error);
     });
 }
 
@@ -68,7 +68,7 @@ const Register = () => {
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
     };
 
     const prefixSelector = (

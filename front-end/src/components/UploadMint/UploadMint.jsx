@@ -24,7 +24,7 @@ const props = {
     onChange(info) {
         const {status} = info.file;
         if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
+            // console.log(info.file, info.fileList);
         }
         if (status === 'done') {
             message.success(`${info.file.name} file uploaded successfully.`);
@@ -86,7 +86,7 @@ const normFile = (e) => {
 };
 
 const onSubmit = (values) => {
-    console.log(values)
+    // console.log(values)
     fetch(ApiUtil.API_UPLOAD, {
         //fetch请求
         method: 'POST',
@@ -98,7 +98,7 @@ const onSubmit = (values) => {
             message.error('NTF铸造信息提交失败,请重新提交~');
         }
     }).catch(function (error) {
-        console.log(error);
+        // console.log(error);
     });
 };
 

@@ -12,7 +12,7 @@ class JoyStick {
             left: this.domElement.offsetLeft,
             top: this.domElement.offsetTop
         }
-        console.log(this.origin)
+        // console.log(this.origin)
         this.rotationDamping = options.rotationDamping || 0.06
         this.moveDamping = options.moveDamping || 0.01
         this.createEvent()
