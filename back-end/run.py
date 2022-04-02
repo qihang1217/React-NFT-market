@@ -1,20 +1,20 @@
 import os
 import time
-
+import configs
 from flask import Flask, send_from_directory, request, jsonify, render_template
 from flask_cors import CORS
 import MysqlUtil as DBUtil
+from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-USERNAME = 'root'
-PASSWORD = 'root'
-HOST = 'localhost'
-PORT = '3306'
-DATABASE = 'nft_market'
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://%s:%s@%s:%s/%s?charset=utf8"%(USERNAME,PASSWORD,HOST,PORT,DATABASE)
+# 加载配置文件
+app.config.from_object(configs)
+db = SQLAlchemy(app)
+# db绑定app
+db.init_app(app)
 # 解决cors问题
-cors = CORS(app)
+cors = CORS(app, supports_credentials=True)
 
 # api接口前缀
 apiPrefix = '/api/v1/'
@@ -43,9 +43,9 @@ def api_upload():
         unix_time = int(time.time())
         new_filename = str(unix_time) + '.' + ext  # 修改文件名
         f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
-        return jsonify({"errno": 0, "errmsg": "上传成功", "status": 200})
+        return jsonify({"code": 0, "message": "上传成功", "responseCode": 200})
     else:
-        return jsonify({"errno": 1001, "errmsg": "上传失败"})
+        return jsonify({"code": 1001, "message": "上传失败"})
 
 
 ########## React访问flask资源
@@ -101,8 +101,16 @@ def api_museum():
 @app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
 def register_user():
     data = request.get_data(as_text=True)
-    print(data)
-    return jsonify({"errno": 0, "errmsg": "注册成功", "status": 200})
+    response=DBUtil.addOrUpdateUsers(data)
+    response['responseCode']=200
+    return jsonify(response)
+
+@app.route(apiPrefix + 'checkUserName', methods=['POST'], strict_slashes=False)
+def check_username():
+    data = request.get_data(as_text=True)
+    response=DBUtil.checkUserNameRepeat(data)
+    response['responseCode']=200
+    return jsonify(response)
 
 
 ########## Staff接口

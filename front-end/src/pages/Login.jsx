@@ -3,6 +3,12 @@ import {Button, Checkbox, Form, Input, message} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {withRouter} from "react-router-dom";
 import "./css/Login.css"
+import md5 from "./model/md5";
+import HttpUtil from "../Utils/HttpUtil";
+import ApiUtil from "../Utils/ApiUtil";
+//引用CSS
+import "./css/rslogin/css/lstyle.css"
+import "./css/rslogin/css/font-awesome.min.css"
 
 class Login extends Component {
     constructor(props) {
@@ -15,6 +21,19 @@ class Login extends Component {
 
     // 提交登录表单
     async handleSubmit(e) {
+        let md5 = require("./model/md5.js"); //引入md5加密模块
+        e.password = md5(e.password);
+        HttpUtil.post(ApiUtil.API_REGISTER, e).then(function (response) {
+            console.log(response)
+            if (response.status === 200 && response.message === '添加成功') {
+                message.success('注册成功~');
+                window.location.href = "/login";
+            } else {
+                message.error('注册失败,请稍后重试~');
+            }
+        }).catch(function (error) {
+            // console.log(error);
+        });
         const username = e.username;
         const password = e.password;
         // 保存信息到sessionStorage
@@ -34,59 +53,101 @@ class Login extends Component {
         message.error('未登录,请先登录~', 1);
     }
 
+    componentDidMount() {
+        const screenHeight = document.documentElement.clientHeight;
+        let height = `${screenHeight}px`;
+        this.setState({
+            height,
+        })
+        window.addEventListener('resize', this.handleHeight);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleHeight);
+    }
+
+    handleHeight = () => {
+        const screenHeight = document.documentElement.clientHeight;
+        let height = `${screenHeight}px`;
+        this.setState({
+            height,
+        })
+    }
+
     render() {
         return (
             <>
-                <Form
-                    name="normal_login"
-                    className="login-form"
-                    initialValues={{
-                        remember: true,
-                    }}
-                    onFinish={this.handleSubmit}
-                >
-                    <Form.Item
-                        name="username"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your Username!',
-                            },
-                        ]}
-                    >
-                        <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"/>
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your Password!',
-                            },
-                        ]}
-                    >
-                        <Input
-                            prefix={<LockOutlined className="site-form-item-icon"/>}
-                            type="password"
-                            placeholder="Password"
-                        />
-                    </Form.Item>
-                    <Form.Item>
-                        <Form.Item name="remember" valuePropName="checked" noStyle>
-                            <Checkbox>Remember me</Checkbox>
-                        </Form.Item>
+                <session className="w3l-hotair-form" style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
+                    {/*表单开头 */}
+                    <h2>Welocome to NFT market</h2>
+                    <div className="container">
+                        {/*表单样式*/}
+                        <div className="workinghny-form-grid">
+                            <div className="main-hotair">
+                                <div className="content-wthree">
+                                    <h3 style={{'text-align': 'center'}}>Log In</h3>
+                                    <p>To Your Account</p>
 
-                        <a className="login-form-forgot" href="">
-                            Forgot password
-                        </a>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            Log in
-                        </Button>
-                        Or <a href="/register">register now!</a>
-                    </Form.Item>
-                </Form>
+                                    <Form
+                                        name="normal_login" className="login-form"
+                                        initialValues={{
+                                            remember: true,
+                                        }}
+                                        onFinish={this.handleSubmit}
+                                    >
+                                        <Form.Item
+                                            name="username"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please input your Username!',
+                                                },
+                                            ]}
+                                        >
+                                            <Input placeholder="Username"/>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="password"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please input your Password!',
+                                                },
+                                            ]}
+                                        >
+                                            {/*prefix={<LockOutlined className="site-form-item-icon"/>}*/}
+                                            <Input
+
+                                                type="password"
+                                                placeholder="Password"
+                                            />
+                                        </Form.Item>
+                                        <Form.Item>
+                                            <Form.Item name="remember" valuePropName="checked" noStyle>
+                                                <Checkbox>Remember me</Checkbox>
+                                            </Form.Item>
+                                            <br/><br/>
+                                            <a className="login-form-forgot" href="">
+                                                Forgot password
+                                            </a>
+                                            Or <a href="/register">register now!</a>
+                                        </Form.Item>
+
+                                        <Form.Item>
+                                            <Button type="primary" htmlType="submit" className='login-form-button'>
+                                                Log in
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+                                </div>
+                                {/*放图片的区域*/}
+                                <div className="w3l_form align-self"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </session>
             </>
         );
     }

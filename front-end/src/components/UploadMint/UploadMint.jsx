@@ -91,13 +91,16 @@ const onSubmit = (values) => {
         //fetch请求
         method: 'POST',
         body: formData,
-    }).then(function (response) {
-        if (response.status === 200) {
-            message.success('NTF铸造信息提交成功,正在火速为您审核中~');
-        } else {
-            message.error('NTF铸造信息提交失败,请重新提交~');
-        }
-    }).catch(function (error) {
+    }).then(response => response.json())
+        .then(result => {
+            console.log(result)
+            if (result.responseCode === 200&&result.message==='上传成功') {
+                message.success('NTF铸造信息提交成功,正在火速为您审核中~');
+            } else {
+                message.error('NTF铸造信息提交失败,请重新提交~');
+            }
+        })
+    .catch(function (error) {
         // console.log(error);
     });
 };

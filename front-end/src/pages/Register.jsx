@@ -41,6 +41,7 @@ const tailFormItemLayout = {
 const Register = () => {
     const [value, setValue] = React.useState('');
     const [email_end, setEmail_end] = React.useState('@qq.com');
+    const [onlyName, setonlyName] = React.useState('');
     const [form] = Form.useForm();
 
     const selectAfter = (
@@ -62,16 +63,38 @@ const Register = () => {
         console.log('Received values of form: ', values);
         HttpUtil.post(ApiUtil.API_REGISTER, values).then(function (response) {
             console.log(response)
-            if (response.status === 200) {
+            if (response.responseCode === 200 && response.message=== '添加成功') {
                 message.success('注册成功~');
                 window.location.href="/login";
-            } else {
+            }
+            else if (response.message=== '用户名重复')
+            {
+                message.error('用户名已被使用,请更换~');
+            }
+            else {
                 message.error('注册失败,请稍后重试~');
             }
         }).catch(function (error) {
             // console.log(error);
         });
     };
+
+    const checkedAccount=(data)=>{
+        return HttpUtil.post(ApiUtil.API_CHECK_USERNAME, data)
+    }
+
+    // 验证账号是否已经被添加过
+    const checkAccount = (value) => { // 这个是rules自定义的验证方法
+        return new Promise((resolve, reject) => {  // 返回一个promise
+            checkedAccount({ account: value }).then(res => { // 这个是后台接口方法
+                if (res.responseCode === '000000') {
+                    resolve(res.data)
+                } else resolve(false)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -217,6 +240,17 @@ const Register = () => {
                         required: true,
                         message: '请输入您的用户名!',
                         whitespace: true,
+                    },
+                    {
+                        validator: (rule, value, callback) => {
+                            checkAccount(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('该用户名已存在,请更换重试!')
+                                }
+                            })
+                        },
                     },
                 ]}
             >
