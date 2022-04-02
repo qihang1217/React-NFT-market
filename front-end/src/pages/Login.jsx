@@ -1,9 +1,6 @@
 import React, {Component} from "react";
 import {Button, Checkbox, Form, Input, message} from "antd";
-import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {withRouter} from "react-router-dom";
-import "./css/Login.css"
-import md5 from "./model/md5";
 import HttpUtil from "../Utils/HttpUtil";
 import ApiUtil from "../Utils/ApiUtil";
 //引用CSS
@@ -23,30 +20,33 @@ class Login extends Component {
     async handleSubmit(e) {
         let md5 = require("./model/md5.js"); //引入md5加密模块
         e.password = md5(e.password);
-        HttpUtil.post(ApiUtil.API_REGISTER, e).then(function (response) {
-            console.log(response)
-            if (response.status === 200 && response.message === '添加成功') {
-                message.success('注册成功~');
-                window.location.href = "/login";
+        HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
+            // console.log(response);
+            if (response.responseCode === 200 && response.message === '验证成功') {
+                message.success('登陆成功~');
+                const username = e.username;
+                const password = e.password;
+                // 保存信息到sessionStorage
+                sessionStorage.setItem("userName", username);
+                // 登录成功后，设置redirectToReferrer为true;
+                this.setState({
+                    redirectToReferrer: true,
+                });
+                let RedirectUrl = this.props.location.pathname
+                    ? this.props.location.pathname
+                    : "/";
+                // 登陆成功之后的跳转
+                window.location.href = RedirectUrl
+            } else if (response.responseCode === 200 && response.message === '用户不存在') {
+                message.error('账号或密码错误,请稍后重试~');
+            } else if (response.responseCode === 200 && response.message === '验证失败') {
+                message.error('账号或密码错误,请稍后重试~');
             } else {
-                message.error('注册失败,请稍后重试~');
+                message.error('登陆错误,请稍后重试~');
             }
         }).catch(function (error) {
             // console.log(error);
         });
-        const username = e.username;
-        const password = e.password;
-        // 保存信息到sessionStorage
-        sessionStorage.setItem("userName", username);
-        // 登录成功后，设置redirectToReferrer为true;
-        this.setState({
-            redirectToReferrer: true,
-        });
-        let RedirectUrl = this.props.location.pathname
-            ? this.props.location.pathname
-            : "/";
-        // 登陆成功之后的跳转
-        window.location.href = RedirectUrl
     }
 
     componentWillMount() {
@@ -77,7 +77,8 @@ class Login extends Component {
     render() {
         return (
             <>
-                <session className="w3l-hotair-form" style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
+                <session className="w3l-hotair-form"
+                         style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
                     {/*表单开头 */}
                     <h2>Welocome to NFT market</h2>
                     <div className="container">

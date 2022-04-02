@@ -28,19 +28,19 @@ class Users(db.Model):
     # 创建字段： id， 主键和自增涨
     id = db.Column(db.Integer, primary_key=True)
     # 创建字段：username， 长度为20的字符串，不允许为空
-    real_name=db.Column(db.String(20), nullable=False)
+    real_name = db.Column(db.String(20), nullable=False)
     # 创建字段：id_name， 长度为18的字符串，不允许为空
-    id_number=db.Column(db.String(18), nullable=False)
+    id_number = db.Column(db.String(18), nullable=False)
     # 创建字段：age，整数，不允许为空
     age = db.Column(db.Integer, nullable=False)
     # 创建字段：email，长度为30的字符串，不允许为空
     email = db.Column(db.String(30), nullable=False)
     # 创建字段：phone_number， 长度为20的字符串，不允许为空
-    phone_number=db.Column(db.String(20), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
     # 创建字段：gender， 长度为20的字符串，不允许为空
-    gender=db.Column(db.String(2), nullable=False)
+    gender = db.Column(db.String(2), nullable=False)
     # 创建字段：user_name， 长度为20的字符串，不允许为空,不可重复
-    user_name = db.Column(db.String(20), nullable=False,unique=True)
+    user_name = db.Column(db.String(20), nullable=False, unique=True)
     # 创建字段：password，长度为50的字符串，不允许为空
     password = db.Column(db.String(44), nullable=False)
 
@@ -49,32 +49,31 @@ class Users(db.Model):
 # db.create_all()
 
 
-staffColumns = ("id", "service", "money", "card_number", "name", "phone", "project",\
-                "shop_guide", "teacher", "financial", "remarks1", "collect_money", "remarks2")  #id没写可把我害惨了
-
+staffColumns = ("id", "service", "money", "card_number", "name", "phone", "project", \
+                "shop_guide", "teacher", "financial", "remarks1", "collect_money", "remarks2")  # id没写可把我害惨了
 
 staffColumns = ("id", "real_name", "id_name", "age", "email", "phone_number", "gender", "user_name", "password")
 
+
 def addOrUpdateUsers(json_str):
     try:
-        print(json_str)
-        # print("=="*30)
+        # print(json_str)
         user_data = json.loads(json_str)
         # 获取用户id,没有则赋为0
         id = user_data.get('id', 0)
         result = ''
-        new_id=id
-        perfix=user_data.get('prefix')
-        email_end=user_data.get('email_end')
+        new_id = id
+        perfix = user_data.get('prefix')
+        email_end = user_data.get('email_end')
         # 删除与数据库无关的字段
         del user_data['confirm']
         del user_data['agreement']
         # 插入
         if id == 0:
             # 防止用户名重复
-            res=db.session.query(Users).filter(Users.user_name==user_data['user_name']).all()
+            res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
             db.session.commit()
-            if len(res)==0:
+            if len(res) == 0:
                 keys = ''
                 values = ''
                 isFirst = True
@@ -103,27 +102,27 @@ def addOrUpdateUsers(json_str):
 
                 sql = "INSERT INTO Users (%s) values (%s)" % (keys, values)
                 # print(sql)
-                result=db.session.execute(sql)
+                result = db.session.execute(sql)
                 db.session.commit()
                 # 获取插入数据后的主键id
                 new_id = result.lastrowid
-                # result = '添加成功'
-                print(result)
+                result = '添加成功'
+                # print(result)
             else:
-                result='用户名重复'
+                result = '用户名重复'
         else:
-            #修改
+            # 修改
             update = ''
             isFirst = True
-            for key,value in user_data.items():
-                if key=='id':
-                    #这个字段不用考虑，隐藏的
+            for key, value in user_data.items():
+                if key == 'id':
+                    # 这个字段不用考虑，隐藏的
                     continue
                 if isFirst:
                     isFirst = False
                 else:
-                    update += ','  #相当于除了第一个，其他的都需要在最前面加','
-                if value==None:
+                    update += ','  # 相当于除了第一个，其他的都需要在最前面加','
+                if value == None:
                     value = ""
                 if isinstance(value, str):
                     update += (key + "='" + value + "'")
@@ -151,16 +150,16 @@ def addOrUpdateUsers(json_str):
         }
         return re
 
+
 def checkUserNameRepeat(json_str):
     user_data = json.loads(json_str)
-    result=''
     # 防止用户名重复
     res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
     db.session.commit()
     if len(res) == 0:
-        result = '用户名重复'
-    else:
         result = '用户名不重复'
+    else:
+        result = '用户名重复'
     re = {
         'code': 0,
         'message': result
@@ -168,30 +167,38 @@ def checkUserNameRepeat(json_str):
     return re
 
 
-# def CheckUsers(json_str):
-#     #验证密码是否正确
-#     data = json.loads(json_str)
-#     try:
-#
-#         if data["username"]== and toMd5(data["password"])==my_set_password_md5:
-#             #验证成功
-#             re = {
-#                 'code': 0,
-#                 'message': "验证通过"
-#             }
-#         else:
-#             re = {
-#                 'code': 1,
-#                 'message': "验证失败"
-#             }
-#         return re
-#     except Exception as e:
-#         print(repr(e))
-#         re = {
-#             'code': -1,
-#             'message': repr(e)
-#         }
-#         return re
+def checkUsers(json_str):
+    # 验证密码是否正确
+    try:
+        user_data = json.loads(json_str)
+        res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
+        db.session.commit()
+        if len(res) == 0:
+            re = {
+                'code': -1,
+                'message': "用户不存在"
+            }
+        else:
+            print(res[0])
+            if user_data["username"] == res[0]:
+                # 验证成功
+                re = {
+                    'code': 0,
+                    'message': "验证通过"
+                }
+            else:
+                re = {
+                    'code': -1,
+                    'message': "验证失败"
+                }
+            return re
+    except Exception as e:
+        print(repr(e))
+        re = {
+            'code': -1,
+            'message': repr(e)
+        }
+        return re
 
 # def deleteStaff(id):
 #     #根据staff的id号来删除该条记录

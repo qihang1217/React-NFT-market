@@ -86,10 +86,13 @@ const Register = () => {
     // 验证账号是否已经被添加过
     const checkAccount = (value) => { // 这个是rules自定义的验证方法
         return new Promise((resolve, reject) => {  // 返回一个promise
-            checkedAccount({ account: value }).then(res => { // 这个是后台接口方法
-                if (res.responseCode === '000000') {
-                    resolve(res.data)
-                } else resolve(false)
+            checkedAccount({ user_name: value }).then(res => { // 这个是后台接口方法
+                if (res.responseCode === 200&&res.message==='用户名重复') {
+                    console.log(res)
+                    resolve(false)
+                }
+                else
+                    resolve(true)
             }).catch(error => {
                 reject(error)
             })
@@ -244,9 +247,10 @@ const Register = () => {
                     {
                         validator: (rule, value, callback) => {
                             checkAccount(value).then(res => {
+                                console.log(res)
                                 if (res) {
                                     callback()
-                                } else {
+                                } else{
                                     callback('该用户名已存在,请更换重试!')
                                 }
                             })

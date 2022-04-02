@@ -94,8 +94,6 @@ def api_museum():
 #     else:
 #         pass
 
-########## 登陆接口
-
 
 ########## 注册接口
 @app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
@@ -103,13 +101,25 @@ def register_user():
     data = request.get_data(as_text=True)
     response=DBUtil.addOrUpdateUsers(data)
     response['responseCode']=200
+    print(response)
     return jsonify(response)
 
+# 动态检验用户名是否可用
 @app.route(apiPrefix + 'checkUserName', methods=['POST'], strict_slashes=False)
 def check_username():
     data = request.get_data(as_text=True)
     response=DBUtil.checkUserNameRepeat(data)
     response['responseCode']=200
+    return jsonify(response)
+
+
+########## 登陆接口
+@app.route(apiPrefix + 'login', methods=['POST'], strict_slashes=False)
+def login_user():
+    data = request.get_data(as_text=True)
+    response= DBUtil.checkUsers(data)
+    response['responseCode']=200
+    print(response)
     return jsonify(response)
 
 
