@@ -19,15 +19,16 @@ class Login extends Component {
     async handleSubmit(e) {
         let md5 = require("./model/md5.js"); //引入md5加密模块
         e.password = md5(e.password);
-        e['token']=sessionStorage.getItem("token")
+        e['token']=localStorage.getItem("token")
         HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
             // console.log(response);
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
                 if(response.token_message!=='success')
-                    // 生成token到sessionStorage
-                    sessionStorage.setItem("token", response.token);
-                // window.location.href='/'
+                    // 生成token到localStorage
+                    localStorage.setItem("token", response.token);
+                //页面跳转
+                window.location.href=document.referrer
             } else if (response.responseCode === 200 && response.message === '用户不存在') {
                 message.error('账号或密码错误,请稍后重试~');
             } else if (response.responseCode === 200 && response.message === '验证失败') {

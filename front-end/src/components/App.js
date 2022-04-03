@@ -56,7 +56,7 @@ class App extends Component {
         await this.loadBlockchainData();
         await this.setMetaData();
         await this.setMintBtnTimer();
-        let isAuthenticated = sessionStorage.getItem("token") ? true : false;
+        let isAuthenticated = localStorage.getItem("token") ? true : false;
         this.setState({isAuthenticated: isAuthenticated})
     };
 

@@ -7,7 +7,7 @@ class FrontendAuth extends Component {
         const {routerConfig, location} = this.props;
         const {pathname} = location;
         var isLogin =false
-        if (sessionStorage.getItem("token")){
+        if (localStorage.getItem("token")){
             isLogin=true;
         }
         console.log(isLogin)

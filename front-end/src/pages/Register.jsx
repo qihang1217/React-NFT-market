@@ -42,7 +42,6 @@ const tailFormItemLayout = {
 const Register = () => {
     const [value, setValue] = React.useState('');
     const [email_end, setEmail_end] = React.useState('@qq.com');
-    const [onlyName, setonlyName] = React.useState('');
     const [form] = Form.useForm();
     const [current, setCurrent] = React.useState(0);
 
@@ -68,26 +67,6 @@ const Register = () => {
         </Select>
     );
 
-    const onFinish = (values) => {
-        let md5 = require("./model/md5.js"); //引入md5加密模块
-        values.password = md5(values.password);
-        console.log(typeof values);
-        values['email_end'] = email_end;
-        console.log('Received values of form: ', values);
-        HttpUtil.post(ApiUtil.API_REGISTER, values).then(function (response) {
-            console.log(response)
-            if (response.responseCode === 200 && response.message === '添加成功') {
-                message.success('注册成功~');
-                window.location.href = "/login";
-            } else if (response.message === '用户名重复') {
-                message.error('用户名已被使用,请更换~');
-            } else {
-                message.error('注册失败,请稍后重试~');
-            }
-        }).catch(function (error) {
-            // console.log(error);
-        });
-    };
 
     const checkedAccount = (data) => {
         return HttpUtil.post(ApiUtil.API_CHECK_USERNAME, data)
@@ -121,11 +100,75 @@ const Register = () => {
         </Form.Item>
     );
 
+    const firstOnFinish = (values) => {
+        sessionStorage.setItem('real_name',values.real_name)
+        sessionStorage.setItem('id_number',values.id_number)
+        sessionStorage.setItem('age',values.age)
+        sessionStorage.setItem('gender',values.gender)
+        next();
+    }
+
+    const secondOnFinish = (values) => {
+        console.log(values)
+        sessionStorage.setItem('email',values.email)
+        sessionStorage.setItem('email_end',values.email_end)
+        sessionStorage.setItem('prefix',values.prefix)
+        sessionStorage.setItem('phone_number',values.phone_number)
+        next();
+    }
+
+    const onFinish = (values) => {
+        //获得前两个表单的数据
+        values['real_name'] = sessionStorage.getItem('real_name');
+        values['id_number'] = sessionStorage.getItem('id_number');
+        values['age'] = sessionStorage.getItem('age');
+        values['gender'] = sessionStorage.getItem('gender');
+        values['email'] = sessionStorage.getItem('email');
+        values['email_end'] = sessionStorage.getItem('email_end');
+        values['prefix'] = sessionStorage.getItem('prefix');
+        values['phone_number'] = sessionStorage.getItem('phone_number');
+        //清除存储的数据
+        sessionStorage.removeItem('real_name');
+        sessionStorage.removeItem('id_number');
+        sessionStorage.removeItem('age');
+        sessionStorage.removeItem('gender');
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('email_end');
+        sessionStorage.removeItem('prefix');
+        sessionStorage.removeItem('phone_number');
+        let md5 = require("./model/md5.js"); //引入md5加密模块
+        values.password = md5(values.password);
+        console.log(values)
+        HttpUtil.post(ApiUtil.API_REGISTER, values).then(function (response) {
+            console.log(response)
+            if (response.responseCode === 200 && response.message === '添加成功') {
+                message.success('注册成功~');
+                window.location.href = "/login";
+            } else if (response.message === '用户名重复') {
+                message.error('用户名已被使用,请更换~');
+            } else {
+                message.error('注册失败,请稍后重试~');
+            }
+        }).catch(function (error) {
+            // console.log(error);
+        });
+    };
+
+    const steps_length=3
     const steps = [
         {
             title: 'First',
             content:
-                <>
+                <Form
+                    {...formItemLayout}
+                    form={form}
+                    name="register"
+                    onFinish={firstOnFinish}
+                    initialValues={{
+                        prefix: '86',
+                    }}
+                    scrollToFirstError
+                >
                     <Form.Item
                         name="real_name"
                         label="真实姓名"
@@ -196,12 +239,38 @@ const Register = () => {
                             <Option value="其他">其他</Option>
                         </Select>
                     </Form.Item>
-                </>,
+                    <div className="steps-action">
+                        {current < steps_length - 1 && (
+                            <Button type="primary" htmlType="submit" >
+                                Next
+                            </Button>
+                        )}
+                        {current === steps_length - 1 && (
+                            <Button type="primary" htmlType="submit" onClick={() => message.success('Processing complete!')}>
+                                Done
+                            </Button>
+                        )}
+                        {current > 0 && (
+                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
+                                Previous
+                            </Button>
+                        )}
+                    </div>
+                </Form>
         },
         {
-            title: 'Last',
+            title: 'Second',
             content:
-                <>
+                <Form
+                    {...formItemLayout}
+                    form={form}
+                    name="register"
+                    onFinish={secondOnFinish}
+                    initialValues={{
+                        prefix: '86',
+                    }}
+                    scrollToFirstError
+                >
                     <Form.Item
                         name="email"
                         label="E-mail"
@@ -241,13 +310,39 @@ const Register = () => {
                             maxlength="12"
                         />
                     </Form.Item>
-                </>
+                    <div className="steps-action">
+                        {current < steps_length - 1 && (
+                            <Button type="primary" htmlType="submit" >
+                                Next
+                            </Button>
+                        )}
+                        {current === steps_length - 1 && (
+                            <Button type="primary" htmlType="submit" onClick={() => message.success('Processing complete!')}>
+                                Done
+                            </Button>
+                        )}
+                        {current > 0 && (
+                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
+                                Previous
+                            </Button>
+                        )}
+                    </div>
+                </Form>
             ,
         },
         {
-            title: 'Second',
+            title: 'Last',
             content:
-                <>
+                <Form
+                    {...formItemLayout}
+                    form={form}
+                    name="register"
+                    onFinish={onFinish}
+                    initialValues={{
+                        prefix: '86',
+                    }}
+                    scrollToFirstError
+                >
                     <Form.Item
                         name="user_name"
                         label="用户名"
@@ -327,12 +422,24 @@ const Register = () => {
                             I have read the <a href="">agreement</a>
                         </Checkbox>
                     </Form.Item>
-                    <Form.Item {...tailFormItemLayout}>
-                        <Button type="primary" htmlType="submit">
-                            Register
-                        </Button>
-                    </Form.Item>
-                </>,
+                    <div className="steps-action">
+                        {current < steps_length - 1 && (
+                            <Button type="primary" htmlType="submit" >
+                                Next
+                            </Button>
+                        )}
+                        {current === steps_length - 1 && (
+                            <Button type="primary" htmlType="submit" onClick={() => message.success('Processing complete!')}>
+                                Done
+                            </Button>
+                        )}
+                        {current > 0 && (
+                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
+                                Previous
+                            </Button>
+                        )}
+                    </div>
+                </Form>,
         },
     ];
 
@@ -344,35 +451,8 @@ const Register = () => {
                     <Step key={item.title} title={item.title}/>
                 ))}
             </Steps>
-            <Form
-                {...formItemLayout}
-                form={form}
-                name="register"
-                onFinish={onFinish}
-                initialValues={{
-                    prefix: '86',
-                }}
-                scrollToFirstError
-            >
-                <div className="steps-content">{steps[current].content}</div>
-            </Form>
-            <div className="steps-action">
-                {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => next()}>
-                        Next
-                    </Button>
-                )}
-                {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                        Done
-                    </Button>
-                )}
-                {current > 0 && (
-                    <Button style={{margin: '0 8px'}} onClick={() => prev()}>
-                        Previous
-                    </Button>
-                )}
-            </div>
+            <div className="steps-content">{steps[current].content}</div>
+
         </>
     );
 };
