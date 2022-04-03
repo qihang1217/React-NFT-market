@@ -30,7 +30,20 @@ class Login extends Component {
                     // 生成token到localStorage
                     localStorage.setItem("token", response.token);
                 //页面跳转
-                window.location.href=document.referrer
+                let ref = '';
+                if (document.referrer.length > 0) {
+                    ref = document.referrer;
+                }
+                try {
+                    if (ref.length == 0 &&  window.opener.location.href.length > 0) {
+                        ref = window.opener.location.href;
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+                if (ref === '/login' || ref === '/register')
+                    window.location.href = '/'
+                window.location.href = ref
             } else if (response.responseCode === 200 && response.message === '用户不存在') {
                 message.error('账号或密码错误,请稍后重试~');
             } else if (response.responseCode === 200 && response.message === '验证失败') {

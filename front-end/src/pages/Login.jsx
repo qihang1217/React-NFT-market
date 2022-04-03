@@ -10,8 +10,7 @@ import "./css/rslogin/css/font-awesome.min.css"
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -19,16 +18,29 @@ class Login extends Component {
     async handleSubmit(e) {
         let md5 = require("./model/md5.js"); //引入md5加密模块
         e.password = md5(e.password);
-        e['token']=localStorage.getItem("token")
+        e['token'] = localStorage.getItem("token")
         HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
             // console.log(response);
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
-                if(response.token_message!=='success')
+                if (response.token_message !== 'success')
                     // 生成token到localStorage
                     localStorage.setItem("token", response.token);
                 //页面跳转
-                window.location.href=document.referrer
+                let ref = '';
+                if (document.referrer.length > 0) {
+                    ref = document.referrer;
+                }
+                try {
+                    if (ref.length === 0 && window.opener.location.href.length > 0) {
+                        ref = window.opener.location.href;
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+                if (ref === '/login' || ref === '/register')
+                    window.location.href = '/'
+                window.location.href = ref
             } else if (response.responseCode === 200 && response.message === '用户不存在') {
                 message.error('账号或密码错误,请稍后重试~');
             } else if (response.responseCode === 200 && response.message === '验证失败') {
