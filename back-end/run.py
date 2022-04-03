@@ -1,7 +1,8 @@
 import os
 import time
 import configs
-from flask import Flask, send_from_directory, request, jsonify, render_template
+from flask import Flask, send_from_directory, request, jsonify, render_template, current_app
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 from flask_cors import CORS
 import MysqlUtil as DBUtil
 from flask_sqlalchemy import SQLAlchemy
@@ -94,6 +95,27 @@ def api_museum():
 #     else:
 #         pass
 
+########## Token接口
+
+def generate_token(data):
+    expiration = 3600
+    s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration) #expiration是过期时间
+    token = s.dumps({'id': data['user_name']})
+    return token
+
+
+def verify_auth_token(token):
+    s = Serializer(app.config['SECRET_KEY'])
+    if token is not None:
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return 'expired'  # valid token,but expired
+        except BadSignature:
+            return 'invalid'  # invalid token
+        return 'success'
+    else:
+        return 'empty'
 
 ########## 注册接口
 @app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
@@ -117,8 +139,20 @@ def check_username():
 @app.route(apiPrefix + 'login', methods=['POST'], strict_slashes=False)
 def login_user():
     data = request.get_data(as_text=True)
-    response= DBUtil.checkUsers(data)
-    response['responseCode']=200
+    token = request.args.get('token')
+    _token = verify_auth_token(token)
+    if _token=='success':
+        response = {
+            'code': 0,
+            'message': "验证通过"
+        }
+    if _token=='expired':
+        response = DBUtil.checkUsers(data)
+    elif _token=='invalid':
+        response = DBUtil.checkUsers(data)
+    elif _token=='empty':
+        response = DBUtil.checkUsers(data)
+    response['responseCode'] = 200
     print(response)
     return jsonify(response)
 
