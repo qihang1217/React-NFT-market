@@ -129,6 +129,7 @@ def verify_auth_token(token,user_data):
 def register_user():
     json_str = request.get_data(as_text=True)
     user_data = json.loads(json_str)
+    print(user_data)
     response=DBUtil.addOrUpdateUsers(user_data)
     response['responseCode']=200
     print(response)

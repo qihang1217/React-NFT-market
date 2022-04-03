@@ -4,8 +4,10 @@ import {withRouter} from "react-router-dom";
 import HttpUtil from "../.././Utils/HttpUtil";
 import ApiUtil from "../.././Utils/ApiUtil";
 //引用CSS
+import "./InsideLogin.css"
 import "../.././pages/css/rslogin/css/lstyle.css"
 import "../.././pages/css/rslogin/css/font-awesome.min.css"
+import insideLogin from "./InsideLogin";
 
 class Login extends Component {
     constructor(props) {
@@ -68,8 +70,8 @@ class Login extends Component {
 
     render() {
         return (
-            <>
-                <session className="w3l-hotair-form"
+            <div className="insideLogin">
+                <div className="w3l-hotair-form"
                          style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
                     {/*表单开头 */}
                     <h4>Welocome to NFT market</h4>
@@ -140,8 +142,8 @@ class Login extends Component {
 
                     </div>
 
-                </session>
-            </>
+                </div>
+            </div>
         );
     }
 }

@@ -1,0 +1,23 @@
+.insideLogin .w3l-hotair-form{
+    padding: 20px 40px;
+    min-height: 1px;
+    overflow: hidden
+}
+
+.insideLogin .w3l-hotair-form h4{
+    text-align: center;
+    font-size: 18px;
+}
+
+.insideLogin .w3l-hotair-form .content-wthree{
+    padding: 2em 3em;
+    max-height: 420px;
+}
+
+.insideLogin .w3l-hotair-form input{
+    margin-bottom: 0px
+}
+
+.insideLogin .login-form {
+    height: 100%;
+}

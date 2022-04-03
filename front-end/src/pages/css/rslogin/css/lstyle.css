@@ -2,13 +2,9 @@
     scroll-behavior: smooth;
 }
 
-body,
-html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Noto Serif JP', serif;
-}
-
+ .w3l-hotair-form{
+     font-family: 'Noto Serif JP', serif;
+ }
 #components-form-demo-normal-login .login-form {
  max-width: 300px;
 }

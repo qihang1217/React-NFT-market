@@ -18,3 +18,7 @@ input::-webkit-input-placeholder {
 input[type="color"]:hover {
     cursor: pointer;
 }
+
+#root{
+    height: 100%;
+}
