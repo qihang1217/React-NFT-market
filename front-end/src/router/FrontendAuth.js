@@ -6,10 +6,11 @@ class FrontendAuth extends Component {
         // console.log('this.props', this.props)
         const {routerConfig, location} = this.props;
         const {pathname} = location;
-        const isLogin = sessionStorage.getItem("userName");
-        // console.log('pathname',pathname);
-        // console.log('isLogin',isLogin);
-        // console.log('location',location);
+        var isLogin =false
+        if (sessionStorage.getItem("token")){
+            isLogin=true;
+        }
+        console.log(isLogin)
         // 如果该路由不用进行权限校验，登录状态下登陆页除外
         // 因为登陆后，无法跳转到登陆页
         // 这部分代码，是为了在非登陆状态下，访问不需要权限校验的路由
@@ -24,6 +25,8 @@ class FrontendAuth extends Component {
         if (isLogin) {
             // console.log('isLogin', isLogin);
             // 如果是登陆状态，想要跳转到登陆，重定向到主页
+            console.log('yidenglu')
+            console.log(targetRouterConfig)
             if (pathname === "/login") {
                 return <Redirect to="/"/>;
             } else {

@@ -1,3 +1,4 @@
+import json
 import os
 import time
 import configs
@@ -97,31 +98,38 @@ def api_museum():
 
 ########## Token接口
 
-def generate_token(data):
+def generate_auth_token(data):
     expiration = 3600
     s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration) #expiration是过期时间
-    token = s.dumps({'id': data['user_name']})
-    return token
+    token = s.dumps({'user_name':data['user_name'],'password': data['password']})
+    # print(token)
+    return token.decode()
 
 
-def verify_auth_token(token):
+def verify_auth_token(token,user_data):
     s = Serializer(app.config['SECRET_KEY'])
+    # print('qi', token)
     if token is not None:
         try:
             data = s.loads(token)
+            # print('qi',data)
         except SignatureExpired:
             return 'expired'  # valid token,but expired
         except BadSignature:
             return 'invalid'  # invalid token
-        return 'success'
+        if (data.get('user_name') == user_data.get('user_name')) and\
+                (data.get('password') == user_data.get('password')):
+            return 'success'
     else:
         return 'empty'
+    return 'empty'
 
 ########## 注册接口
 @app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
 def register_user():
-    data = request.get_data(as_text=True)
-    response=DBUtil.addOrUpdateUsers(data)
+    json_str = request.get_data(as_text=True)
+    user_data = json.loads(json_str)
+    response=DBUtil.addOrUpdateUsers(user_data)
     response['responseCode']=200
     print(response)
     return jsonify(response)
@@ -129,8 +137,9 @@ def register_user():
 # 动态检验用户名是否可用
 @app.route(apiPrefix + 'checkUserName', methods=['POST'], strict_slashes=False)
 def check_username():
-    data = request.get_data(as_text=True)
-    response=DBUtil.checkUserNameRepeat(data)
+    json_str = request.get_data(as_text=True)
+    user_data = json.loads(json_str)
+    response=DBUtil.checkUserNameRepeat(user_data)
     response['responseCode']=200
     return jsonify(response)
 
@@ -138,22 +147,26 @@ def check_username():
 ########## 登陆接口
 @app.route(apiPrefix + 'login', methods=['POST'], strict_slashes=False)
 def login_user():
-    data = request.get_data(as_text=True)
-    token = request.args.get('token')
-    _token = verify_auth_token(token)
+    json_str = request.get_data(as_text=True)
+    user_data = json.loads(json_str)
+    # print('user_data',user_data)
+    token = user_data.get('token',None)
+    _token = verify_auth_token(token,user_data)
     if _token=='success':
         response = {
             'code': 0,
-            'message': "验证通过"
+            'message': "验证成功",
+            'token_message':_token,
         }
-    if _token=='expired':
-        response = DBUtil.checkUsers(data)
-    elif _token=='invalid':
-        response = DBUtil.checkUsers(data)
-    elif _token=='empty':
-        response = DBUtil.checkUsers(data)
+    else:
+        response = DBUtil.checkUsers(user_data)
+        if response['message']=='验证成功':
+            # token并没有验证通过,但账号密码验证通过则生成新的token
+            new_token = generate_auth_token(user_data)
+            response['token_message']=_token
+            response['token']=new_token
     response['responseCode'] = 200
-    print(response)
+    # print('response',response)
     return jsonify(response)
 
 

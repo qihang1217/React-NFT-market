@@ -55,10 +55,8 @@ staffColumns = ("id", "service", "money", "card_number", "name", "phone", "proje
 staffColumns = ("id", "real_name", "id_name", "age", "email", "phone_number", "gender", "user_name", "password")
 
 
-def addOrUpdateUsers(json_str):
+def addOrUpdateUsers(user_data):
     try:
-        # print(json_str)
-        user_data = json.loads(json_str)
         # 获取用户id,没有则赋为0
         id = user_data.get('id', 0)
         result = ''
@@ -151,8 +149,7 @@ def addOrUpdateUsers(json_str):
         return re
 
 
-def checkUserNameRepeat(json_str):
-    user_data = json.loads(json_str)
+def checkUserNameRepeat(user_data):
     # 防止用户名重复
     res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
     db.session.commit()
@@ -167,10 +164,9 @@ def checkUserNameRepeat(json_str):
     return re
 
 
-def checkUsers(json_str):
+def checkUsers(user_data):
     # 验证密码是否正确
     try:
-        user_data = json.loads(json_str)
         res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
         db.session.commit()
         if len(res) == 0:
@@ -179,12 +175,12 @@ def checkUsers(json_str):
                 'message': "用户不存在"
             }
         else:
-            print(res[0])
-            if user_data["username"] == res[0]:
+            # print(res[0])
+            if user_data["password"] == res[0].password:
                 # 验证成功
                 re = {
                     'code': 0,
-                    'message': "验证通过"
+                    'message': "验证成功"
                 }
             else:
                 re = {

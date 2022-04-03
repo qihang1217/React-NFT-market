@@ -18,6 +18,7 @@ import MyAccount from "./MyAccount/MyAccount";
 import Mint from "./Mint/Mint";
 import Museum from "./Museum/Museum";
 import Login from "../pages/Login";
+import InsideLogin from "./InsideLogin/InsideLogin";
 
 const {Footer} = Layout;
 const ipfsClient = require("ipfs-http-client");
@@ -55,7 +56,7 @@ class App extends Component {
         await this.loadBlockchainData();
         await this.setMetaData();
         await this.setMintBtnTimer();
-        let isAuthenticated = sessionStorage.getItem("userName") ? true : false;
+        let isAuthenticated = sessionStorage.getItem("token") ? true : false;
         this.setState({isAuthenticated: isAuthenticated})
     };
 
@@ -371,7 +372,10 @@ class App extends Component {
                                             contractDetected={this.state.contractDetected}
                                             loading={this.state.loading}
                                         />
-                                    ) : <Login/>
+                                    ) : <InsideLogin
+                                        delete_footer={this.delete_footer}
+                                        revive_footer={this.revive_footer}
+                                    />
                                 )}
                             />
                             <Route
@@ -385,7 +389,10 @@ class App extends Component {
                                             colorsUsed={this.state.colorsUsed}
                                             setMintBtnTimer={this.setMintBtnTimer}
                                         />
-                                    ) : <Login/>
+                                    ) : <InsideLogin
+                                        delete_footer={this.delete_footer}
+                                        revive_footer={this.revive_footer}
+                                    />
                                 )}
                             />
                             <Route
@@ -394,7 +401,10 @@ class App extends Component {
                                     this.state.isAuthenticated ? (
                                         <UploadMint
                                         />
-                                    ) : <Login/>
+                                    ) : <InsideLogin
+                                        delete_footer={this.delete_footer}
+                                        revive_footer={this.revive_footer}
+                                    />
                                 )}
                             />
                             <Route
@@ -421,7 +431,10 @@ class App extends Component {
                                                 this.state.totalTokensOwnedByAccount
                                             }
                                         />
-                                    ) : <Login/>
+                                    ) : <InsideLogin
+                                        delete_footer={this.delete_footer}
+                                        revive_footer={this.revive_footer}
+                                    />
                                 )}
                             />
                             <Route
@@ -451,7 +464,10 @@ class App extends Component {
                                             accountAddress={this.state.accountAddress}
                                             accountBalance={this.state.accountBalance}
                                         />
-                                    ) : <Login/>
+                                    ) : <InsideLogin
+                                        delete_footer={this.delete_footer}
+                                        revive_footer={this.revive_footer}
+                                    />
                                 )}
                             />
                         </Switch>

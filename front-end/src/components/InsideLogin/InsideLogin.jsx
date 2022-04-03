@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {Button, Checkbox, Form, Input, message} from "antd";
 import {withRouter} from "react-router-dom";
-import HttpUtil from "../Utils/HttpUtil";
-import ApiUtil from "../Utils/ApiUtil";
+import HttpUtil from "../.././Utils/HttpUtil";
+import ApiUtil from "../.././Utils/ApiUtil";
 //引用CSS
-import "./css/rslogin/css/lstyle.css"
-import "./css/rslogin/css/font-awesome.min.css"
+import "../.././pages/css/rslogin/css/lstyle.css"
+import "../.././pages/css/rslogin/css/font-awesome.min.css"
 
 class Login extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class Login extends Component {
 
     // 提交登录表单
     async handleSubmit(e) {
-        let md5 = require("./model/md5.js"); //引入md5加密模块
+        let md5 = require("../.././pages/model/md5.js"); //引入md5加密模块
         e.password = md5(e.password);
         e['token']=sessionStorage.getItem("token")
         HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
@@ -27,7 +27,6 @@ class Login extends Component {
                 if(response.token_message!=='success')
                     // 生成token到sessionStorage
                     sessionStorage.setItem("token", response.token);
-                // window.location.href='/'
             } else if (response.responseCode === 200 && response.message === '用户不存在') {
                 message.error('账号或密码错误,请稍后重试~');
             } else if (response.responseCode === 200 && response.message === '验证失败') {
@@ -41,12 +40,14 @@ class Login extends Component {
     }
 
     componentWillMount() {
+        this.props.revive_footer()
         message.error('未登录,请先登录~', 1);
     }
 
     componentDidMount() {
+        this.props.delete_footer()
         const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight}px`;
+        let height = `${screenHeight-64}px`;
         this.setState({
             height,
         })
@@ -59,7 +60,7 @@ class Login extends Component {
 
     handleHeight = () => {
         const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight}px`;
+        let height = `${screenHeight-64}px`;
         this.setState({
             height,
         })
@@ -71,13 +72,13 @@ class Login extends Component {
                 <session className="w3l-hotair-form"
                          style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
                     {/*表单开头 */}
-                    <h2>Welocome to NFT market</h2>
+                    <h4>Welocome to NFT market</h4>
                     <div className="container">
                         {/*表单样式*/}
                         <div className="workinghny-form-grid">
                             <div className="main-hotair">
                                 <div className="content-wthree">
-                                    <h3 style={{'text-align': 'center'}}>Log In</h3>
+                                    <h4 style={{'text-align': 'center'}}>Log In</h4>
                                     <p>To Your Account</p>
 
                                     <Form
