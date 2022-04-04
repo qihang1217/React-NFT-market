@@ -35,19 +35,24 @@ def allowed_file(filename):
 
 @app.route(apiPrefix + 'upload', methods=['POST'], strict_slashes=False)
 def api_upload():
-    file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])  # 拼接成合法文件夹地址
-    if not os.path.exists(file_dir):
-        os.makedirs(file_dir)  # 文件夹不存在就创建
-    f = request.files['file']  # 从表单的file字段获取文件
-    if f and allowed_file(f.filename):  # 判断是否是允许上传的文件类型
-        fname = f.filename
-        ext = fname.rsplit('.', 1)[1]  # 获取文件后缀
-        unix_time = int(time.time())
-        new_filename = str(unix_time) + '.' + ext  # 修改文件名
-        f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
-        return jsonify({"code": 0, "message": "上传成功", "responseCode": 200})
+    # print(request.values)
+    token=request.values.get('token',None)
+    if verify_login(token):
+        file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])  # 拼接成合法文件夹地址
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)  # 文件夹不存在就创建
+        f = request.files['file']  # 从表单的file字段获取文件
+        if f and allowed_file(f.filename):  # 判断是否是允许上传的文件类型
+            fname = f.filename
+            ext = fname.rsplit('.', 1)[1]  # 获取文件后缀
+            unix_time = int(time.time())
+            new_filename = str(unix_time) + '.' + ext  # 修改文件名
+            f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
+            return jsonify({"code": 0, "message": "上传成功", "responseCode": 200})
+        else:
+            return jsonify({"code": 1001, "message": "上传失败"})
     else:
-        return jsonify({"code": 1001, "message": "上传失败"})
+        return jsonify({"code": 1001, "message": "上传失败",'token_message':'未登录',"responseCode": 200})
 
 
 ########## React访问flask资源
@@ -101,28 +106,35 @@ def api_museum():
 def generate_auth_token(data):
     expiration = 3600
     s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration) #expiration是过期时间
-    token = s.dumps({'user_name':data['user_name'],'password': data['password']})
+    # 利用唯一的用户名生成token
+    token = s.dumps({'user_name':data['user_name']})
     # print(token)
     return token.decode()
 
 
-def verify_auth_token(token,user_data):
+def verify_auth_token(token):
     s = Serializer(app.config['SECRET_KEY'])
     # print('qi', token)
     if token is not None:
         try:
             data = s.loads(token)
-            # print('qi',data)
+            return 'success'
         except SignatureExpired:
             return 'expired'  # valid token,but expired
         except BadSignature:
             return 'invalid'  # invalid token
-        if (data.get('user_name') == user_data.get('user_name')) and\
-                (data.get('password') == user_data.get('password')):
-            return 'success'
+        # if data.get('user_name') == user_data.get('user_name'):
+        #     return 'success'
     else:
         return 'empty'
-    return 'empty'
+
+
+def verify_login(token):
+    _token = verify_auth_token(token)
+    if _token == 'success':
+        return True
+    else:
+        return False
 
 ########## 注册接口
 @app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
@@ -152,7 +164,7 @@ def login_user():
     user_data = json.loads(json_str)
     # print('user_data',user_data)
     token = user_data.get('token',None)
-    _token = verify_auth_token(token,user_data)
+    _token = verify_auth_token(token)
     if _token=='success':
         response = {
             'code': 0,

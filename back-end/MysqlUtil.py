@@ -196,6 +196,38 @@ def checkUsers(user_data):
         }
         return re
 
+def checkUsers(user_data):
+    # 验证密码是否正确
+    try:
+        res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
+        db.session.commit()
+        if len(res) == 0:
+            re = {
+                'code': -1,
+                'message': "用户不存在"
+            }
+        else:
+            # print(res[0])
+            if user_data["password"] == res[0].password:
+                # 验证成功
+                re = {
+                    'code': 0,
+                    'message': "验证成功"
+                }
+            else:
+                re = {
+                    'code': -1,
+                    'message': "验证失败"
+                }
+            return re
+    except Exception as e:
+        print(repr(e))
+        re = {
+            'code': -1,
+            'message': repr(e)
+        }
+        return re
+
 # def deleteStaff(id):
 #     #根据staff的id号来删除该条记录
 #     try:

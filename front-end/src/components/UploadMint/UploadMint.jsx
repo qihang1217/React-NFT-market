@@ -87,16 +87,24 @@ const normFile = (e) => {
 
 const onSubmit = (values) => {
     // console.log(values)
+    let token=localStorage.getItem('token')
+    formData.append('token', token)
     fetch(ApiUtil.API_UPLOAD, {
         //fetch请求
         method: 'POST',
-        body: formData,
+        body: formData,token
     }).then(response => response.json())
         .then(result => {
             console.log(result)
             if (result.responseCode === 200&&result.message==='上传成功') {
                 message.success('NTF铸造信息提交成功,正在火速为您审核中~');
-            } else {
+            }
+            else if(result.responseCode === 200&&result.token_message==='未登录'){
+                message.error('登陆状态无效或未登录,请重新登陆~');
+                localStorage.removeItem('token')
+                window.location.href='/login'
+            }
+            else {
                 message.error('NTF铸造信息提交失败,请重新提交~');
             }
         })
