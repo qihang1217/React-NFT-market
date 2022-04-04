@@ -57,32 +57,11 @@ class Login extends Component {
         message.error('未登录,请先登录~', 1);
     }
 
-    componentDidMount() {
-        const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight}px`;
-        this.setState({
-            height,
-        })
-        window.addEventListener('resize', this.handleHeight);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleHeight);
-    }
-
-    handleHeight = () => {
-        const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight}px`;
-        this.setState({
-            height,
-        })
-    }
-
     render() {
         return (
             <>
                 <session className="w3l-hotair-form"
-                         style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
+                         style={{width: "100%",display: "block"}}>
                     {/*表单开头 */}
                     <h2>Welocome to NFT market</h2>
                     <div className="container">

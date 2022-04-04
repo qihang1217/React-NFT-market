@@ -1,12 +1,13 @@
 .insideLogin .w3l-hotair-form{
     padding: 20px 40px;
     min-height: 1px;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .insideLogin .w3l-hotair-form h4{
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .insideLogin .w3l-hotair-form .content-wthree{
