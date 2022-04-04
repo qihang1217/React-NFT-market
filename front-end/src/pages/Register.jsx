@@ -2,6 +2,11 @@ import React from 'react';
 import {Button, Steps, Checkbox, Form, Input, message, Select, InputNumber, Space} from 'antd';
 import HttpUtil from "../Utils/HttpUtil";
 import ApiUtil from "../Utils/ApiUtil";
+//引用CSS
+import "./css/rsregister/font-awesome/css/font-awesome.min.css"
+import "./css/rsregister/css/rstyle.css"
+import "./css/rsregister/bootstrap/css/bootstrap.min.css"
+import "./css/rslogin/css/lstyle.css"
 
 const {Step} = Steps;
 const {Option} = Select;
@@ -33,13 +38,14 @@ const tailFormItemLayout = {
         },
         sm: {
             span: 16,
-            offset: 8,
+            offset: 4,
         },
     },
 };
 
+
 const Register = () => {
-    const [value, setValue] = React.useState('');
+    const [age, setAge] = React.useState('');
     const [email_end, setEmail_end] = React.useState('@qq.com');
     const [form] = Form.useForm();
     const [current, setCurrent] = React.useState(0);
@@ -100,19 +106,19 @@ const Register = () => {
     );
 
     const firstOnFinish = (values) => {
-        sessionStorage.setItem('real_name',values.real_name)
-        sessionStorage.setItem('id_number',values.id_number)
-        sessionStorage.setItem('age',values.age)
-        sessionStorage.setItem('gender',values.gender)
+        sessionStorage.setItem('real_name', values.real_name)
+        sessionStorage.setItem('id_number', values.id_number)
+        sessionStorage.setItem('age', values.age)
+        sessionStorage.setItem('gender', values.gender)
         next();
     }
 
     const secondOnFinish = (values) => {
-        console.log(values)
-        sessionStorage.setItem('email',values.email)
-        sessionStorage.setItem('email_end',values.email_end)
-        sessionStorage.setItem('prefix',values.prefix)
-        sessionStorage.setItem('phone_number',values.phone_number)
+        // console.log(values)
+        sessionStorage.setItem('email', values.email)
+        sessionStorage.setItem('email_end', values.email_end)
+        sessionStorage.setItem('prefix', values.prefix)
+        sessionStorage.setItem('phone_number', values.phone_number)
         next();
     }
 
@@ -153,7 +159,7 @@ const Register = () => {
         });
     };
 
-    const steps_length=3
+    const steps_length = 3
     const steps = [
         {
             title: 'First',
@@ -218,13 +224,11 @@ const Register = () => {
                             },
                         ]}
                     >
-                        <Space>
-                            <InputNumber min={1} max={99} value={value} onChange={setValue}/>
-                        </Space>
+                        <InputNumber min={1} max={150} value={age} onChange={setAge}/>
                     </Form.Item>
                     <Form.Item
                         name="gender"
-                        label="Gender"
+                        label="性别"
                         rules={[
                             {
                                 required: true,
@@ -238,20 +242,20 @@ const Register = () => {
                             <Option value="其他">其他</Option>
                         </Select>
                     </Form.Item>
-                    <div className="steps-action">
+                    <div className="steps-action ant-col-offset-8">
+                        {current > 0 && (
+                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
+                                上一步
+                            </Button>
+                        )}
                         {current < steps_length - 1 && (
-                            <Button type="primary" htmlType="submit" >
-                                Next
+                            <Button type="primary" htmlType="submit">
+                                下一步
                             </Button>
                         )}
                         {current === steps_length - 1 && (
-                            <Button type="primary" htmlType="submit" onClick={() => message.success('Processing complete!')}>
-                                Done
-                            </Button>
-                        )}
-                        {current > 0 && (
-                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
-                                Previous
+                            <Button type="primary" htmlType="submit">
+                                提交
                             </Button>
                         )}
                     </div>
@@ -272,7 +276,7 @@ const Register = () => {
                 >
                     <Form.Item
                         name="email"
-                        label="E-mail"
+                        label="电子邮箱"
                         rules={[
                             // {
                             //     type: 'email',
@@ -309,20 +313,20 @@ const Register = () => {
                             maxlength="12"
                         />
                     </Form.Item>
-                    <div className="steps-action">
+                    <div className="steps-action ant-col-offset-8">
+                        {current > 0 && (
+                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
+                                上一步
+                            </Button>
+                        )}
                         {current < steps_length - 1 && (
-                            <Button type="primary" htmlType="submit" >
-                                Next
+                            <Button type="primary" htmlType="submit">
+                                下一步
                             </Button>
                         )}
                         {current === steps_length - 1 && (
-                            <Button type="primary" htmlType="submit" onClick={() => message.success('Processing complete!')}>
-                                Done
-                            </Button>
-                        )}
-                        {current > 0 && (
-                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
-                                Previous
+                            <Button type="primary" htmlType="submit">
+                                提交
                             </Button>
                         )}
                     </div>
@@ -370,7 +374,7 @@ const Register = () => {
 
                     <Form.Item
                         name="password"
-                        label="Password"
+                        label="密码"
                         rules={[
                             {
                                 required: true,
@@ -384,7 +388,7 @@ const Register = () => {
 
                     <Form.Item
                         name="confirm"
-                        label="Confirm Password"
+                        label="确认密码"
                         dependencies={['password']}
                         hasFeedback
                         rules={[
@@ -417,24 +421,24 @@ const Register = () => {
                         ]}
                         {...tailFormItemLayout}
                     >
-                        <Checkbox>
-                            I have read the <a href="">agreement</a>
+                        <Checkbox className="ant-col-offset-6">
+                            我已阅读 <a href="">用户协议</a>
                         </Checkbox>
                     </Form.Item>
-                    <div className="steps-action">
+                    <div className="steps-action ant-col-offset-8">
+                        {current > 0 && (
+                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
+                                上一步
+                            </Button>
+                        )}
                         {current < steps_length - 1 && (
-                            <Button type="primary" htmlType="submit" >
-                                Next
+                            <Button type="primary" htmlType="submit">
+                                下一步
                             </Button>
                         )}
                         {current === steps_length - 1 && (
-                            <Button type="primary" htmlType="submit" onClick={() => message.success('Processing complete!')}>
-                                Done
-                            </Button>
-                        )}
-                        {current > 0 && (
-                            <Button style={{margin: '0 8px'}} onClick={() => prev()}>
-                                Previous
+                            <Button type="primary" htmlType="submit">
+                                提交
                             </Button>
                         )}
                     </div>
@@ -444,15 +448,37 @@ const Register = () => {
 
 
     return (
-        <>
-            <Steps current={current}>
-                {steps.map(item => (
-                    <Step key={item.title} title={item.title}/>
-                ))}
-            </Steps>
-            <div className="steps-content">{steps[current].content}</div>
+        <body className='registerbg'>
+        {/*注册表单上方的NFT介绍*/}
+        <div class="top-content">
+            <div class="inner-bg">
+                <div class="container">
+                    {/*表单样式*/}
+                    <h1 className='h1style'><strong>Welocome to NFT market</strong></h1>
+                    <div class="container">
+                        <div class="workinghny-form-grid">
+                            <div class="main-hotai">
+                                <div class="content-wthree">
+                                    <h2 style={{textAlign:'center',color:'#333'}}>Register</h2>
+                                    <p>To Join Us</p>
+                                    <Steps current={current}>
+                                        {steps.map(item => (
+                                            <Step key={item.title} title={item.title}/>
+                                        ))}
+                                    </Steps>
+                                    <div className="steps-content">{steps[current].content}</div>
+                                </div>
 
-        </>
+                                {/*放图片的区域*/}
+                                <div class="w3l_formi align-self"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </body>
     );
 };
 

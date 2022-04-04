@@ -1,3 +1,6 @@
+body #root{
+	height: 100%;
+}
 
 body.registerbg{
     font-family: 'Roboto', sans-serif;
@@ -5,14 +8,51 @@ body.registerbg{
     font-weight: 300;
     color: #888;
     line-height: 30px;
-    text-align: center;
 	margin: 0;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
-	background-image: url("../img/backgrounds/1.jpg");
-	height:1100px;	
+	background-image: url("../img/backgrounds/2.jpg");
+	height:100%;
+}
+
+.registerbg .w3l-hotair-form{
+	padding: 20px 40px;
+	min-height: 1px;
+	overflow: hidden
+}
+
+.registerbg .inner-bg {
+	padding: 25px 0 0px 0;
+}
+
+.registerbg  .h1style{
+	text-align: center;
+	color: #333;
+}
+
+.registerbg .content-wthree{
+	padding: 2em 3em 2em 3em;
+	max-height: 500px;
+	flex-basis: 90%;
+	-webkit-flex-basis: 90%;
+}
+
+.registerbg .ant-form-item-control-input-content{
+}
+
+.registerbg input{
+	margin-bottom: 0px
+}
+
+.registerbg .ant-steps{
+	margin: 20px 0px;
+}
+
+.registerbg .ant-checkbox + span {
+	padding-right: 0px;
+	padding-left: 8px;
 }
 
 strong { font-weight: 500; }
@@ -22,14 +62,23 @@ a, a:hover, a:focus {
 	text-decoration: none;
     -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
 }
+.h1style{
+	margin-top: 10px;
+	font-size: 38px;
+    font-weight: 100;
+    color:#555;
+    line-height: 20px;
+
+}
 
 h1, h2 {
 	margin-top: 10px;
 	font-size: 38px;
     font-weight: 100;
-    color: #555;
+    color:#888;
     line-height: 50px;
 }
+
 
 h3 {
 	font-size: 22px;
@@ -207,8 +256,18 @@ form.registration-form fieldset {
 	display: none;
 }
 
+.main-hotai {
+    position: relative;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    margin: 40px 0;
+}
+
 /****按键处****/
-button.btn {
+.btn-previous {
 	position: relative;
 	color: #000;
 	z-index: 2;
@@ -216,11 +275,11 @@ button.btn {
 	padding: 1;
 	margin:20px;
   }
-  button.btn:hover{
+  .btn-previous {
 	border: none;
   }
-  button.btn:before,
-  button.btn:after {
+  .btn-previous:before,
+  .btn-previous:after {
 	position: absolute;
 	content: "";
 	width: 0%;
@@ -229,7 +288,7 @@ button.btn {
 	z-index: -1;
 	transition: all 0.3s ease;
   }
-  button.btn:before {
+  .btn-previous:before {
 	top: 0;
 	 left: 0;
 	 border-bottom-color: transparent;
@@ -237,7 +296,7 @@ button.btn {
 	 border-top-color: #000;
 	 border-left-color: #000;
   }
-  button.btn:after{
+  .btn-previous:after{
 	 bottom: 0;
 	 right: 0;
 	 border-top-color: transparent;
@@ -245,12 +304,72 @@ button.btn {
 	 border-bottom-color: #000;
 	 border-right-color: #000;
   }
-  button.btn:hover:before,
-  button.btn:hover:after {
+  .btn-previous:hover:before,
+  .btn-previous:hover:after {
 	border-color: #000;
 	height: 100%;
 	width: 100%;
   }
+
+
+  .btn-next {
+	position: relative;
+	color: #000;
+	z-index: 2;
+	line-height: 20px;
+	padding: 1;
+	margin:20px;
+  }
+  .btn-next{
+	border: none;
+  }
+  .btn-next:before,
+  .btn-next:after {
+	position: absolute;
+	content: "";
+	width: 0%;
+	height: 0%;
+	border: 2px solid;
+	z-index: -1;
+	transition: all 0.3s ease;
+  }
+  .btn-next:before {
+	top: 0;
+	 left: 0;
+	 border-bottom-color: transparent;
+	 border-right-color: transparent;
+	 border-top-color: #000;
+	 border-left-color: #000;
+  }
+  .btn-next:after{
+	 bottom: 0;
+	 right: 0;
+	 border-top-color: transparent;
+	 border-left-color: transparent;
+	 border-bottom-color: #000;
+	 border-right-color: #000;
+  }
+  .btn-next:hover:before,
+  .btn-next:hover:after {
+	border-color: #000;
+	height: 100%;
+	width: 100%;
+  }
+
+  .w3l_formi {
+    padding: 0px;
+    flex-basis: 50%;
+    -webkit-flex-basis: 50%;
+    background: url(../img/backgrounds/bg2.jpg) no-repeat center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    padding:20px 20px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
   
 
 /*****媒体查询，根据不同的类型设置不同的参数 *****/
