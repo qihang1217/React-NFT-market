@@ -1,24 +1,25 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Layout} from 'antd';
 import Web3 from "web3";
 
+import "./App.css";
 import CryptoBoys from "../abis/CryptoBoys.json";
 import "antd/dist/antd.css";
-import "./App.css";
-import {Layout} from 'antd';
 
-import ColorMint from "./ColorMint/ColorMint";
-import MarketPlace from "./MarketPlace/MarketPlace";
-import Home from "./Home/Home";
-import Navbar from "./Navbar/Navbar";
-import MyTokens from "./MyTokens/MyTokens";
-import Queries from "./Queries/Queries";
-import UploadMint from "./UploadMint/UploadMint";
-import MyAccount from "./MyAccount/MyAccount";
-import Mint from "./Mint/Mint";
-import Museum from "./Museum/Museum";
-import Login from "../pages/Login";
-import InsideLogin from "./InsideLogin/InsideLogin";
+import loadable from "../Utils/Loadable";
+const ColorMint = loadable(() => import('./ColorMint/ColorMint'));
+const MarketPlace = loadable(() => import('./MarketPlace/MarketPlace'));
+const Home = loadable(() => import('./Home/Home'));
+const Navbar = loadable(() => import('./Navbar/Navbar'));
+const MyTokens = loadable(() => import('./MyTokens/MyTokens'));
+const Queries = loadable(() => import('./Queries/Queries'));
+const UploadMint = loadable(() => import('./UploadMint/UploadMint'));
+const MyAccount = loadable(() => import('./MyAccount/MyAccount'));
+const Mint = loadable(() => import('./Mint/Mint'));
+const Museum = loadable(() => import('./Museum/Museum'));
+const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
+
 
 const {Footer} = Layout;
 const ipfsClient = require("ipfs-http-client");

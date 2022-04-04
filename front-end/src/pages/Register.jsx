@@ -38,7 +38,6 @@ const tailFormItemLayout = {
     },
 };
 
-
 const Register = () => {
     const [value, setValue] = React.useState('');
     const [email_end, setEmail_end] = React.useState('@qq.com');

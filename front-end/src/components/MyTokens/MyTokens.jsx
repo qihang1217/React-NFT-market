@@ -4,7 +4,7 @@ import MyCryptoBoyNFTDetails from "../MyCryptoBoyNFTDetails/MyCryptoBoyNFTDetail
 import Loading from "../Loading/Loading";
 
 import {Button, Empty} from 'antd';
-
+const empty=require('./empty.svg')
 
 const MyTokens = ({
                       accountAddress,
@@ -32,7 +32,7 @@ const MyTokens = ({
         <div>
             {!totalTokensOwnedByAccount ? (
                     <Empty
-                        image="http://127.0.0.1:5001/image/empty.svg"
+                        image={empty}
                         imageStyle={{
                             height: 120,
                         }}

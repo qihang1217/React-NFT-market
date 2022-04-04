@@ -1,7 +1,9 @@
-import App from "../components/App";
-import ErrorPage from "../components/ErrorPage/ErrorPage";
-import Login from "../pages/Login";
-import register from "../pages/Register"
+import loadable from "../Utils/Loadable";
+
+const App = loadable(() => import('../components/App'));
+const register = loadable(() => import('../pages/Register'));
+const Login = loadable(() => import('../pages/Login'));
+const ErrorPage = loadable(() => import('../components/ErrorPage/ErrorPage'));
 
 export const routerMap = [
     {
