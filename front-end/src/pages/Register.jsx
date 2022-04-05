@@ -120,8 +120,8 @@ const Register = () => {
     const onFinish = (values) => {
         //获得前两个表单的数据
         // console.log(typeof values)
-        let first_register=JSON.parse(sessionStorage.getItem('first_register'))
-        let second_register=JSON.parse(sessionStorage.getItem('second_register'))
+        const first_register=JSON.parse(sessionStorage.getItem('first_register')||'{}')
+        const second_register=JSON.parse(sessionStorage.getItem('second_register')||'{}')
         values=Object.assign(values,first_register,second_register)
         //清除存储的数据
         sessionStorage.removeItem('first_register');
