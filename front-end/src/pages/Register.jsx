@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Steps, Checkbox, Form, Input, message, Select, InputNumber, Space} from 'antd';
+import {Button, Steps, Checkbox, Form, Input, message, Select, InputNumber} from 'antd';
 import HttpUtil from "../Utils/HttpUtil";
 import ApiUtil from "../Utils/ApiUtil";
 //引用CSS
@@ -375,6 +375,7 @@ const Register = () => {
                                     checkAccount(value).then(res => {
                                         console.log(res)
                                         if (res) {
+                                            message.success('该用户名可以使用',1)
                                             callback()
                                         } else {
                                             callback('该用户名已存在,请更换重试!')
