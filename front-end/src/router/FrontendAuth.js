@@ -29,7 +29,11 @@ class FrontendAuth extends Component {
             console.log(targetRouterConfig)
             if (pathname === "/login") {
                 return <Redirect to="/"/>;
-            } else {
+            }
+            else if (pathname === "/register") {
+                return <Redirect to="/"/>;
+            }
+            else {
                 // 如果路由合法，就跳转到相应的路由
                 if (targetRouterConfig) {
                     return (
