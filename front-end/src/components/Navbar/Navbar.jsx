@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import icon from "./favicon-32x32.png";
-import {Link} from "react-router-dom";
-import {Avatar, Badge, Layout, Menu} from 'antd';
+import {Link, withRouter} from "react-router-dom";
+import {Avatar, Badge, Icon, Layout, Menu} from 'antd';
 import "./Navbar.css"
 import {
     BankTwoTone,
@@ -17,31 +17,31 @@ const {SubMenu} = Menu;
 //菜单项数据
 const tabItems = [
     {
-        toPath: '/mint',
+        key: '/mint',
         title: 'Mint NFT',
     },
     {
-        toPath: '/upload_mint',
+        key: '/upload_mint',
         title: 'upload_mint',
     },
     {
-        toPath: '/color_mint',
+        key: '/color_mint',
         title: 'color_mint',
     },
     {
-        toPath: '/marketplace',
+        key: '/marketplace',
         title: 'Marketplace',
     },
     {
-        toPath: '/my-tokens',
+        key: '/my-tokens',
         title: 'My Tokens',
     },
     {
-        toPath: '/queries',
+        key: '/queries',
         title: 'Queries',
     },
     {
-        toPath: '/museum',
+        key: '/museum',
         title: 'NTF博物馆',
     },
 ]
@@ -52,17 +52,17 @@ class Navbar extends Component {
         super(props);
     }
 
-    //渲染菜单栏数据方法
-    renderTabBarItems() {
+    renderTabBarItems(tabItems) {
         return tabItems.map(item =>
-            <Menu.Item key={item.toPath}>
-                <Link to={item.toPath}>
+            <Menu.Item key={item.key}>
+                <Link to={item.key}>
                     {item.title}
                 </Link>
             </Menu.Item>)
     }
 
     render() {
+        const selectKey = this.props.location.pathname
         return (
             <Layout className="layout">
                 <Header theme="light">
@@ -72,19 +72,14 @@ class Navbar extends Component {
                             NFT's
                         </Link>
                     </div>
-                    <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
+                    <Menu theme="light" mode="horizontal" defaultSelectedKeys={[selectKey]}>
                         {/*代码重构封装*/}
-                        {this.renderTabBarItems()}
+                        {this.renderTabBarItems(tabItems)}
                         <SubMenu key="SubMenu" style={{"align-items": "center"}}
                                  title={
-                                     <>
-                                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                             <Badge count={1}>
-                                                 <Avatar shape="square" icon={<UserOutlined/>}/>
-                                             </Badge>
-                                         </a>
-                                     </>
-                                 }>
+                                        <Avatar shape="square" icon={<UserOutlined/>}/>
+                                 }
+                        >
                             <Menu.Item key="1" icon={<IdcardTwoTone/>}>
                                 <Link to='/my'>
                                     主页
@@ -118,4 +113,4 @@ class Navbar extends Component {
     }
 };
 
-export default Navbar;
+export default withRouter(Navbar);
