@@ -20,11 +20,12 @@ class Login extends Component {
         e.password = md5(e.password);
         e['token'] = localStorage.getItem("token")
         HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
-            // console.log(response);
+            console.log(response);
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
                 if (response.token_message !== 'success')
                     // 生成token到localStorage
+                    localStorage.setItem('user_name',e.user_name)
                     localStorage.setItem("token", response.token);
                 //页面跳转
                 let ref = '';

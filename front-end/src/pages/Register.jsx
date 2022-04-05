@@ -106,44 +106,29 @@ const Register = () => {
     );
 
     const firstOnFinish = (values) => {
-        sessionStorage.setItem('real_name', values.real_name)
-        sessionStorage.setItem('id_number', values.id_number)
-        sessionStorage.setItem('age', values.age)
-        sessionStorage.setItem('gender', values.gender)
+        sessionStorage.setItem('first_register', JSON.stringify(values))
         next();
     }
 
     const secondOnFinish = (values) => {
-        // console.log(values)
-        sessionStorage.setItem('email', values.email)
-        sessionStorage.setItem('email_end', values.email_end)
-        sessionStorage.setItem('prefix', values.prefix)
-        sessionStorage.setItem('phone_number', values.phone_number)
+        console.log(values)
+        values['email_end']=email_end
+        sessionStorage.setItem('second_register', JSON.stringify(values))
         next();
     }
 
     const onFinish = (values) => {
         //获得前两个表单的数据
-        values['real_name'] = sessionStorage.getItem('real_name');
-        values['id_number'] = sessionStorage.getItem('id_number');
-        values['age'] = sessionStorage.getItem('age');
-        values['gender'] = sessionStorage.getItem('gender');
-        values['email'] = sessionStorage.getItem('email');
-        values['email_end'] = sessionStorage.getItem('email_end');
-        values['prefix'] = sessionStorage.getItem('prefix');
-        values['phone_number'] = sessionStorage.getItem('phone_number');
+        // console.log(typeof values)
+        let first_register=JSON.parse(sessionStorage.getItem('first_register'))
+        let second_register=JSON.parse(sessionStorage.getItem('second_register'))
+        values=Object.assign(values,first_register,second_register)
         //清除存储的数据
-        sessionStorage.removeItem('real_name');
-        sessionStorage.removeItem('id_number');
-        sessionStorage.removeItem('age');
-        sessionStorage.removeItem('gender');
-        sessionStorage.removeItem('email');
-        sessionStorage.removeItem('email_end');
-        sessionStorage.removeItem('prefix');
-        sessionStorage.removeItem('phone_number');
+        sessionStorage.removeItem('first_register');
+        sessionStorage.removeItem('second_register');
         let md5 = require("./model/md5.js"); //引入md5加密模块
         values.password = md5(values.password);
-        console.log(values)
+        // console.log(values)
         HttpUtil.post(ApiUtil.API_REGISTER, values).then(function (response) {
             console.log(response)
             if (response.responseCode === 200 && response.message === '添加成功') {
