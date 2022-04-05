@@ -162,7 +162,7 @@ const Register = () => {
     const steps_length = 3
     const steps = [
         {
-            title: 'First',
+            title: '个人信息',
             content:
                 <Form
                     {...formItemLayout}
@@ -232,7 +232,8 @@ const Register = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please select gender!',
+                                message: '请输入您的性别!',
+                                whitespace: true,
                             },
                         ]}
                     >
@@ -262,7 +263,7 @@ const Register = () => {
                 </Form>
         },
         {
-            title: 'Second',
+            title: '联系方式',
             content:
                 <Form
                     {...formItemLayout}
@@ -280,11 +281,12 @@ const Register = () => {
                         rules={[
                             // {
                             //     type: 'email',
-                            //     message: 'The input is not valid E-mail!',
+                            //     message: '这不是一个有效的电子邮箱!',
                             // },
                             {
                                 required: true,
-                                message: 'Please input your E-mail!',
+                                message: '请输入您的电子邮箱!',
+                                whitespace: true,
                             },
                         ]}
                     >
@@ -297,7 +299,8 @@ const Register = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your phone number!',
+                                message: '请输入您的电话号码!',
+                                whitespace: true,
                             },
                             // {
                             //     pattern: "[1][34578][0-9]{9}",
@@ -334,7 +337,7 @@ const Register = () => {
             ,
         },
         {
-            title: 'Last',
+            title: '账号密码',
             content:
                 <Form
                     {...formItemLayout}
@@ -354,6 +357,18 @@ const Register = () => {
                                 required: true,
                                 message: '请输入您的用户名!',
                                 whitespace: true,
+                            },
+                            {
+                                min:2,
+                                message: '用户名不能小于2位!',
+                            },
+                            {
+                                max:12,
+                                message: '用户名不能大于12位!',
+                            },
+                            {
+                                pattern:/^[a-zA-Z0-9_]+$/,
+                                message: '用户名必须是由英文、数字或下划线组成!',
                             },
                             {
                                 validator: (rule, value, callback) => {
@@ -378,7 +393,20 @@ const Register = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your password!',
+                                message: '请输入您的密码!',
+                                whitespace: true,
+                            },
+                            {
+                                min:6,
+                                message: '密码不能小于6位!',
+                            },
+                            {
+                                max:12,
+                                message: '密码不能大于12位!',
+                            },
+                            {
+                                pattern:/^[a-zA-Z0-9_]+$/,
+                                message: '密码必须是由英文、数字或下划线组成!',
                             },
                         ]}
                         hasFeedback
@@ -394,7 +422,20 @@ const Register = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please confirm your password!',
+                                message: '请确认您的密码!',
+                                whitespace: true,
+                            },
+                            {
+                                min:6,
+                                message: '密码不能小于6位!',
+                            },
+                            {
+                                max:12,
+                                message: '密码不能大于12位!',
+                            },
+                            {
+                                pattern:/^[a-zA-Z0-9_]+$/,
+                                message: '密码必须是由英文、数字或下划线组成!',
                             },
                             ({getFieldValue}) => ({
                                 validator(_, value) {
@@ -402,7 +443,7 @@ const Register = () => {
                                         return Promise.resolve();
                                     }
 
-                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    return Promise.reject(new Error('您两次输入的密码不一致!'));
                                 },
                             }),
                         ]}
@@ -416,7 +457,7 @@ const Register = () => {
                         rules={[
                             {
                                 validator: (_, value) =>
-                                    value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+                                    value ? Promise.resolve() : Promise.reject(new Error('请接受用户协议')),
                             },
                         ]}
                         {...tailFormItemLayout}
@@ -454,13 +495,13 @@ const Register = () => {
             <div class="inner-bg">
                 <div class="container">
                     {/*表单样式*/}
-                    <h1 className='h1style'><strong>Welocome to NFT market</strong></h1>
+                    <h1 className='h1style'><strong>欢迎来到NFT市场</strong></h1>
                     <div class="container">
                         <div class="workinghny-form-grid">
                             <div class="main-hotai">
                                 <div class="content-wthree">
-                                    <h2 style={{textAlign:'center',color:'#333'}}>Register</h2>
-                                    <p>To Join Us</p>
+                                    <h2 style={{textAlign:'center',color:'#333','font-weight':'600','margin-bottom':'3px'}}>注册</h2>
+                                    <p>加入我们吧</p>
                                     <Steps current={current}>
                                         {steps.map(item => (
                                             <Step key={item.title} title={item.title}/>

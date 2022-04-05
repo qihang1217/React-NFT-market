@@ -33,7 +33,7 @@ body.registerbg{
 }
 
 .registerbg .content-wthree{
-	padding: 2em 3em 2em 3em;
+	padding: 1.5em 3em 2em 3em;
 	max-height: 500px;
 	flex-basis: 90%;
 	-webkit-flex-basis: 90%;
@@ -263,7 +263,7 @@ form.registration-form fieldset {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    margin: 40px 0;
+    margin: 30px 0 0 0;
 }
 
 /****按键处****/
