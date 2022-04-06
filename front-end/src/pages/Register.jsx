@@ -78,16 +78,19 @@ const Register = () => {
     }
 
     // 验证账号是否已经被添加过
-    const checkAccount = (value) => { // 这个是rules自定义的验证方法
-        return new Promise((resolve, reject) => {  // 返回一个promise
+    const checkAccount = (value) => {
+        // 返回一个promise
+        return new Promise((resolve, reject) => {
             checkedAccount({user_name: value}).then(res => { // 这个是后台接口方法
                 if (res.responseCode === 200 && res.message === '用户名重复') {
                     console.log(res)
                     resolve(false)
-                } else
+                } else {
                     resolve(true)
+                }
             }).catch(error => {
-                reject(error)
+                // reject(error)
+                message.error('用户名有效性校验失败',1)
             })
         })
     }
@@ -329,14 +332,12 @@ const Register = () => {
                     form={form}
                     name="register"
                     onFinish={onFinish}
-                    initialValues={{
-                        prefix: '86',
-                    }}
                     scrollToFirstError
                 >
                     <Form.Item
                         name="user_name"
                         label="用户名"
+                        hasFeedback
                         rules={[
                             {
                                 required: true,
@@ -358,19 +359,23 @@ const Register = () => {
                             {
                                 validator: (rule, value, callback) => {
                                     checkAccount(value).then(res => {
-                                        console.log(res)
-                                        if (res) {
-                                            message.success('该用户名可以使用',1)
+                                        // console.log(res)
+                                        if (res===true) {
+                                            console.log(value.length)
+                                            if (value.length>=2&&value.length<=12)
+                                                message.success('该用户名可以使用',0.5)
                                             callback()
                                         } else {
                                             callback('该用户名已存在,请更换重试!')
                                         }
+
                                     })
+
                                 },
                             },
                         ]}
                     >
-                        <Input maxlength="10"/>
+                        <Input maxlength="12"/>
                     </Form.Item>
 
                     <Form.Item
@@ -397,7 +402,7 @@ const Register = () => {
                         ]}
                         hasFeedback
                     >
-                        <Input.Password/>
+                        <Input.Password maxlength="12"/>
                     </Form.Item>
 
                     <Form.Item
@@ -434,7 +439,7 @@ const Register = () => {
                             }),
                         ]}
                     >
-                        <Input.Password/>
+                        <Input.Password maxlength="12"/>
                     </Form.Item>
 
                     <Form.Item

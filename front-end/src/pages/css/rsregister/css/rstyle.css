@@ -50,6 +50,10 @@ body.registerbg{
 	margin: 20px 0px;
 }
 
+.registerbg p{
+	text-align: center;
+}
+
 .registerbg .ant-checkbox + span {
 	padding-right: 0px;
 	padding-left: 8px;
