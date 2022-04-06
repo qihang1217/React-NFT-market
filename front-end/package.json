@@ -1,9 +1,9 @@
 {
-  "name": "cryptoboys",
+  "name": "ntf-marketplace",
   "version": "0.1.0",
-  "description": "Crypto Boys NFT Marketplace",
-  "author": "devpavan04",
-  "homepage": "https://devpavan04.github.io/cryptoboys-nft-marketplace",
+  "description": "NFT Marketplace",
+  "author": "Qihang",
+  "homepage": "",
   "dependencies": {
     "@babel/core": "7.1.6",
     "@openzeppelin/contracts": "^3.4.1",
