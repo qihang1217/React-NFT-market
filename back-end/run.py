@@ -48,11 +48,11 @@ def api_upload():
             unix_time = int(time.time())
             new_filename = str(unix_time) + '.' + ext  # 修改文件名
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
-            return jsonify({"code": 0, "message": "上传成功", "responseCode": 200})
+            return jsonify({"message": "上传成功", "responseCode": 200})
         else:
-            return jsonify({"code": 1001, "message": "上传失败"})
+            return jsonify({"message": "上传失败"，"responseCode": -1})
     else:
-        return jsonify({"code": 1001, "message": "上传失败",'token_message':'未登录',"responseCode": 200})
+        return jsonify({"message": "上传失败",'token_message':'未登录',"responseCode": -1})
 
 
 ########## React访问flask资源
