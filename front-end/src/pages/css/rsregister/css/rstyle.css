@@ -276,7 +276,7 @@ form.registration-form fieldset {
 	color: #000;
 	z-index: 2;
 	line-height: 20px;
-	padding: 1;
+	padding: 1px;
 	margin:20px;
   }
   .btn-previous {
@@ -321,7 +321,7 @@ form.registration-form fieldset {
 	color: #000;
 	z-index: 2;
 	line-height: 20px;
-	padding: 1;
+	padding: 1px;
 	margin:20px;
   }
   .btn-next{
@@ -361,7 +361,6 @@ form.registration-form fieldset {
   }
 
   .w3l_formi {
-    padding: 0px;
     flex-basis: 50%;
     -webkit-flex-basis: 50%;
     background: url(../img/backgrounds/bg2.jpg) no-repeat center;

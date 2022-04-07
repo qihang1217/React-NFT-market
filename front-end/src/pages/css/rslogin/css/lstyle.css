@@ -199,7 +199,6 @@ button:hover {
 }
 
 .w3l_form {
-    padding: 0px;
     flex-basis: 50%;
     -webkit-flex-basis: 50%;
     background: url(../images/left-bg.jpg) no-repeat center;
@@ -298,7 +297,6 @@ p.account a:hover {
 }
 
 .w3l-hotair-form input{
-    outline: none;
     margin-bottom: 15px;
     font-size: 16px;
     color: #999;
@@ -307,7 +305,6 @@ p.account a:hover {
     width: 100%;
     display: inline-block;
     box-sizing: border-box;
-    border: none;
     outline: none;
     background: #f7fafc;
     border: 1px solid #e5e5e5;
