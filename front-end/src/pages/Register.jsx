@@ -46,7 +46,6 @@ const tailFormItemLayout = {
 
 const Register = () => {
     const [age, setAge] = React.useState('');
-    const [email_end, setEmail_end] = React.useState('@qq.com');
     const [form] = Form.useForm();
     const [current, setCurrent] = React.useState(0);
 
@@ -60,16 +59,27 @@ const Register = () => {
 
 
     const selectAfter = (
-        <Select defaultValue="@qq.com" className="select-after"
-                onChange={(selected_value) => {
-                    setEmail_end(selected_value)
+        <Form.Item name="email_end" noStyle initialValue='@qq.com'>
+            <Select className="select-after">
+                <Option value="@aliyun.com">@aliyun.com</Option>
+                <Option value="@163.com">@163.com</Option>
+                <Option value="@126.com">@126.com</Option>
+                <Option value="@139.com">@139.com</Option>
+            </Select>
+        </Form.Item>
+    );
+
+    const prefixSelector = (
+        <Form.Item name="prefix" noStyle initialValue='86'>
+            <Select
+                style={{
+                    width: 70,
                 }}
-        >
-            <Option value="@aliyun.com">@aliyun.com</Option>
-            <Option value="@163.com">@163.com</Option>
-            <Option value="@126.com">@126.com</Option>
-            <Option value="@139.com">@139.com</Option>
-        </Select>
+            >
+                <Option value="86">+86</Option>
+                <Option value="87">+87</Option>
+            </Select>
+        </Form.Item>
     );
 
 
@@ -95,18 +105,6 @@ const Register = () => {
         })
     }
 
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        </Form.Item>
-    );
 
     const firstOnFinish = (values) => {
         sessionStorage.setItem('first_register', JSON.stringify(values))
@@ -114,15 +112,14 @@ const Register = () => {
     }
 
     const secondOnFinish = (values) => {
-        console.log(values)
-        values['email_end']=email_end
+        // console.log(values)
         sessionStorage.setItem('second_register', JSON.stringify(values))
         next();
     }
 
     const onFinish = (values) => {
         //获得前两个表单的数据
-        // console.log(typeof values)
+        console.log(values)
         const first_register=JSON.parse(sessionStorage.getItem('first_register')||'{}')
         const second_register=JSON.parse(sessionStorage.getItem('second_register')||'{}')
         values=Object.assign(values,first_register,second_register)
@@ -157,9 +154,6 @@ const Register = () => {
                     form={form}
                     name="register"
                     onFinish={firstOnFinish}
-                    initialValues={{
-                        prefix: '86',
-                    }}
                     scrollToFirstError
                 >
                     <Form.Item
