@@ -12,6 +12,7 @@ ReactDOM.render(
     <React.StrictMode>
         <Router>
             <Switch>
+                {/*利用高阶组件进行路由有效性检验和响应跳转*/}
                 <FrontendAuth routerConfig={routerMap}/>
             </Switch>
         </Router>

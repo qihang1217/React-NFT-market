@@ -44,6 +44,14 @@ class Login extends Component {
         });
     }
 
+    handleHeight = () => {
+        const screenHeight = document.documentElement.clientHeight;
+        let height = `${screenHeight-64}px`;
+        this.setState({
+            height,
+        })
+    }
+
     componentWillMount() {
         this.props.revive_footer()
         message.error('未登录,请先登录~', 1);
@@ -61,14 +69,6 @@ class Login extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleHeight);
-    }
-
-    handleHeight = () => {
-        const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight-64}px`;
-        this.setState({
-            height,
-        })
     }
 
     render() {
