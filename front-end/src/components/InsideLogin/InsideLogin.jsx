@@ -7,7 +7,6 @@ import ApiUtil from "../.././Utils/ApiUtil";
 import "./InsideLogin.css"
 import "../.././pages/css/rslogin/css/lstyle.css"
 import "../.././pages/css/rslogin/css/font-awesome.min.css"
-import insideLogin from "./InsideLogin";
 
 class Login extends Component {
     constructor(props) {
@@ -36,7 +35,7 @@ class Login extends Component {
                     ref = document.referrer;
                 }
                 try {
-                    if (ref.length == 0 &&  window.opener.location.href.length > 0) {
+                    if (ref.length === 0 &&  window.opener.location.href.length > 0) {
                         ref = window.opener.location.href;
                     }
                 } catch (e) {

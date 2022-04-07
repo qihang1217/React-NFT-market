@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import icon from "./favicon-32x32.png";
 import {Link, withRouter} from "react-router-dom";
-import {Avatar, Badge, Icon, Layout, Menu} from 'antd';
+import {Avatar, Layout, Menu} from 'antd';
 import "./Navbar.css"
 import {
     BankTwoTone,
@@ -48,9 +48,6 @@ const tabItems = [
 
 
 class Navbar extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     renderTabBarItems(tabItems) {
         return tabItems.map(item =>
