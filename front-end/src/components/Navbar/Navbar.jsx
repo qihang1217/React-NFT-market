@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import icon from "./favicon-32x32.png";
 import {Link, withRouter} from "react-router-dom";
-import {Avatar, Layout, Menu,Modal,message} from 'antd';
+import {Avatar, Layout, Menu, message, Modal} from 'antd';
 import "./Navbar.css"
 import {
     BankTwoTone,

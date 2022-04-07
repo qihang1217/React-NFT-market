@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {Layout,message} from 'antd';
+import {Layout, message} from 'antd';
 import Web3 from "web3";
 
 import "./App.css";
@@ -8,6 +8,7 @@ import CryptoBoys from "../abis/CryptoBoys.json";
 import "antd/dist/antd.css";
 
 import loadable from "../Utils/Loadable";
+
 const ColorMint = loadable(() => import('./ColorMint/ColorMint'));
 const MarketPlace = loadable(() => import('./MarketPlace/MarketPlace'));
 const Home = loadable(() => import('./Home/Home'));

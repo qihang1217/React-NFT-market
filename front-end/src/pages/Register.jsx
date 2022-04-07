@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Steps, Checkbox, Form, Input, message, Select, InputNumber} from 'antd';
+import {Button, Checkbox, Form, Input, InputNumber, message, Select, Steps} from 'antd';
 import HttpUtil from "../Utils/HttpUtil";
 import ApiUtil from "../Utils/ApiUtil";
 //引用CSS

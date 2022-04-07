@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import CryptoBoyNFTImage from "../CryptoBoyNFTImage/CryptoBoyNFTImage";
 import MyCryptoBoyNFTDetails from "../MyCryptoBoyNFTDetails/MyCryptoBoyNFTDetails";
 import Loading from "../Loading/Loading";
-
 import {Button, Empty} from 'antd';
+
 const empty=require('./empty.svg')
 
 const MyTokens = ({
