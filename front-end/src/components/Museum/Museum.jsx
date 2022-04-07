@@ -1,14 +1,13 @@
 import React from "react";
 import ApiUtil from "../../Utils/ApiUtil";
-import loadingGIF from "../Loading/loading.gif"
-import {message} from "antd";
+import Loading from "../Loading/Loading"
 
 class Museum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             height: 0,
-            loadingVisible:'block',
+            loadingVisible:'flex',
             iframeVisible:'none'
         }
     }
@@ -39,12 +38,8 @@ class Museum extends React.Component {
     render() {
         return (
             <>
-                <div style={{display:this.state.loadingVisible}}>
-                    <img
-                        src={loadingGIF}
-                        alt="Loading.."
-                        className="d-block m-auto"
-                    />
+                <div style={{display:this.state.loadingVisible,alignItems:"center",height: this.state.height}}>
+                    <Loading/>
                 </div>
                 <iframe
                     src={ApiUtil.API_MUSEUM}
