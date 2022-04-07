@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import icon from "./favicon-32x32.png";
 import {Link, withRouter} from "react-router-dom";
-import {Avatar, Layout, Menu} from 'antd';
+import {Avatar, Layout, Menu,Modal,message} from 'antd';
 import "./Navbar.css"
 import {
     BankTwoTone,
@@ -48,6 +48,45 @@ const tabItems = [
 
 
 class Navbar extends Component {
+
+    //退出登陆
+    logout = () => {
+        const isAuthenticated=localStorage.getItem("token") ? true : false
+        if (isAuthenticated){
+            //已登录
+            // 显示确认提示
+            Modal.confirm({
+                title: '您确认退出登陆吗?',
+                okText:'确定',
+                cancelText:'取消',
+                onOk: () => {
+                    // console.log('OK');
+                    // 确定后, 删除存储的用户信息
+                    localStorage.clear()
+                    message.success('退出登陆成功')
+                },
+                onCancel() {
+                    // console.log('Cancel');
+                },
+            })
+        }
+        else{
+            message.error('您还未登陆,无法退出')
+            Modal.confirm({
+                title: '您还未登陆,是否现在登陆?',
+                okText:'确定',
+                cancelText:'取消',
+                onOk: () => {
+                    // console.log('OK');
+                    // 跳转到登陆界面
+                    window.location.href='/login'
+                },
+                onCancel() {
+                    // console.log('Cancel');
+                },
+            })
+        }
+    }
 
     renderTabBarItems(tabItems) {
         return tabItems.map(item =>
@@ -97,7 +136,7 @@ class Navbar extends Component {
                                     设置
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="5" icon={<CloseSquareTwoTone/>}>
+                            <Menu.Item key="5" icon={<CloseSquareTwoTone/>} onClick={this.logout}>
                                 <Link to='/'>
                                     退出登陆
                                 </Link>
