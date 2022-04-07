@@ -79,7 +79,7 @@ class Navbar extends Component {
                 onOk: () => {
                     // console.log('OK');
                     // 跳转到登陆界面
-                    window.location.href='/login'
+                    this.props.history.replace('/login')
                 },
                 onCancel() {
                     // console.log('Cancel');
