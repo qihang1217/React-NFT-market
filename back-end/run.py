@@ -8,7 +8,6 @@ from flask_cors import CORS
 import MysqlUtil as DBUtil
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
 # 加载配置文件
 app.config.from_object(configs)
@@ -22,11 +21,12 @@ cors = CORS(app, supports_credentials=True)
 apiPrefix = '/api/v1/'
 
 ########## 文件上传API
+
 UPLOAD_FOLDER = 'upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # 设置文件上传的目标文件夹
 basedir = os.path.abspath(os.path.dirname(__file__))  # 获取当前项目的绝对路径
-ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'rmvb', 'avi', 'ts','wav',
-'midi','cda','mp3','wma'}  # 允许上传的文件后缀
+ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'rmvb', 'avi', 'ts', 'wav',
+                      'midi', 'cda', 'mp3', 'wma'}  # 允许上传的文件后缀
 
 
 # 判断文件是否合法
@@ -37,7 +37,7 @@ def allowed_file(filename):
 @app.route(apiPrefix + 'upload', methods=['POST'], strict_slashes=False)
 def api_upload():
     print(request.values.items())
-    token=request.values.get('token',None)
+    token = request.values.get('token', None)
     if verify_login(token):
         file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])  # 拼接成合法文件夹地址
         if not os.path.exists(file_dir):
@@ -51,9 +51,9 @@ def api_upload():
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             return jsonify({"message": "上传成功", "responseCode": 200})
         else:
-            return jsonify({"message": "上传失败","responseCode": -1,"detail_message":"文件类型不合格"})
+            return jsonify({"message": "上传失败", "responseCode": -1, "detail_message": "文件类型不合格"})
     else:
-        return jsonify({"message": "上传失败",'token_message':'未登录',"responseCode": -1})
+        return jsonify({"message": "上传失败", 'token_message': '未登录', "responseCode": -1})
 
 
 ########## React访问flask资源
@@ -67,20 +67,7 @@ def send_js(filename):
     return send_from_directory(dirpath, filename, as_attachment=True)
 
 
-@app.route('/image/<path:filename>')
-def send_image(filename):
-    dirpath = os.path.join(app.root_path, RESOURCE_FOLDER + '/image')
-    return send_from_directory(dirpath, filename, as_attachment=True)
-
-
-@app.route('/css/<path:filename>')
-def send_css(filename):
-    dirpath = os.path.join(app.root_path, RESOURCE_FOLDER + '/css')
-    return send_from_directory(dirpath, filename, as_attachment=True)
-
-
 ########## React访问flask上的NTF博物馆
-
 @app.route('/api/museum', methods=['GET'], strict_slashes=False)
 def api_museum():
     if request.method == 'GET':
@@ -103,12 +90,11 @@ def api_museum():
 #         pass
 
 ########## Token接口
-
 def generate_auth_token(data):
     expiration = 3600
-    s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration) #expiration是过期时间
+    s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)  # expiration是过期时间
     # 利用唯一的用户名生成token
-    token = s.dumps({'user_name':data['user_name']})
+    token = s.dumps({'user_name': data['user_name']})
     # print(token)
     return token.decode()
 
@@ -137,24 +123,26 @@ def verify_login(token):
     else:
         return False
 
+
 ########## 注册接口
 @app.route(apiPrefix + 'register', methods=['POST'], strict_slashes=False)
 def register_user():
     json_str = request.get_data(as_text=True)
     user_data = json.loads(json_str)
     print(user_data)
-    response=DBUtil.addOrUpdateUsers(user_data)
-    response['responseCode']=200
+    response = DBUtil.addOrUpdateUsers(user_data)
+    response['responseCode'] = 200
     print(response)
     return jsonify(response)
+
 
 # 动态检验用户名是否可用
 @app.route(apiPrefix + 'checkUserName', methods=['POST'], strict_slashes=False)
 def check_username():
     json_str = request.get_data(as_text=True)
     user_data = json.loads(json_str)
-    response=DBUtil.checkUserNameRepeat(user_data)
-    response['responseCode']=200
+    response = DBUtil.checkUserNameRepeat(user_data)
+    response['responseCode'] = 200
     return jsonify(response)
 
 
@@ -164,21 +152,21 @@ def login_user():
     json_str = request.get_data(as_text=True)
     user_data = json.loads(json_str)
     # print('user_data',user_data)
-    token = user_data.get('token',None)
+    token = user_data.get('token', None)
     _token = verify_auth_token(token)
-    if _token=='success':
+    if _token == 'success':
         response = {
             'code': 0,
             'message': "验证成功",
-            'token_message':_token,
+            'token_message': _token,
         }
     else:
         response = DBUtil.checkUsers(user_data)
-        if response['message']=='验证成功':
+        if response['message'] == '验证成功':
             # token并没有验证通过,但账号密码验证通过则生成新的token
             new_token = generate_auth_token(user_data)
-            response['token_message']=_token
-            response['token']=new_token
+            response['token_message'] = _token
+            response['token'] = new_token
     response['responseCode'] = 200
     # print('response',response)
     return jsonify(response)
