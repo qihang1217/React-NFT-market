@@ -35,6 +35,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
+# TODO: 对传入的相关参数进行处理
 @app.route(apiPrefix + 'upload', methods=['POST'], strict_slashes=False)
 def api_upload():
     print(request.values.items())
