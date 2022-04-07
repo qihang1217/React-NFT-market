@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {Layout} from 'antd';
+import {Layout,message} from 'antd';
 import Web3 from "web3";
 
 import "./App.css";
@@ -52,14 +52,6 @@ class App extends Component {
         };
     }
 
-    componentWillMount = async () => {
-        await this.loadWeb3();
-        await this.loadBlockchainData();
-        await this.setMetaData();
-        await this.setMintBtnTimer();
-        let isAuthenticated = localStorage.getItem("token") ? true : false;
-        this.setState({isAuthenticated: isAuthenticated})
-    };
 
     //检测与连接web3浏览器用户
     loadWeb3 = async () => {
@@ -68,8 +60,8 @@ class App extends Component {
         } else if (window.web3) {
             window.web3 = new Web3(window.web3.currentProvider);
         } else {
-            window.alert(
-                "Non-Ethereum browser detected. You should consider trying MetaMask!"
+            message.error(
+                "检测到非以太坊浏览器。你应该考虑使用MetaMask!"
             );
         }
     };
@@ -192,7 +184,8 @@ class App extends Component {
 
     //连接到Matemask
     connectToMetamask = async () => {
-        await window.ethereum.enable();//请求用户授权应用访问MetaMask中的用户账号信息
+        //请求用户授权应用访问MetaMask中的用户账号信息
+        await window.ethereum.enable();
         this.setState({metamaskConnected: true});
         window.location.reload();
     };
@@ -346,6 +339,25 @@ class App extends Component {
             footerVisible: '',
         })
     }
+
+    componentWillMount = async () => {
+        await this.loadWeb3();
+        await this.loadBlockchainData();
+        await this.setMetaData();
+        await this.setMintBtnTimer();
+        // 启动循环定时器,每隔一秒检查登陆状态
+        this.intervalLoginId = setInterval(() => {
+            this.setState({
+                isAuthenticated: localStorage.getItem("token") ? true : false
+            })
+        }, 1000);
+    };
+
+    componentWillUnmount () {
+        // 清除定时器
+        clearInterval(this.intervalLoginId)
+    }
+
 
     //渲染网页
     render() {

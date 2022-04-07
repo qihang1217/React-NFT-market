@@ -58,6 +58,12 @@ class Login extends Component {
         message.error('未登录,请先登录~', 1);
     }
 
+    componentWillUnmount () {
+        // 清除定时器
+        clearInterval(this.intervalId)
+    }
+
+
     render() {
         return (
             <>

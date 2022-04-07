@@ -50,7 +50,7 @@ def api_upload():
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             return jsonify({"message": "上传成功", "responseCode": 200})
         else:
-            return jsonify({"message": "上传失败"，"responseCode": -1})
+            return jsonify({"message": "上传失败","responseCode": -1})
     else:
         return jsonify({"message": "上传失败",'token_message':'未登录',"responseCode": -1})
 
