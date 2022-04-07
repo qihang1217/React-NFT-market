@@ -24,24 +24,12 @@ class Login extends Component {
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
                 if (response.token_message !== 'success')
-                    // 生成token到localStorage
+                    // 将生成token存储到localStorage
                     localStorage.setItem('user_name',e.user_name)
                     localStorage.setItem("token", response.token);
                 //页面跳转
-                let ref = '';
-                if (document.referrer.length > 0) {
-                    ref = document.referrer;
-                }
-                try {
-                    if (ref.length === 0 && window.opener.location.href.length > 0) {
-                        ref = window.opener.location.href;
-                    }
-                } catch (e) {
-                    console.log(e)
-                }
-                if (ref === '/login' || ref === '/register')
-                    window.location.href = '/'
-                window.location.href = ref
+                window.history.back()
+                window.location.reload()
             } else if (response.responseCode === 200 && response.message === '用户不存在') {
                 message.error('账号或密码错误,请稍后重试~');
             } else if (response.responseCode === 200 && response.message === '验证失败') {
