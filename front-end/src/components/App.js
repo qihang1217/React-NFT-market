@@ -111,6 +111,7 @@ class App extends Component {
                     let totalTokensMinted = await cryptoBoysContract.methods
                         .getNumberOfTokensMinted()
                         .call();
+                    // fixme:可能存在bug,totalTokensMinted值错误
                     totalTokensMinted = totalTokensMinted.toNumber();
                     this.setState({totalTokensMinted});
                     //获取所拥有的cryptoBoys总数
