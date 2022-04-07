@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-import json
 import pymysql
 from run import db
 
@@ -147,6 +146,8 @@ def addOrUpdateUsers(user_data):
             'message': repr(e)
         }
         return re
+    finally:
+        db.session.close()
 
 
 def checkUserNameRepeat(user_data):
@@ -161,6 +162,7 @@ def checkUserNameRepeat(user_data):
         'code': 0,
         'message': result
     }
+    db.session.close()
     return re
 
 
@@ -195,6 +197,8 @@ def checkUsers(user_data):
             'message': repr(e)
         }
         return re
+    finally:
+        db.session.close()
 
 def checkUsers(user_data):
     # 验证密码是否正确
@@ -227,6 +231,8 @@ def checkUsers(user_data):
             'message': repr(e)
         }
         return re
+    finally:
+        db.session.close()
 
 # def deleteStaff(id):
 #     #根据staff的id号来删除该条记录
