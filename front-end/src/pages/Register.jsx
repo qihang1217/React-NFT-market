@@ -258,9 +258,6 @@ const Register = () => {
                     form={form}
                     name="register"
                     onFinish={secondOnFinish}
-                    initialValues={{
-                        prefix: '86',
-                    }}
                     scrollToFirstError
                 >
                     <Form.Item
