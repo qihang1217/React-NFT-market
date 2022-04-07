@@ -25,7 +25,8 @@ apiPrefix = '/api/v1/'
 UPLOAD_FOLDER = 'upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # 设置文件上传的目标文件夹
 basedir = os.path.abspath(os.path.dirname(__file__))  # 获取当前项目的绝对路径
-ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'rmvb', 'avi', 'ts'}  # 允许上传的文件后缀
+ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'rmvb', 'avi', 'ts','wav',
+'midi','cda','mp3','wma'}  # 允许上传的文件后缀
 
 
 # 判断文件是否合法
@@ -35,7 +36,7 @@ def allowed_file(filename):
 
 @app.route(apiPrefix + 'upload', methods=['POST'], strict_slashes=False)
 def api_upload():
-    # print(request.values)
+    print(request.values.items())
     token=request.values.get('token',None)
     if verify_login(token):
         file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])  # 拼接成合法文件夹地址
@@ -50,7 +51,7 @@ def api_upload():
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             return jsonify({"message": "上传成功", "responseCode": 200})
         else:
-            return jsonify({"message": "上传失败","responseCode": -1})
+            return jsonify({"message": "上传失败","responseCode": -1,"detail_message":"文件类型不合格"})
     else:
         return jsonify({"message": "上传失败",'token_message':'未登录',"responseCode": -1})
 

@@ -27,18 +27,14 @@ const props = {
             // console.log(info.file, info.fileList);
         }
         if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
+            message.success(`${info.file.name}文件上传成功!`);
         } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+            message.error(`${info.file.name}文件上传失败!`);
         }
     },
     beforeUpload() {
         return false;
     },
-};
-
-const validateMessages = {
-    required: '${label} is required!',
 };
 
 var formData = new FormData();
@@ -89,10 +85,12 @@ const onSubmit = (values) => {
     // console.log(values)
     let token=localStorage.getItem('token')
     formData.append('token', token)
+    formData.append('work_name', values.work_name)
+    formData.append('introduction', values.introduction)
     fetch(ApiUtil.API_UPLOAD, {
         //fetch请求
         method: 'POST',
-        body: formData,token
+        body: formData
     }).then(response => response.json())
         .then(result => {
             console.log(result)
@@ -101,8 +99,13 @@ const onSubmit = (values) => {
             }
             else if(result.responseCode === -1&&result.token_message==='未登录'){
                 message.error('登陆状态无效或未登录,请重新登陆~');
+                //清除存储的无效登陆信息
                 localStorage.removeItem('token')
+                localStorage.removeItem('user_name')
                 window.location.href='/login'
+            }
+            else if(result.responseCode === -1&&result.detail_message==='文件类型不合格'){
+                message.error('作品格式不符合要求,请重新上传作品~');
             }
             else {
                 message.error('NTF铸造信息提交失败,请重新提交~');
@@ -120,11 +123,11 @@ const UploadMint = () => {
             <div className="card mt-1">
                 <div className="card-body align-items-center d-flex justify-content-center">
                     <h5>
-                        UPLOAD YOUR WORK TO MAKE YOUR WORK UNIQUE!
+                        上传你的作品，让你的作品独一无二！
                     </h5>
                 </div>
             </div>
-            <Form {...layout} name="nest-messages" validateMessages={validateMessages} onFinish={onSubmit}>
+            <Form {...layout} name="nest-messages" onFinish={onSubmit}>
                 <Form.Item
                     name="upload-file"
                     label='文件上传'
@@ -133,37 +136,37 @@ const UploadMint = () => {
                     rules={[
                         {
                             required: true,
+                            message:'请上传您的作品!'
                         },
                     ]}>
                     <Dragger {...props} >
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined/>
                         </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                        <p className="ant-upload-text">单击或拖动文件到此区域以上载</p>
                         <p className="ant-upload-hint">
-                            Support for a single or bulk upload. Strictly prohibit from uploading company data or
-                            other
-                            band files
+                            支持单次或批量上传,仅支持图片、音频或视频
                         </p>
                     </Dragger>
                 </Form.Item>
                 <Form.Item
-                    name={['user', 'name']}
-                    label="Name"
+                    name="work_name"
+                    label="作品名称"
                     rules={[
                         {
                             required: true,
+                            message:'请输入您的作品名称!'
                         },
                     ]}
                 >
                     <Input maxlength="20" placeholder="作品名称"/>
                 </Form.Item>
-                <Form.Item name={['user', 'introduction']} label="Introduction">
-                    <Input.TextArea maxlength="1000" placeholder="Provide a detailed description of your item."/>
+                <Form.Item name='introduction' label="作品介绍">
+                    <Input.TextArea maxlength="1000" placeholder="请输入您的作品描述"/>
                 </Form.Item>
                 <Form.Item wrapperCol={{...layout.wrapperCol, offset: 6}}>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        提交
                     </Button>
                 </Form.Item>
             </Form>
