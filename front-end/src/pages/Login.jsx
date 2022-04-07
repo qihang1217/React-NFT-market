@@ -23,13 +23,13 @@ class Login extends Component {
             console.log(response);
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
-                if (response.token_message !== 'success')
+                if (response.token_message !== 'success'){
                     // 将生成token存储到localStorage
                     localStorage.setItem('user_name',e.user_name)
-                    localStorage.setItem("token", response.token);
+                    localStorage.setItem("token", response.token)
+                }
                 //页面跳转
-                window.history.back()
-                window.location.reload()
+                // window.location.href='/'
             } else if (response.responseCode === 200 && response.message === '用户不存在') {
                 message.error('账号或密码错误,请稍后重试~');
             } else if (response.responseCode === 200 && response.message === '验证失败') {
