@@ -83,6 +83,20 @@ const Register = () => {
         </Form.Item>
     );
 
+
+    //用户名重复性校验
+    const validateUser_name_repeat=(rule, value, callback) => {
+        // console.log(value)
+        const reg = /^[a-zA-Z0-9_]+$/
+        if (value.length >= 4 && value.length <= 12 && reg.test(value)) {
+            //用户名有效性检验通过后才能进行用户名重复性检验
+            let debounceCheckAccount = debounce(checkAccount)
+            debounceCheckAccount(value, callback)
+        } else {
+            callback()
+        }
+    }
+
     //年龄自定义校验
     const validateAge=(rule,value,callback)=>{
         if(value===''){
@@ -376,17 +390,7 @@ const Register = () => {
                                 message: '用户名必须是由英文、数字或下划线组成!',
                             },
                             {
-                                validator: (rule, value, callback) => {
-                                    // console.log(value)
-                                    const reg = /^[a-zA-Z0-9_]+$/
-                                    if (value.length >= 4 && value.length <= 12 && reg.test(value)) {
-                                        //用户名有效性检验通过后才能进行用户名重复性检验
-                                        let debounceCheckAccount = debounce(checkAccount)
-                                        debounceCheckAccount(value, callback)
-                                    } else {
-                                        callback()
-                                    }
-                                },
+                                validator:validateUser_name_repeat,
                             },
                         ]}
                     >
