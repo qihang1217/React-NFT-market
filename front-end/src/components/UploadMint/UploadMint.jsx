@@ -81,6 +81,9 @@ const normFile = (e) => {
     return e && e.fileList;
 };
 
+/*todo:添加上传文件根据文件类型进行预览
+https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=monline_4_dg&wd=antd%20%E9%A2%84%E8%A7%88%E8%A7%86%E9%A2%91&oq=antd%2520%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589%25E9%25A2%2584%25E8%25A7%2588%25E8%25A7%2586%25E9%25A2%2591&rsv_pq=be4df6ef0038692f&rsv_t=b75foeWyNzqw1JsrhOYyQWQ2XBZlI2HXMsS7lK0xNz0W2BceVYTo%2FO1%2BnJwFxWv5PzR6&rqlang=cn&rsv_dl=tb&rsv_enter=1&rsv_btype=t&inputT=924&rsv_sug3=53&rsv_sug1=52&rsv_sug7=100&rsv_sug2=0&rsv_sug4=1792
+https://cloud.tencent.com/developer/ask/sof/1152199*/
 const onSubmit = (values) => {
     // console.log(values)
     let token = localStorage.getItem('token')
