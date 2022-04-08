@@ -1,164 +1,6 @@
 import React from 'react';
 
 
-/*export const Nav30DataSource = {
-  wrapper: { className: 'header3 home-page-wrapper' },
-  page: { className: 'home-page l1nk8fctvib-editor_css' },
-  logo: {
-    className: 'header3-logo l1ni9gn53ju-editor_css',
-    children: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jinse.com%2F5171770_image3.png&refer=http%3A%2F%2Fimg.jinse.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1651837808&t=68d16006f650f92f07e71e5e3777108c',     
-  },
-  Menu: {
-    className: 'header3-menu',
-    children: [
-      {
-        name: 'item0',
-        className: 'header3-item',
-        children: {
-          href: '#',
-          children: [
-            {
-              children: (
-                <span>
-                  <span>
-                    <span>
-                      <span>
-                        <span>
-                          <p>happy</p>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
-              ),
-              name: 'text',
-              className: 'l1nil3j9ebr-editor_css',
-            },
-          ],
-        },
-        /*subItem: [
-          {
-            name: 'sub0',
-            className: 'item-sub',
-            children: {
-              className: 'item-sub-item',
-              children: [
-                {
-                  name: 'image0',
-                  className: 'item-image',
-                  children:
-                    'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
-                },
-                {
-                  name: 'title',
-                  className: 'item-title',
-                  children: 'Ant Design',
-                },
-                {
-                  name: 'content',
-                  className: 'item-content',
-                  children: '企业级 UI 设计体系',
-                },
-              ],
-            },
-          },
-          {
-            name: 'sub1',
-            className: 'item-sub',
-            children: {
-              className: 'item-sub-item',
-              children: [
-                {
-                  name: 'image0',
-                  className: 'item-image',
-                  children:
-                    'https://gw.alipayobjects.com/zos/rmsportal/ruHbkzzMKShUpDYMEmHM.svg',
-                    
-                },
-                {
-                  name: 'title',
-                  className: 'item-title',
-                  children: 'Ant Design',
-                },
-                {
-                  name: 'content',
-                  className: 'item-content',
-                  children: '企业级 UI 设计体系',
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        name: 'item1',
-        className: 'header3-item',
-        children: {
-          href: '#',
-          children: [
-            {
-              children: (
-                <span>
-                  <span>
-                    <span>
-                      <span>
-                        <span>
-                          <p>&nbsp;wonderful</p>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
-              ),
-              name: 'text',
-              className: 'l1nkbvi2ogk-editor_css',
-              
-            },
-          ],
-        },
-      },
-      {
-        name: 'item2',
-        className: 'header3-item',
-        children: {
-          href: '#',
-          children: [
-            {
-              children: (
-                <span>
-                  <p>&nbsp;positive</p>
-                </span>
-              ),
-              name: 'text',
-              className: 'l1nketscoya-editor_css',
-            },
-          ],
-        },
-      },
-      {
-        name: 'item3',
-        className: 'header3-item',
-        children: {
-          href: '#',
-          children: [
-            {
-              children: (
-                <span>
-                  <span>
-                    <p>&nbsp;eximius</p>
-                  </span>
-                </span>
-              ),
-              name: 'text',
-              className: 'l1nkeucr8hc-editor_css',
-            },
-          ],
-        },
-      },
-    ],
-  },
-  mobileMenu: { className: 'header3-mobile-menu' },
-}; */
 export const Banner00DataSource = {
     wrapper: {className: 'banner0 l1nheinijtt-editor_css'},
     textWrapper: {className: 'banner0-text-wrapper'},
@@ -189,6 +31,9 @@ export const Banner00DataSource = {
         ),
     },
 };
+
+//fixme:修正优秀作品样式
+//todo:修改获取方式为后端异步获取
 export const Content00DataSource = {
     wrapper: {className: 'home-page-wrapper content0-wrapper'},
     page: {className: 'home-page content0 l1nj5s0lfjq-editor_css'},
@@ -233,46 +78,18 @@ export const Content00DataSource = {
                                 'https://p3.itc.cn/images01/20220225/e644b4ee07f34e208bbef97b896d1978.jpeg',
                         },
                         {
-                            name: 'title',
+                            name: 'content',
                             className: 'content0-block-title l1nkvfqzvhp-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <p>
-                        &nbsp;作品名称：《Megastars- Mick and Madonna<span>
-                          》
-                        </span>
-                      </p>
-                    </span>
-                  </span>
-                </span>
+                              <p>
+                                《Megastars- Mick and Madonna》
+                              </p>
                             ),
                         },
                         {
                             name: 'content',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <span>
-                        <span>
-                          <span>
-                            <span>
-                              <span>
-                                <span>
-                                  <span>
-                                    <p>作者：Richard Bernstein</p>
-                                  </span>
-                                </span>
-                              </span>
-                            </span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
+                                <p>作者：Richard Bernstein</p>
                             ),
                             className: 'l1nkvit9sz-editor_css',
                         },
@@ -280,27 +97,11 @@ export const Content00DataSource = {
                             name: 'content~l1odc52dio',
                             className: 'l1odfqq6f8c-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <span>
-                        <span>
-                          <span>
-                            <span>
-                              <span>
                                 <p>
                                   Richard
                                   Bernstein丰富的彩色艺术作品展现了波普艺术的魅力、奢华和创新。
                                   波普艺术，是一个探讨通俗文化与艺术之间关联的艺术运动。其表现往往是色彩绚丽的，具有强烈的视觉冲击力，我们从该作品中也可以强烈感受到。
                                 </p>
-                              </span>
-                            </span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
                             ),
                         },
                     ],
@@ -321,26 +122,16 @@ export const Content00DataSource = {
                                 'https://p8.itc.cn/images01/20220225/2f10ab947b484df09a5c53bac47cd503.jpeg',
                         },
                         {
-                            name: 'title',
+                            name: 'content',
                             className: 'content0-block-title',
                             children: (
-                                <span>
-                  <span>
-                    <p>&nbsp;作品名称：<br/>《Carbon碳》</p>
-                  </span>
-                </span>
+                                <p>《Carbon碳》</p>
                             ),
                         },
                         {
                             name: 'content',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <p>&nbsp;作者：Giulio Iurissevich</p>
-                    </span>
-                  </span>
-                </span>
+                                <p>作者：Giulio Iurissevich</p>
                             ),
                             className: 'l1ogalscbro-editor_css',
                         },
@@ -348,15 +139,11 @@ export const Content00DataSource = {
                             name: 'content~l1ogapobup',
                             className: 'l1ogaqgw53j-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <p>
-                      「Carbon碳」是一个女人的肖像，她有着一头黑发，她有着其他时代的美丽，这是我想在这张图像里给人留下深刻印象的一点。该幅作品在法国巴黎的室内设计交易会Maison
-                      et
-                      Objet上首次展出，并大获成功。该图像的构建采用了混合媒体技术。
-                    </p>
-                  </span>
-                </span>
+                                <p>
+                                  「Carbon碳」是一个女人的肖像，她有着一头黑发，她有着其他时代的美丽，这是我想在这张图像里给人留下深刻印象的一点。该幅作品在法国巴黎的室内设计交易会Maison
+                                  et
+                                  Objet上首次展出，并大获成功。该图像的构建采用了混合媒体技术。
+                                </p>
                             ),
                         },
                     ],
@@ -377,22 +164,16 @@ export const Content00DataSource = {
                                 'https://p7.itc.cn/images01/20220225/9a2f85b4f5b44c6e8e2ade5c896d9ee3.jpeg',
                         },
                         {
-                            name: 'title',
+                            name: 'content',
                             className: 'content0-block-title',
                             children: (
-                                <span>
-                  <p>&nbsp;作品名称：<br/>《All of my Love》</p>
-                </span>
+                                <p>《All of my Love》</p>
                             ),
                         },
                         {
                             name: 'content',
                             children: (
-                                <span>
-                  <span>
-                    <p>&nbsp;作者：Erin McGean</p>
-                  </span>
-                </span>
+                                <p>&nbsp;作者：Erin McGean</p>
                             ),
                             className: 'l1ogoth0ef8-editor_css',
                         },
@@ -400,19 +181,9 @@ export const Content00DataSource = {
                             name: 'content~l1ogpwgfpxq',
                             className: 'l1ogpxb0myg-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <span>
-                        <span>
-                          <p>
-                            年轻的爱情，被温柔亲吻的皮肤，情动的眼神，天鹅绒般的花瓣茂盛地生长在花盆里，清新甜美的香味弥漫在房间里，这些构成了一幅美丽浪漫的景象。<br/>
-                          </p>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
+                              <p>
+                                年轻的爱情，被温柔亲吻的皮肤，情动的眼神，天鹅绒般的花瓣茂盛地生长在花盆里，清新甜美的香味弥漫在房间里，这些构成了一幅美丽浪漫的景象。<br/>
+                              </p>
                             ),
                         },
                     ],
@@ -433,24 +204,16 @@ export const Content00DataSource = {
                                 'https://p2.itc.cn/images01/20220225/1659e6f1eb854889928827186b56f121.png',
                         },
                         {
-                            name: 'title',
+                            name: 'content',
                             className: 'content0-block-title',
                             children: (
-                                <span>
-                  <p>&nbsp;作品名称：《Futuristic Nostalgia, 2022》</p>
-                </span>
+                                <p>《Futuristic Nostalgia, 2022》</p>
                             ),
                         },
                         {
                             name: 'content',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <p>&nbsp;作者：POST WOOK</p>
-                    </span>
-                  </span>
-                </span>
+                                <p>作者：POST WOOK</p>
                             ),
                             className: 'l1oh1ofkrv-editor_css',
                         },
@@ -458,15 +221,11 @@ export const Content00DataSource = {
                             name: 'content~l1ogx713o48',
                             className: 'l1oh1uacdn-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <p>
-                      Natasha Chomko是POST
-                      WOOK创意项目背后的视觉艺术家。她将对纹理、颜色和形状的热爱融合于她的自学创作过程中，根据我们周围的世界和宇宙创造出怀旧和超现实的梦境。POST
-                      WOOK将艺术作为一种治疗形式，唤起情感、创伤、和记忆并将这些经验具象化为艺术。
-                    </p>
-                  </span>
-                </span>
+                                <p>
+                                  Natasha Chomko是POST
+                                  WOOK创意项目背后的视觉艺术家。她将对纹理、颜色和形状的热爱融合于她的自学创作过程中，根据我们周围的世界和宇宙创造出怀旧和超现实的梦境。POST
+                                  WOOK将艺术作为一种治疗形式，唤起情感、创伤、和记忆并将这些经验具象化为艺术。
+                                </p>
                             ),
                         },
                     ],
@@ -487,33 +246,18 @@ export const Content00DataSource = {
                                 'https://p2.itc.cn/images01/20220225/52c2f87dd9ac4b13b81bb3e39ec9139b.jpeg',
                         },
                         {
-                            name: 'title',
+                            name: 'content',
                             className: 'content0-block-title',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <p>
-                        &nbsp;作品名称：《gravitational collapse<span>》</span>
-                      </p>
-                    </span>
-                  </span>
-                </span>
+                              <p>
+                                《gravitational collapse》
+                              </p>
                             ),
                         },
                         {
                             name: 'content',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <p>&nbsp;作者：Mikko Raima</p>
-                      <p>
-                        <br/>
-                      </p>
-                    </span>
-                  </span>
-                </span>
+                                <p>作者：Mikko Raima</p>
                             ),
                             className: 'l1ohfbm65g-editor_css',
                         },
@@ -521,16 +265,9 @@ export const Content00DataSource = {
                             name: 'content~l1ogx713o48',
                             className: 'l1ohgi0i5qb-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <p>
-                      引力坍缩是天文物体由于自身物质的引力作用向内塌陷的过程。它是宇宙结构形成的基本机制。随着时间的推移，起初相对平滑的物质分布将坍缩形成更高密度的凝聚态结构，比如星系团、恒星群、恒星和行星。
-                    </p>
-                    <p>
-                      <br/>
-                    </p>
-                  </span>
-                </span>
+                                <p>
+                                  引力坍缩是天文物体由于自身物质的引力作用向内塌陷的过程。它是宇宙结构形成的基本机制。随着时间的推移，起初相对平滑的物质分布将坍缩形成更高密度的凝聚态结构，比如星系团、恒星群、恒星和行星。
+                                </p>
                             ),
                         },
                     ],
@@ -551,28 +288,18 @@ export const Content00DataSource = {
                                 'https://p0.itc.cn/images01/20220225/ad657a3b58e54f8e85544ebd461212b6.jpeg',
                         },
                         {
-                            name: 'title',
+                            name: 'content',
                             className: 'content0-block-title',
                             children: (
-                                <span>
-                  <span>
-                    <p>
-                      &nbsp;作品名称：<br/>《花液茎骨<span>》</span>
-                    </p>
-                  </span>
-                </span>
+                                <p>
+                                  《花液茎骨》
+                                </p>
                             ),
                         },
                         {
                             name: 'content',
                             children: (
-                                <span>
-                  <span>
-                    <span>
-                      <p>&nbsp;作者：王一才</p>
-                    </span>
-                  </span>
-                </span>
+                                <p>作者：王一才</p>
                             ),
                             className: 'l1ohl0cdbxo-editor_css',
                         },
@@ -580,16 +307,9 @@ export const Content00DataSource = {
                             name: 'content~l1ogx713o48',
                             className: 'l1ohkwtpp7s-editor_css',
                             children: (
-                                <span>
-                  <span>
-                    <p>
-                      花液茎骨系列分为4个部分：花液、花茎、花骨，将花朵的侧面进行数字雕塑。花朵盛开，远比我们想象的硕大，那是亲眼所见，并非幻觉。百合繁殖根茎，它的生长超出了我们的理性。那里，那里有朵玫瑰花，神子在其中铸成肉身。
-                    </p>
-                    <p>
-                      <br/>
-                    </p>
-                  </span>
-                </span>
+                                <p>
+                                  花液茎骨系列分为4个部分：花液、花茎、花骨，将花朵的侧面进行数字雕塑。花朵盛开，远比我们想象的硕大，那是亲眼所见，并非幻觉。百合繁殖根茎，它的生长超出了我们的理性。那里，那里有朵玫瑰花，神子在其中铸成肉身。
+                                </p>
                             ),
                         },
                     ],
