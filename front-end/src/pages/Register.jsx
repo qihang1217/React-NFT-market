@@ -97,6 +97,7 @@ const Register = () => {
         }
     }
 
+
     //年龄自定义校验
     const validateAge=(rule,value,callback)=>{
         if(value===''){
