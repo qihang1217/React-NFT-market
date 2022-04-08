@@ -22,7 +22,6 @@ const Museum = loadable(() => import('./Museum/Museum'));
 const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
 
 
-
 const {Footer} = Layout;
 const ipfsClient = require("ipfs-http-client");
 const ipfs = ipfsClient({
@@ -207,7 +206,7 @@ class App extends Component {
                 if (colorIsUsed) {
                     colorsUsed = [...colorsUsed, colorsArray[i]];
                 } else {
-                    continue;
+
                 }
             }
         }
@@ -356,7 +355,7 @@ class App extends Component {
         }, 1000);
     };
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         // 清除定时器
         clearInterval(this.intervalLoginId)
     }

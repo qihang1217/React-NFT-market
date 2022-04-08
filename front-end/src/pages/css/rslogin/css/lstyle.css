@@ -1,24 +1,25 @@
- html {
+html {
     scroll-behavior: smooth;
 }
 
- .w3l-hotair-form{
-     font-family: 'Noto Serif JP', serif;
- }
+.w3l-hotair-form {
+    font-family: 'Noto Serif JP', serif;
+}
+
 #components-form-demo-normal-login .login-form {
- max-width: 300px;
+    max-width: 300px;
 }
 
 #components-form-demo-normal-login .login-form-forgot {
- float: right;
+    float: right;
 }
 
 #components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
- float: left;
+    float: left;
 }
 
 #components-form-demo-normal-login .login-form-button {
- width: 100%;
+    width: 100%;
 }
 
 session .ant-form-item {
@@ -184,7 +185,7 @@ button:hover {
     position: relative;
     min-height: 100vh;
     z-index: 0;
-    background:url("../images/bg1.jpg") no-repeat center 0px;
+    background: url("../images/bg1.jpg") no-repeat center 0px;
     background-size: cover;
     padding: 30px 40px;
     justify-content: center;
@@ -207,15 +208,15 @@ button:hover {
     -moz-background-size: cover;
     -o-background-size: cover;
     -ms-background-size: cover;
-    padding:20px 20px;
+    padding: 20px 20px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 
-.workinghny-form-grid{
+.workinghny-form-grid {
     min-width: 70%;
 }
- 
+
 .content-wthree {
     flex-basis: 50%;
     -webkit-flex-basis: 50%;
@@ -265,6 +266,7 @@ button:hover {
     text-align: center;
     margin-top: 16px;
 }
+
 p.account, p.account a {
     text-align: center;
     padding-top: 20px;
@@ -273,13 +275,15 @@ p.account, p.account a {
     color: #333;
 }
 
-p.account a{
+p.account a {
     color: #f52605;
-    opacity:.95;
+    opacity: .95;
 }
+
 p.account a:hover {
     text-decoration: underline;
 }
+
 .w3l-hotair-form h1 {
     text-align: center;
     font-size: 40px;
@@ -296,7 +300,7 @@ p.account a:hover {
     text-align: center;
 }
 
-.w3l-hotair-form input{
+.w3l-hotair-form input {
     margin-bottom: 15px;
     font-size: 16px;
     color: #999;
@@ -314,10 +318,12 @@ p.account a:hover {
     -ms-transition: .3s ease;
     -o-transition: .3s ease;
 }
+
 .w3l-hotair-form input:focus {
-    background:transparent;
+    background: transparent;
     border: 1px solid #0568C1;
 }
+
 .w3l-hotair-form button {
     font-size: 18px;
     color: #fff;
@@ -367,7 +373,8 @@ p.account a:hover {
     height: 36px;
     border-radius: 50%;
     margin-right: 6px;
-    border: 2px solid #696687;line-height:32px;
+    border: 2px solid #696687;
+    line-height: 32px;
 }
 
 .w3l-hotair-form .social-icons ul li a.twitter span {
@@ -378,18 +385,18 @@ p.account a:hover {
     border-radius: 50%;
     margin-right: 6px;
     border: 2px solid #1da1f2;
-    line-height:32px;
+    line-height: 32px;
 }
 
 .w3l-hotair-form .social-icons ul li a.pinterest span {
-    color:#e60023;
+    color: #e60023;
     font-size: 18px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     margin-right: 6px;
     border: 2px solid #e60023;
-    line-height:32px;
+    line-height: 32px;
 }
 
 
@@ -406,7 +413,7 @@ p.copy-footer-29 a {
 }
 
 p.copy-footer-29 a:hover {
-    color:#0568C1;
+    color: #0568C1;
     transition: 0.5s ease;
     -webkit-transition: 0.5s ease;
     -o-transition: 0.5s ease;
@@ -420,7 +427,7 @@ p.copy-footer-29 a:hover {
 
 /*-- responsive design --*/
 
-@media (max-width:736px) {
+@media (max-width: 736px) {
     .w3l-hotair-form .main-hotair {
         flex-direction: column;
     }
@@ -441,7 +448,7 @@ p.copy-footer-29 a:hover {
     }
 }
 
-@media (max-width:568px) {
+@media (max-width: 568px) {
     .w3l-hotair-form h1 {
         font-size: 36px;
     }
@@ -462,7 +469,7 @@ p.copy-footer-29 a:hover {
 
 }
 
-@media (max-width:384px) {
+@media (max-width: 384px) {
     .w3l-hotair-form {
         padding: 30px 15px;
     }
@@ -470,6 +477,7 @@ p.copy-footer-29 a:hover {
     .content-wthree {
         padding: 2em;
     }
+
     .w3l-hotair-form h2 {
         font-size: 22px;
         line-height: 32px;
@@ -478,20 +486,22 @@ p.copy-footer-29 a:hover {
     .copyright p {
         font-size: 16px;
     }
+
     .w3l-hotair-form h1 {
         font-size: 32px;
     }
 
 }
-.login-form-button{
+
+.login-form-button {
     display: flex;
     align-items: center;
-justify-content: center;
-border-radius:30rem;
+    justify-content: center;
+    border-radius: 30rem;
 }
- 
+
 /*--整个登录表单所占区域--*/
-.login-form{ 
+.login-form {
     height: 300px;
 }
 

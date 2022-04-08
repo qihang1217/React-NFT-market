@@ -89,10 +89,10 @@ const Register = () => {
     }
 
     // 验证账号是否已经被添加过
-    const checkAccount = (value,callback) => {
+    const checkAccount = (value, callback) => {
         // 返回一个promise
         // console.log('校验')
-        const checkPromise=new Promise((resolve, reject) => {
+        const checkPromise = new Promise((resolve, reject) => {
             checkedAccount({user_name: value}).then(res => { // 这个是后台接口方法
                 if (res.responseCode === 200 && res.message === '用户名重复') {
                     console.log(res)
@@ -102,13 +102,13 @@ const Register = () => {
                 }
             }).catch(error => {
                 // reject(error)
-                message.error('用户名有效性校验失败',1)
+                message.error('用户名有效性校验失败', 1)
             })
         })
         checkPromise.then(res => {
             // console.log(res)
-            if (res===true) {
-                message.success('该用户名可以使用',0.5)
+            if (res === true) {
+                message.success('该用户名可以使用', 0.5)
                 callback()
             } else {
                 callback('该用户名已存在,请更换重试!')
@@ -132,9 +132,9 @@ const Register = () => {
     const onFinish = (values) => {
         //获得前两个表单的数据
         console.log(values)
-        const first_register=JSON.parse(sessionStorage.getItem('first_register')||'{}')
-        const second_register=JSON.parse(sessionStorage.getItem('second_register')||'{}')
-        values=Object.assign(values,first_register,second_register)
+        const first_register = JSON.parse(sessionStorage.getItem('first_register') || '{}')
+        const second_register = JSON.parse(sessionStorage.getItem('second_register') || '{}')
+        values = Object.assign(values, first_register, second_register)
         //清除存储的数据
         sessionStorage.removeItem('first_register');
         sessionStorage.removeItem('second_register');
@@ -350,27 +350,26 @@ const Register = () => {
                                 whitespace: true,
                             },
                             {
-                                min:4,
+                                min: 4,
                                 message: '用户名不能小于4位!',
                             },
                             {
-                                max:12,
+                                max: 12,
                                 message: '用户名不能大于12位!',
                             },
                             {
-                                pattern:/^[a-zA-Z0-9_]+$/,
+                                pattern: /^[a-zA-Z0-9_]+$/,
                                 message: '用户名必须是由英文、数字或下划线组成!',
                             },
                             {
                                 validator: (rule, value, callback) => {
                                     // console.log(value)
-                                    const reg=/^[a-zA-Z0-9_]+$/
-                                    if (value.length>=4&&value.length<=12&&reg.test(value)){
+                                    const reg = /^[a-zA-Z0-9_]+$/
+                                    if (value.length >= 4 && value.length <= 12 && reg.test(value)) {
                                         //用户名有效性检验通过后才能进行用户名重复性检验
-                                        let debounceCheckAccount=debounce(checkAccount)
-                                        debounceCheckAccount(value,callback)
-                                    }
-                                    else{
+                                        let debounceCheckAccount = debounce(checkAccount)
+                                        debounceCheckAccount(value, callback)
+                                    } else {
                                         callback()
                                     }
                                 },
@@ -390,15 +389,15 @@ const Register = () => {
                                 whitespace: true,
                             },
                             {
-                                min:6,
+                                min: 6,
                                 message: '密码不能小于6位!',
                             },
                             {
-                                max:12,
+                                max: 12,
                                 message: '密码不能大于12位!',
                             },
                             {
-                                pattern:/^[a-zA-Z0-9_]+$/,
+                                pattern: /^[a-zA-Z0-9_]+$/,
                                 message: '密码必须是由英文、数字或下划线组成!',
                             },
                         ]}
@@ -419,15 +418,15 @@ const Register = () => {
                                 whitespace: true,
                             },
                             {
-                                min:6,
+                                min: 6,
                                 message: '密码不能小于6位!',
                             },
                             {
-                                max:12,
+                                max: 12,
                                 message: '密码不能大于12位!',
                             },
                             {
-                                pattern:/^[a-zA-Z0-9_]+$/,
+                                pattern: /^[a-zA-Z0-9_]+$/,
                                 message: '密码必须是由英文、数字或下划线组成!',
                             },
                             ({getFieldValue}) => ({
@@ -494,7 +493,12 @@ const Register = () => {
                         <div class="workinghny-form-grid">
                             <div class="main-hotai">
                                 <div class="content-wthree">
-                                    <h2 style={{textAlign:'center',color:'#333','font-weight':'600','margin-bottom':'3px'}}>注册</h2>
+                                    <h2 style={{
+                                        textAlign: 'center',
+                                        color: '#333',
+                                        'font-weight': '600',
+                                        'margin-bottom': '3px'
+                                    }}>注册</h2>
                                     <p>加入我们吧</p>
                                     <Steps current={current}>
                                         {steps.map(item => (

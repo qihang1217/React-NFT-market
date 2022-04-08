@@ -4,7 +4,7 @@ import MyCryptoBoyNFTDetails from "../MyCryptoBoyNFTDetails/MyCryptoBoyNFTDetail
 import Loading from "../Loading/Loading";
 import {Button, Empty} from 'antd';
 
-const empty=require('./empty.svg')
+const empty = require('./empty.svg')
 
 const MyTokens = ({
                       accountAddress,

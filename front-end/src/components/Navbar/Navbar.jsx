@@ -51,14 +51,14 @@ class Navbar extends Component {
 
     //退出登陆
     logout = () => {
-        const isAuthenticated=localStorage.getItem("token") ? true : false
-        if (isAuthenticated){
+        const isAuthenticated = localStorage.getItem("token") ? true : false
+        if (isAuthenticated) {
             //已登录
             // 显示确认提示
             Modal.confirm({
                 title: '您确认退出登陆吗?',
-                okText:'确定',
-                cancelText:'取消',
+                okText: '确定',
+                cancelText: '取消',
                 onOk: () => {
                     // console.log('OK');
                     // 确定后, 删除存储的用户信息
@@ -69,13 +69,12 @@ class Navbar extends Component {
                     // console.log('Cancel');
                 },
             })
-        }
-        else{
+        } else {
             message.error('您还未登陆,无法退出')
             Modal.confirm({
                 title: '您还未登陆,是否现在登陆?',
-                okText:'确定',
-                cancelText:'取消',
+                okText: '确定',
+                cancelText: '取消',
                 onOk: () => {
                     // console.log('OK');
                     // 跳转到登陆界面
@@ -113,7 +112,7 @@ class Navbar extends Component {
                         {this.renderTabBarItems(tabItems)}
                         <SubMenu key="SubMenu" style={{"align-items": "center"}}
                                  title={
-                                        <Avatar shape="square" icon={<UserOutlined/>}/>
+                                     <Avatar shape="square" icon={<UserOutlined/>}/>
                                  }
                         >
                             <Menu.Item key="1" icon={<IdcardTwoTone/>}>
@@ -147,6 +146,6 @@ class Navbar extends Component {
             </Layout>
         );
     }
-};
+}
 
 export default withRouter(Navbar);

@@ -23,9 +23,9 @@ class Login extends Component {
             console.log(response);
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
-                if (response.token_message !== 'success'){
+                if (response.token_message !== 'success') {
                     // 将生成token存储到localStorage
-                    localStorage.setItem('user_name',e.user_name)
+                    localStorage.setItem('user_name', e.user_name)
                     localStorage.setItem("token", response.token)
                 }
                 //页面跳转
@@ -46,7 +46,7 @@ class Login extends Component {
         message.error('未登录,请先登录~', 1);
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         // 清除定时器
         clearInterval(this.intervalId)
     }
@@ -56,7 +56,7 @@ class Login extends Component {
         return (
             <>
                 <session className="w3l-hotair-form"
-                         style={{width: "100%",display: "block"}}>
+                         style={{width: "100%", display: "block"}}>
                     {/*表单开头 */}
                     <h2>Welocome to NFT market</h2>
                     <div className="container">

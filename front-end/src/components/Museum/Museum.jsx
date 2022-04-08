@@ -7,8 +7,8 @@ class Museum extends React.Component {
         super(props);
         this.state = {
             height: 0,
-            loadingVisible:'flex',
-            iframeVisible:'none'
+            loadingVisible: 'flex',
+            iframeVisible: 'none'
         }
     }
 
@@ -38,7 +38,7 @@ class Museum extends React.Component {
     render() {
         return (
             <>
-                <div style={{display:this.state.loadingVisible,alignItems:"center",height: this.state.height}}>
+                <div style={{display: this.state.loadingVisible, alignItems: "center", height: this.state.height}}>
                     <Loading/>
                 </div>
                 <iframe
@@ -48,16 +48,16 @@ class Museum extends React.Component {
                     frameBorder="0"
                     marginHeight="0"
                     marginWidth="0"
-                    onLoad={()=>{
+                    onLoad={() => {
                         this.setState({
                             loadingVisible: 'none',
-                            iframeVisible:'block'
+                            iframeVisible: 'block'
                         })
                     }}
-                    style={{width: "100%", height: this.state.height, display:this.state.iframeVisible}}
+                    style={{width: "100%", height: this.state.height, display: this.state.iframeVisible}}
                 />
             </>
-            )
+        )
 
     }
 }

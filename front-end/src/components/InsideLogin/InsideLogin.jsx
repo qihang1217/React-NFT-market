@@ -11,8 +11,7 @@ import "../.././pages/css/rslogin/css/font-awesome.min.css"
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -20,12 +19,12 @@ class Login extends Component {
     async handleSubmit(e) {
         let md5 = require("../.././pages/model/md5.js"); //引入md5加密模块
         e.password = md5(e.password);
-        e['token']=localStorage.getItem("token")
+        e['token'] = localStorage.getItem("token")
         HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
             // console.log(response);
             if (response.responseCode === 200 && response.message === '验证成功') {
                 message.success('登陆成功~');
-                if(response.token_message!=='success') {
+                if (response.token_message !== 'success') {
                     // 将生成token存储到localStorage
                     localStorage.setItem('user_name', e.user_name)
                     localStorage.setItem("token", response.token)
@@ -46,7 +45,7 @@ class Login extends Component {
 
     handleHeight = () => {
         const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight-64}px`;
+        let height = `${screenHeight - 64}px`;
         this.setState({
             height,
         })
@@ -60,7 +59,7 @@ class Login extends Component {
     componentDidMount() {
         this.props.delete_footer()
         const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight-64}px`;
+        let height = `${screenHeight - 64}px`;
         this.setState({
             height,
         })
@@ -75,7 +74,7 @@ class Login extends Component {
         return (
             <div className="insideLogin">
                 <div className="w3l-hotair-form"
-                         style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
+                     style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
                     {/*表单开头 */}
                     <h4>Welocome to NFT market</h4>
                     <div className="container">

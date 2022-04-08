@@ -83,7 +83,7 @@ const normFile = (e) => {
 
 const onSubmit = (values) => {
     // console.log(values)
-    let token=localStorage.getItem('token')
+    let token = localStorage.getItem('token')
     formData.append('token', token)
     formData.append('work_name', values.work_name)
     formData.append('introduction', values.introduction)
@@ -94,26 +94,23 @@ const onSubmit = (values) => {
     }).then(response => response.json())
         .then(result => {
             console.log(result)
-            if (result.responseCode === 200&&result.message==='上传成功') {
+            if (result.responseCode === 200 && result.message === '上传成功') {
                 message.success('NTF铸造信息提交成功,正在火速为您审核中~');
-            }
-            else if(result.responseCode === -1&&result.token_message==='未登录'){
+            } else if (result.responseCode === -1 && result.token_message === '未登录') {
                 message.error('登陆状态无效或未登录,请重新登陆~');
                 //清除存储的无效登陆信息
                 localStorage.removeItem('token')
                 localStorage.removeItem('user_name')
-                window.location.href='/login'
-            }
-            else if(result.responseCode === -1&&result.detail_message==='文件类型不合格'){
+                window.location.href = '/login'
+            } else if (result.responseCode === -1 && result.detail_message === '文件类型不合格') {
                 message.error('作品格式不符合要求,请重新上传作品~');
-            }
-            else {
+            } else {
                 message.error('NTF铸造信息提交失败,请重新提交~');
             }
         })
-    .catch(function (error) {
-        // console.log(error);
-    });
+        .catch(function (error) {
+            // console.log(error);
+        });
 };
 
 
@@ -136,7 +133,7 @@ const UploadMint = () => {
                     rules={[
                         {
                             required: true,
-                            message:'请上传您的作品!'
+                            message: '请上传您的作品!'
                         },
                     ]}>
                     <Dragger {...props} >
@@ -155,7 +152,7 @@ const UploadMint = () => {
                     rules={[
                         {
                             required: true,
-                            message:'请输入您的作品名称!'
+                            message: '请输入您的作品名称!'
                         },
                     ]}
                 >

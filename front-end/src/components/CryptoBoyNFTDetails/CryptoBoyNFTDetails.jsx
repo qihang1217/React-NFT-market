@@ -26,26 +26,26 @@ class CryptoBoyNFTDetails extends Component {
                 <p>
                     <span className="font-weight-bold">Minted By</span> :{" "}
                     {this.props.cryptoboy.mintedBy.substr(0, 5) +
-                    "..." +
-                    this.props.cryptoboy.mintedBy.slice(
-                        this.props.cryptoboy.mintedBy.length - 5
-                    )}
+                        "..." +
+                        this.props.cryptoboy.mintedBy.slice(
+                            this.props.cryptoboy.mintedBy.length - 5
+                        )}
                 </p>
                 <p>
                     <span className="font-weight-bold">Owned By</span> :{" "}
                     {this.props.cryptoboy.currentOwner.substr(0, 5) +
-                    "..." +
-                    this.props.cryptoboy.currentOwner.slice(
-                        this.props.cryptoboy.currentOwner.length - 5
-                    )}
+                        "..." +
+                        this.props.cryptoboy.currentOwner.slice(
+                            this.props.cryptoboy.currentOwner.length - 5
+                        )}
                 </p>
                 <p>
                     <span className="font-weight-bold">Previous Owner</span> :{" "}
                     {this.props.cryptoboy.previousOwner.substr(0, 5) +
-                    "..." +
-                    this.props.cryptoboy.previousOwner.slice(
-                        this.props.cryptoboy.previousOwner.length - 5
-                    )}
+                        "..." +
+                        this.props.cryptoboy.previousOwner.slice(
+                            this.props.cryptoboy.previousOwner.length - 5
+                        )}
                 </p>
                 <p>
                     <span className="font-weight-bold">Price</span> :{" "}

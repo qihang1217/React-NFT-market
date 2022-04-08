@@ -6,9 +6,9 @@ class FrontendAuth extends Component {
         // console.log('this.props', this.props)
         const {routerConfig, location} = this.props;
         const {pathname} = location;
-        var isLogin =false
-        if (localStorage.getItem("token")){
-            isLogin=true;
+        var isLogin = false
+        if (localStorage.getItem("token")) {
+            isLogin = true;
         }
         // console.log(isLogin)
         // 如果该路由不用进行权限校验，登录状态下登陆页除外
@@ -28,11 +28,9 @@ class FrontendAuth extends Component {
             // console.log(targetRouterConfig)
             if (pathname === "/login") {
                 return <Redirect to="/"/>;
-            }
-            else if (pathname === "/register") {
+            } else if (pathname === "/register") {
                 return <Redirect to="/"/>;
-            }
-            else {
+            } else {
                 // 如果路由合法，就跳转到相应的路由
                 if (targetRouterConfig) {
                     return (

@@ -19,7 +19,8 @@ abstract contract Context {
     }
 
     function _msgData() internal view virtual returns (bytes memory) {
-        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+        this;
+        // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
         return msg.data;
     }
 }
@@ -554,7 +555,7 @@ library Address {
 
         uint256 size;
         // solhint-disable-next-line no-inline-assembly
-        assembly { size := extcodesize(account) }
+        assembly {size := extcodesize(account)}
         return size > 0;
     }
 
@@ -578,7 +579,7 @@ library Address {
         require(address(this).balance >= amount, "Address: insufficient balance");
 
         // solhint-disable-next-line avoid-low-level-calls, avoid-call-value
-        (bool success, ) = recipient.call{ value: amount }("");
+        (bool success,) = recipient.call{value : amount}("");
         require(success, "Address: unable to send value, recipient may have reverted");
     }
 
@@ -601,7 +602,7 @@ library Address {
      * _Available since v3.1._
      */
     function functionCall(address target, bytes memory data) internal returns (bytes memory) {
-      return functionCall(target, data, "Address: low-level call failed");
+        return functionCall(target, data, "Address: low-level call failed");
     }
 
     /**
@@ -640,7 +641,7 @@ library Address {
         require(isContract(target), "Address: call to non-contract");
 
         // solhint-disable-next-line avoid-low-level-calls
-        (bool success, bytes memory returndata) = target.call{ value: value }(data);
+        (bool success, bytes memory returndata) = target.call{value : value}(data);
         return _verifyCallResult(success, returndata, errorMessage);
     }
 
@@ -692,7 +693,7 @@ library Address {
         return _verifyCallResult(success, returndata, errorMessage);
     }
 
-    function _verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) private pure returns(bytes memory) {
+    function _verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) private pure returns (bytes memory) {
         if (success) {
             return returndata;
         } else {
@@ -755,7 +756,7 @@ library EnumerableSet {
 
         // Position of the value in the `values` array, plus 1 because index 0
         // means a value is not in the set.
-        mapping (bytes32 => uint256) _indexes;
+        mapping(bytes32 => uint256) _indexes;
     }
 
     /**
@@ -786,7 +787,7 @@ library EnumerableSet {
         // We read and store the value's index to prevent multiple reads from the same storage slot
         uint256 valueIndex = set._indexes[value];
 
-        if (valueIndex != 0) { // Equivalent to contains(set, value)
+        if (valueIndex != 0) {// Equivalent to contains(set, value)
             // To delete an element from the _values array in O(1), we swap the element to delete with the last one in
             // the array, and then remove the last element (sometimes called as 'swap and pop').
             // This modifies the order of the array, as noted in {at}.
@@ -802,7 +803,8 @@ library EnumerableSet {
             // Move the last value to the index where the value to delete is
             set._values[toDeleteIndex] = lastvalue;
             // Update the index for the moved value
-            set._indexes[lastvalue] = toDeleteIndex + 1; // All indexes are 1-based
+            set._indexes[lastvalue] = toDeleteIndex + 1;
+            // All indexes are 1-based
 
             // Delete the slot where the moved value was stored
             set._values.pop();
@@ -830,8 +832,8 @@ library EnumerableSet {
         return set._values.length;
     }
 
-   /**
-    * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
     *
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
@@ -885,8 +887,8 @@ library EnumerableSet {
         return _length(set._inner);
     }
 
-   /**
-    * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
     *
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
@@ -939,8 +941,8 @@ library EnumerableSet {
         return _length(set._inner);
     }
 
-   /**
-    * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
     *
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
@@ -994,8 +996,8 @@ library EnumerableSet {
         return _length(set._inner);
     }
 
-   /**
-    * @dev Returns the value stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
     *
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
@@ -1057,7 +1059,7 @@ library EnumerableMap {
 
         // Position of the entry defined by a key in the `entries` array, plus 1
         // because index 0 means a key is not in the map.
-        mapping (bytes32 => uint256) _indexes;
+        mapping(bytes32 => uint256) _indexes;
     }
 
     /**
@@ -1071,8 +1073,8 @@ library EnumerableMap {
         // We read and store the key's index to prevent multiple reads from the same storage slot
         uint256 keyIndex = map._indexes[key];
 
-        if (keyIndex == 0) { // Equivalent to !contains(map, key)
-            map._entries.push(MapEntry({ _key: key, _value: value }));
+        if (keyIndex == 0) {// Equivalent to !contains(map, key)
+            map._entries.push(MapEntry({_key : key, _value : value}));
             // The entry is stored at length-1, but we add 1 to all indexes
             // and use 0 as a sentinel value
             map._indexes[key] = map._entries.length;
@@ -1092,7 +1094,7 @@ library EnumerableMap {
         // We read and store the key's index to prevent multiple reads from the same storage slot
         uint256 keyIndex = map._indexes[key];
 
-        if (keyIndex != 0) { // Equivalent to contains(map, key)
+        if (keyIndex != 0) {// Equivalent to contains(map, key)
             // To delete a key-value pair from the _entries array in O(1), we swap the entry to delete with the last one
             // in the array, and then remove the last entry (sometimes called as 'swap and pop').
             // This modifies the order of the array, as noted in {at}.
@@ -1108,7 +1110,8 @@ library EnumerableMap {
             // Move the last entry to the index where the entry to delete is
             map._entries[toDeleteIndex] = lastEntry;
             // Update the index for the moved entry
-            map._indexes[lastEntry._key] = toDeleteIndex + 1; // All indexes are 1-based
+            map._indexes[lastEntry._key] = toDeleteIndex + 1;
+            // All indexes are 1-based
 
             // Delete the slot where the moved entry was stored
             map._entries.pop();
@@ -1136,8 +1139,8 @@ library EnumerableMap {
         return map._entries.length;
     }
 
-   /**
-    * @dev Returns the key-value pair stored at position `index` in the map. O(1).
+    /**
+     * @dev Returns the key-value pair stored at position `index` in the map. O(1).
     *
     * Note that there are no guarantees on the ordering of entries inside the
     * array, and it may change when more entries are added or removed.
@@ -1159,8 +1162,10 @@ library EnumerableMap {
      */
     function _tryGet(Map storage map, bytes32 key) private view returns (bool, bytes32) {
         uint256 keyIndex = map._indexes[key];
-        if (keyIndex == 0) return (false, 0); // Equivalent to contains(map, key)
-        return (true, map._entries[keyIndex - 1]._value); // All indexes are 1-based
+        if (keyIndex == 0) return (false, 0);
+        // Equivalent to contains(map, key)
+        return (true, map._entries[keyIndex - 1]._value);
+        // All indexes are 1-based
     }
 
     /**
@@ -1172,8 +1177,10 @@ library EnumerableMap {
      */
     function _get(Map storage map, bytes32 key) private view returns (bytes32) {
         uint256 keyIndex = map._indexes[key];
-        require(keyIndex != 0, "EnumerableMap: nonexistent key"); // Equivalent to contains(map, key)
-        return map._entries[keyIndex - 1]._value; // All indexes are 1-based
+        require(keyIndex != 0, "EnumerableMap: nonexistent key");
+        // Equivalent to contains(map, key)
+        return map._entries[keyIndex - 1]._value;
+        // All indexes are 1-based
     }
 
     /**
@@ -1184,8 +1191,10 @@ library EnumerableMap {
      */
     function _get(Map storage map, bytes32 key, string memory errorMessage) private view returns (bytes32) {
         uint256 keyIndex = map._indexes[key];
-        require(keyIndex != 0, errorMessage); // Equivalent to contains(map, key)
-        return map._entries[keyIndex - 1]._value; // All indexes are 1-based
+        require(keyIndex != 0, errorMessage);
+        // Equivalent to contains(map, key)
+        return map._entries[keyIndex - 1]._value;
+        // All indexes are 1-based
     }
 
     // UintToAddressMap
@@ -1228,8 +1237,8 @@ library EnumerableMap {
         return _length(map._inner);
     }
 
-   /**
-    * @dev Returns the element stored at position `index` in the set. O(1).
+    /**
+     * @dev Returns the element stored at position `index` in the set. O(1).
     * Note that there are no guarantees on the ordering of values inside the
     * array, and it may change when more values are added or removed.
     *
@@ -1328,16 +1337,16 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
     bytes4 private constant _ERC721_RECEIVED = 0x150b7a02;
 
     // Mapping from holder address to their (enumerable) set of owned tokens
-    mapping (address => EnumerableSet.UintSet) private _holderTokens;
+    mapping(address => EnumerableSet.UintSet) private _holderTokens;
 
     // Enumerable mapping from token ids to their owners
     EnumerableMap.UintToAddressMap private _tokenOwners;
 
     // Mapping from token ID to approved address
-    mapping (uint256 => address) private _tokenApprovals;
+    mapping(uint256 => address) private _tokenApprovals;
 
     // Mapping from owner to operator approvals
-    mapping (address => mapping (address => bool)) private _operatorApprovals;
+    mapping(address => mapping(address => bool)) private _operatorApprovals;
 
     // Token name
     string private _name;
@@ -1346,7 +1355,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
     string private _symbol;
 
     // Optional mapping for token URIs
-    mapping (uint256 => string) private _tokenURIs;
+    mapping(uint256 => string) private _tokenURIs;
 
     // Base URI
     string private _baseURI;
@@ -1476,7 +1485,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      * @dev See {IERC721Enumerable-tokenByIndex}.
      */
     function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
-        (uint256 tokenId, ) = _tokenOwners.at(index);
+        (uint256 tokenId,) = _tokenOwners.at(index);
         return tokenId;
     }
 
@@ -1652,7 +1661,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      * Emits a {Transfer} event.
      */
     function _burn(uint256 tokenId) internal virtual {
-        address owner = ERC721.ownerOf(tokenId); // internal owner
+        address owner = ERC721.ownerOf(tokenId);
+        // internal owner
 
         _beforeTokenTransfer(owner, address(0), tokenId);
 
@@ -1683,7 +1693,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      * Emits a {Transfer} event.
      */
     function _transfer(address from, address to, uint256 tokenId) internal virtual {
-        require(ERC721.ownerOf(tokenId) == from, "ERC721: transfer of token that is not own"); // internal owner
+        require(ERC721.ownerOf(tokenId) == from, "ERC721: transfer of token that is not own");
+        // internal owner
         require(to != address(0), "ERC721: transfer to the zero address");
 
         _beforeTokenTransfer(from, to, tokenId);
@@ -1731,18 +1742,18 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      * @return bool whether the call correctly returned the expected magic value
      */
     function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data)
-        private returns (bool)
+    private returns (bool)
     {
         if (!to.isContract()) {
             return true;
         }
         bytes memory returndata = to.functionCall(abi.encodeWithSelector(
-            IERC721Receiver(to).onERC721Received.selector,
-            _msgSender(),
-            from,
-            tokenId,
-            _data
-        ), "ERC721: transfer to non ERC721Receiver implementer");
+                IERC721Receiver(to).onERC721Received.selector,
+                _msgSender(),
+                from,
+                tokenId,
+                _data
+            ), "ERC721: transfer to non ERC721Receiver implementer");
         bytes4 retval = abi.decode(returndata, (bytes4));
         return (retval == _ERC721_RECEIVED);
     }
@@ -1754,7 +1765,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      */
     function _approve(address to, uint256 tokenId) internal virtual {
         _tokenApprovals[tokenId] = to;
-        emit Approval(ERC721.ownerOf(tokenId), to, tokenId); // internal owner
+        emit Approval(ERC721.ownerOf(tokenId), to, tokenId);
+        // internal owner
     }
 
     /**
@@ -1772,5 +1784,5 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      *
      * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
      */
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual { }
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual {}
 }
