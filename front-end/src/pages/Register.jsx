@@ -329,6 +329,7 @@ const Register = () => {
                         name="user_name"
                         label="用户名"
                         hasFeedback
+                        initialValue=''
                         rules={[
                             {
                                 required: true,
@@ -336,8 +337,8 @@ const Register = () => {
                                 whitespace: true,
                             },
                             {
-                                min:2,
-                                message: '用户名不能小于2位!',
+                                min:4,
+                                message: '用户名不能小于4位!',
                             },
                             {
                                 max:12,
@@ -349,18 +350,24 @@ const Register = () => {
                             },
                             {
                                 validator: (rule, value, callback) => {
-                                    checkAccount(value).then(res => {
-                                        // console.log(res)
-                                        if (res===true) {
-                                            console.log(value.length)
-                                            if (value.length>=2&&value.length<=12)
+                                    // console.log(value)
+                                    const reg=/^[a-zA-Z0-9_]+$/
+                                    if (value.length>=4&&value.length<=12&&reg.test(value)){
+                                        //用户名有效性检验通过后才能进行用户名重复性检验
+                                        checkAccount(value).then(res => {
+                                            // console.log(res)
+                                            if (res===true) {
                                                 message.success('该用户名可以使用',0.5)
-                                            callback()
-                                        } else {
-                                            callback('该用户名已存在,请更换重试!')
-                                        }
+                                                callback()
+                                            } else {
+                                                callback('该用户名已存在,请更换重试!')
+                                            }
 
-                                    })
+                                        })
+                                    }
+                                    else{
+                                        callback()
+                                    }
 
                                 },
                             },
@@ -436,6 +443,7 @@ const Register = () => {
                     <Form.Item
                         name="agreement"
                         valuePropName="checked"
+                        className="ant-col-offset-5"
                         rules={[
                             {
                                 validator: (_, value) =>
@@ -444,7 +452,7 @@ const Register = () => {
                         ]}
                         {...tailFormItemLayout}
                     >
-                        <Checkbox className="ant-col-offset-6">
+                        <Checkbox>
                             我已阅读 <a href="">用户协议</a>
                         </Checkbox>
                     </Form.Item>
