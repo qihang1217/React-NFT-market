@@ -83,6 +83,16 @@ const Register = () => {
         </Form.Item>
     );
 
+    //年龄自定义校验
+    const validateAge=(rule,value,callback)=>{
+        if(value===''){
+            callback()
+        }else if(value*1<=0){
+            callback('年龄必须大于0')
+        }else if(value*1>=150){
+            callback('年龄不能大于150')
+        }
+    }
 
     const checkedAccount = (data) => {
         return HttpUtil.post(ApiUtil.API_CHECK_USERNAME, data)
@@ -212,14 +222,18 @@ const Register = () => {
                     <Form.Item
                         name="age"
                         label="年龄"
+                        initialValue=''
                         rules={[
                             {
                                 required: true,
                                 message: '请输入您的年龄!',
                             },
+                            {
+                                validator:validateAge
+                            },
                         ]}
                     >
-                        <InputNumber min={1} max={150} value={age} onChange={setAge}/>
+                        <InputNumber value={age} onChange={setAge}/>
                     </Form.Item>
                     <Form.Item
                         name="gender"
