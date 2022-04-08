@@ -22,6 +22,7 @@ const Museum = loadable(() => import('./Museum/Museum'));
 const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
 
 
+
 const {Footer} = Layout;
 const ipfsClient = require("ipfs-http-client");
 const ipfs = ipfsClient({
