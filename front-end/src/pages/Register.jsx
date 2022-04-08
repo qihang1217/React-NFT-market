@@ -70,6 +70,7 @@ const Register = () => {
         </Form.Item>
     );
 
+
     const prefixSelector = (
         <Form.Item name="prefix" noStyle initialValue='86'>
             <Select
@@ -83,6 +84,19 @@ const Register = () => {
         </Form.Item>
     );
 
+    //年龄自定义校验
+    const validateAge=(rule,value)=>{
+        if(value===''){
+            return Promise.reject()
+        }else if(value*1<=0){
+            return Promise.reject('年龄必须大于0')
+        }else if(value*1>=150){
+            return Promise.reject('年龄不能大于150')
+        }else{
+            return Promise.resolve()
+        }
+    }
+
 
     //用户名重复性校验
     const validateUser_name_repeat=(rule, value, callback) => {
@@ -90,24 +104,13 @@ const Register = () => {
         const reg = /^[a-zA-Z0-9_]+$/
         if (value.length >= 4 && value.length <= 12 && reg.test(value)) {
             //用户名有效性检验通过后才能进行用户名重复性检验
-            let debounceCheckAccount = debounce(checkAccount)
+            let debounceCheckAccount = debounce(checkAccount,500)
             debounceCheckAccount(value, callback)
         } else {
-            callback()
+            return Promise.resolve()
         }
     }
 
-
-    //年龄自定义校验
-    const validateAge=(rule,value,callback)=>{
-        if(value===''){
-            callback()
-        }else if(value*1<=0){
-            callback('年龄必须大于0')
-        }else if(value*1>=150){
-            callback('年龄不能大于150')
-        }
-    }
 
     const checkedAccount = (data) => {
         return HttpUtil.post(ApiUtil.API_CHECK_USERNAME, data)
@@ -130,6 +133,7 @@ const Register = () => {
                 message.error('用户名有效性校验失败', 1)
             })
         })
+
         checkPromise.then(res => {
             // console.log(res)
             if (res === true) {
@@ -138,7 +142,6 @@ const Register = () => {
             } else {
                 callback('该用户名已存在,请更换重试!')
             }
-
         })
     }
 
