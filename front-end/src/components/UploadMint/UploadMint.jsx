@@ -47,27 +47,18 @@ class UploadMint extends React.Component{
         previewTitle: '',
         previewContent: null,
         data: null,
-        fileList:[],
-    }
-
-    handlePreview=(file)=>{
-        console.log(file)
-        this.setState({
-            previewVisible: true,
-            previewTitle: file.name,
-        });
     }
 
     handleOk = () => this.setState({ previewVisible: false });
 
     handleCancel = () => {
         this.setState({ previewVisible: false })
+        //点击外部删除按钮,删除提交的文件
         let delete_button = document.getElementsByClassName("ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn")[0];
-        console.log(delete_button)
         delete_button.click();
     }
 
-
+    //提交整个表单,此时才上传文件
     onSubmit = (values) => {
         // console.log(values)
         let token = localStorage.getItem('token')
@@ -102,17 +93,16 @@ class UploadMint extends React.Component{
 
 
     normFile = (e) => {
-        console.log(e)
+        // console.log(e)
         let file=e.file
         if(file.originFileObj){
-            //删除时
+            //删除文件时
             file=file.originFileObj
         }
-        else
-        {
-            let size = file.size;
-            let sizeM = size / 1024 / 1024;
-            // console.log(file.type)
+        else {
+            //添加文件时
+
+            //校验文件类型
             let src,previewContent,type=file.type;
             const isSatisfy = /^image\/\S+$/.test(type) || /^video\/\S+$/.test(type) || /^audio\/\S+$/.test(type)||/^text\/\S+$/.test(type);
             if (!isSatisfy) {
@@ -120,6 +110,9 @@ class UploadMint extends React.Component{
                 return [];
             }
 
+            //校验文件大小
+            let size = file.size;
+            let sizeM = size / 1024 / 1024;
             // console.log(sizeM)
             const image_limit = 10;
             const audio_limit = 10;
@@ -133,6 +126,7 @@ class UploadMint extends React.Component{
                 }else{
                     // 获取当前文件的一个内存URL
                     src = URL.createObjectURL(file)
+                    //根据文件类型个性生成预览组件
                     previewContent = <img src={src} alt='上传的图片' />
                 }
             }else if (/^video\/\S+$/.test(type)) {
@@ -180,7 +174,7 @@ class UploadMint extends React.Component{
             //确保传输的文件只有一个
             formData=new FormData()
             formData.append('file', file)
-            console.log(formData)
+            // console.log(formData)
             // console.log('UploadMint event:', e);
             return e && e.fileList;
         }
@@ -212,7 +206,7 @@ class UploadMint extends React.Component{
                             },
                         ]}>
                         <Dragger
-                            {...props} fileList={this.state.fileList}
+                            {...props}
                         >
                             <p className="ant-upload-drag-icon">
                                 <InboxOutlined/>
