@@ -40,7 +40,7 @@ class Users(db.Model):
     gender = db.Column(db.String(2), nullable=False)
     # 创建字段：user_name， 长度为20的字符串，不允许为空,不可重复
     user_name = db.Column(db.String(20), nullable=False, unique=True)
-    # 创建字段：password，长度为50的字符串，不允许为空
+    # 创建字段：password，长度为44的字符串(存储加密后的密码)，不允许为空
     password = db.Column(db.String(44), nullable=False)
 
 
@@ -126,7 +126,7 @@ def addOrUpdateUsers(user_data):
                 else:
                     update += (key + "=" + str(value))
             where = "where id=" + str(id)
-            sql = "update t_staff set %s %s" % (update, where)
+            sql = "update Users set %s %s" % (update, where)
             # print("=="*30)
             print(sql)
             db.session.execute(sql)
@@ -200,39 +200,6 @@ def checkUsers(user_data):
     finally:
         db.session.close()
 
-def checkUsers(user_data):
-    # 验证密码是否正确
-    try:
-        res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
-        db.session.commit()
-        if len(res) == 0:
-            re = {
-                'code': -1,
-                'message': "用户不存在"
-            }
-        else:
-            # print(res[0])
-            if user_data["password"] == res[0].password:
-                # 验证成功
-                re = {
-                    'code': 0,
-                    'message': "验证成功"
-                }
-            else:
-                re = {
-                    'code': -1,
-                    'message': "验证失败"
-                }
-            return re
-    except Exception as e:
-        print(repr(e))
-        re = {
-            'code': -1,
-            'message': repr(e)
-        }
-        return re
-    finally:
-        db.session.close()
 
 # def deleteStaff(id):
 #     #根据staff的id号来删除该条记录
