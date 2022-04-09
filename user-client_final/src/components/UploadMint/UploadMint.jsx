@@ -18,7 +18,6 @@ const layout = {
 const props = {
     name: 'file',
     multiple: false,
-    action: 'http://127.0.0.1:5001/api/upload',
     accept: "image/*,video/*,audio/*",
     maxCount: 1,
     listType:'picture',

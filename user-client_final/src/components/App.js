@@ -25,9 +25,9 @@ const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
 const {Footer} = Layout;
 const ipfsClient = require("ipfs-http-client");
 const ipfs = ipfsClient({
-    host: "ipfs.infura.io",
+    host: "localhost",
     port: 5001,
-    protocol: "https",
+    protocol: "http",
 });
 
 class App extends Component {
@@ -269,7 +269,7 @@ class App extends Component {
                 },
             };
             const cid = await ipfs.add(JSON.stringify(tokenObject));
-            let tokenURI = `https://ipfs.infura.io/ipfs/${cid.path}`;
+            let tokenURI = `http://127.0.0.1:8080/ipfs/${cid.path}`;
             const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
             this.state.cryptoBoysContract.methods
                 .mintCryptoBoy(name, tokenURI, price, colorsArray)
