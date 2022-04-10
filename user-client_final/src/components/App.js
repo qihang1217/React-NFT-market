@@ -486,8 +486,9 @@ class App extends Component {
                                 )}
                             />
                         </Switch>
-                        <Footer style={{textAlign: 'center', display: this.state.footerVisible}}>Ant Design ©2018
-                            Created by Ant UED</Footer>
+                        <Footer style={{textAlign: 'center', display: this.state.footerVisible}}>
+                            NFT marketplace ©2021
+                        </Footer>
                     </Router>
                 </>
             </div>
