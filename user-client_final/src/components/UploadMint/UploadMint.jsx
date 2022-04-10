@@ -1,6 +1,6 @@
 import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
-import {Button, Form, Input, message, Modal, Upload} from 'antd';
+import {Button, Form, Input, InputNumber, message, Modal, Upload} from 'antd';
 import ApiUtil from "../../Utils/ApiUtil";
 
 const {Dragger} = Upload;
@@ -59,13 +59,14 @@ class UploadMint extends React.Component{
 
     //提交整个表单,此时才上传文件
     onSubmit = (values) => {
-        // console.log(values)
+        console.log(values)
         let token = localStorage.getItem('token')||''
         let user_data=localStorage.getItem('user_data') || {}
-        console.log(user_data)
+        // console.log(user_data)
         formData.append('token', token)
         formData.append('user_data',user_data)
         formData.append('work_name', values.work_name)
+        formData.append('price', values.price)
         formData.append('introduction', values.introduction)
         fetch(ApiUtil.API_UPLOAD, {
             //fetch请求
@@ -92,6 +93,17 @@ class UploadMint extends React.Component{
                 // console.log(error);
             });
     };
+
+
+    validatePrice=(rule,value)=>{
+        if(value===''){
+            return Promise.reject()
+        }else if(value*1<=0){
+            return Promise.reject('价格必须大于0')
+        }else{
+            return Promise.resolve()
+        }
+    }
 
 
     normFile = (e) => {
@@ -230,6 +242,22 @@ class UploadMint extends React.Component{
                         ]}
                     >
                         <Input maxlength="20" placeholder="作品名称"/>
+                    </Form.Item>
+                    <Form.Item
+                        name="price"
+                        label="价格"
+                        initialValue=''
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入价格!',
+                            },
+                            {
+                                validator:this.validatePrice
+                            },
+                        ]}
+                    >
+                        <InputNumber/>
                     </Form.Item>
                     <Form.Item name='introduction' label="作品介绍">
                         <Input.TextArea maxlength="1000" placeholder="请输入您的作品描述"/>

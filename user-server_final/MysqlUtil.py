@@ -70,9 +70,11 @@ class Products(db.Model):
     product_id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(20))
     owner_id = db.Column(db.String(20),db.ForeignKey('Users.user_id'))
-    file_url=db.Column(db.String(100))
+    price=db.Column(db.Integer)
     pass_status=db.Column(db.Boolean)
+    file_url=db.Column(db.String(100))
     description=db.Column(db.Text)
+
 # 将创建好的实体类映射回数据库
 # db.create_all()
 
@@ -236,11 +238,12 @@ def saveUploadPorduct(product_data,upload_file_url):
     user_id=user_data.get('user_id')
     work_name=product_data.get('work_name')
     introduction=product_data.get('introduction')
+    price = product_data.get('price')
     if introduction == 'undefined':
         introduction=''
-        product=Products(product_name=work_name,owner_id=user_id,file_url=upload_file_url,pass_status=False,description=introduction)
-        db.session.add(product)
-        db.session.commit()
+    product=Products(product_name=work_name,owner_id=user_id,file_url=upload_file_url,pass_status=False,description=introduction,price=price)
+    db.session.add(product)
+    db.session.commit()
 # # def addOrUpdateUsers(user_data):
 # #     try:
 # #         # 获取用户id,没有则赋为0

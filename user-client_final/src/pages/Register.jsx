@@ -46,7 +46,6 @@ const tailFormItemLayout = {
 
 
 const Register = () => {
-    const [age, setAge] = React.useState('');
     const [form] = Form.useForm();
     const [current, setCurrent] = React.useState(0);
 
@@ -251,7 +250,7 @@ const Register = () => {
                             },
                         ]}
                     >
-                        <InputNumber value={age} onChange={setAge}/>
+                        <InputNumber/>
                     </Form.Item>
                     <Form.Item
                         name="gender"

@@ -52,10 +52,11 @@ def api_upload():
             fname = f.filename
             ext = fname.rsplit('.', 1)[1]  # 获取文件后缀
             unix_time = int(time.time())
-            new_filename = str(unix_time)+str(randint(5,10)*1000) + '.' + ext  # 修改文件名
-            print(str(unix_time))
+            new_filename = str(unix_time)+str(randint(1000,9999)) + '.' + ext  # 修改文件名
+            # print(str(unix_time))
             f.save(os.path.join(file_dir,new_filename))  # 保存文件到upload目录
             product_data=request.form.to_dict()
+            # print(product_data)
             DBUtil.saveUploadPorduct(product_data,new_filename)
             return jsonify({"message": "上传成功", "responseCode": 200})
         else:
