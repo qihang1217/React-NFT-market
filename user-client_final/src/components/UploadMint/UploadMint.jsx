@@ -60,8 +60,11 @@ class UploadMint extends React.Component{
     //提交整个表单,此时才上传文件
     onSubmit = (values) => {
         // console.log(values)
-        let token = localStorage.getItem('token')
+        let token = localStorage.getItem('token')||''
+        let user_data=localStorage.getItem('user_data') || {}
+        console.log(user_data)
         formData.append('token', token)
+        formData.append('user_data',user_data)
         formData.append('work_name', values.work_name)
         formData.append('introduction', values.introduction)
         fetch(ApiUtil.API_UPLOAD, {

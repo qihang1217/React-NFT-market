@@ -2,6 +2,8 @@
 import json
 import os
 import time
+from random import randint
+
 import configs
 from flask import Flask, send_from_directory, request, jsonify, render_template, current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
@@ -38,9 +40,10 @@ def allowed_file(filename):
 # TODO: 对传入的相关参数进行处理
 @app.route(apiPrefix + 'upload', methods=['POST'], strict_slashes=False)
 def api_upload():
-    print(request.values.items())
+    # print(request.form.to_dict().get('user_data'))
     token = request.values.get('token', None)
     if verify_login(token):
+        # 校验是否登陆
         file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])  # 拼接成合法文件夹地址
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)  # 文件夹不存在就创建
@@ -49,8 +52,11 @@ def api_upload():
             fname = f.filename
             ext = fname.rsplit('.', 1)[1]  # 获取文件后缀
             unix_time = int(time.time())
-            new_filename = str(unix_time) + '.' + ext  # 修改文件名
-            f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
+            new_filename = str(unix_time)+str(randint(5,10)*1000) + '.' + ext  # 修改文件名
+            print(str(unix_time))
+            f.save(os.path.join(file_dir,new_filename))  # 保存文件到upload目录
+            product_data=request.form.to_dict()
+            DBUtil.saveUploadPorduct(product_data,new_filename)
             return jsonify({"message": "上传成功", "responseCode": 200})
         else:
             return jsonify({"message": "上传失败", "responseCode": -1, "detail_message": "文件类型不合格"})
@@ -156,19 +162,18 @@ def login_user():
     # print('user_data',user_data)
     token = user_data.get('token', None)
     _token = verify_auth_token(token)
+    response = DBUtil.checkUsers(user_data)
     if _token == 'success':
         response = {
             'code': 0,
             'message': "验证成功",
             'token_message': _token,
         }
-    else:
-        response = DBUtil.checkUsers(user_data)
-        if response['message'] == '验证成功':
-            # token并没有验证通过,但账号密码验证通过则生成新的token
-            new_token = generate_auth_token(user_data)
-            response['token_message'] = _token
-            response['token'] = new_token
+    elif response['message'] == '验证成功':
+        # token并没有验证通过,但账号密码验证通过则生成新的token
+        new_token = generate_auth_token(user_data)
+        response['token_message'] = _token
+        response['token'] = new_token
     response['responseCode'] = 200
     # print('response',response)
     return jsonify(response)

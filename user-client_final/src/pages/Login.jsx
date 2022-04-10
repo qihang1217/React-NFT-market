@@ -25,7 +25,7 @@ class Login extends Component {
                 message.success('登陆成功~');
                 if (response.token_message !== 'success') {
                     // 将生成token存储到localStorage
-                    localStorage.setItem('user_name', e.user_name)
+                    localStorage.setItem("user_data", JSON.stringify(response.data[0]))
                     localStorage.setItem("token", response.token)
                 }
                 //页面跳转
