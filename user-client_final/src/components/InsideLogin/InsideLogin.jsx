@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import {Button, Checkbox, Form, Input, message} from "antd";
 import {withRouter} from "react-router-dom";
-import HttpUtil from "../.././Utils/HttpUtil";
-import ApiUtil from "../.././Utils/ApiUtil";
+
 //引用CSS
 import "./InsideLogin.css"
 import "../.././pages/css/rslogin/css/lstyle.css"
 import "../.././pages/css/rslogin/css/font-awesome.min.css"
+import {reqLogin} from "../../api/API";
 
-class Login extends Component {
+class InsideLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -17,30 +17,27 @@ class Login extends Component {
 
     // 提交登录表单
     async handleSubmit(e) {
-        let md5 = require("../.././pages/model/md5.js"); //引入md5加密模块
+        let md5 = require("../../pages/model/md5"); //引入md5加密模块
         e.password = md5(e.password);
         e['token'] = localStorage.getItem("token")
-        HttpUtil.post(ApiUtil.API_LOGIN, e).then(function (response) {
-            // console.log(response);
-            if (response.responseCode === 200 && response.message === '验证成功') {
-                message.success('登陆成功~');
-                if (response.token_message !== 'success') {
-                    // 将生成token存储到localStorage
-                    localStorage.setItem("user_data", JSON.stringify(response.data[0]))
-                    localStorage.setItem("token", response.token)
-                }
-                //页面跳转
-                this.props.history.back()
-            } else if (response.responseCode === 200 && response.message === '用户不存在') {
-                message.error('账号或密码错误,请稍后重试~');
-            } else if (response.responseCode === 200 && response.message === '验证失败') {
-                message.error('账号或密码错误,请稍后重试~');
-            } else {
-                message.error('登陆错误,请稍后重试~');
+        const response=await reqLogin(e)
+        console.log(response);
+        if (response.status === 0 && response.message === '验证成功') {
+            message.success('登陆成功~');
+            if (response.token_message !== 'success') {
+                // 将生成token存储到localStorage
+                localStorage.setItem("user_data", JSON.stringify(response.data[0]))
+                localStorage.setItem("token", response.token)
             }
-        }).catch(function (error) {
-            // console.log(error);
-        });
+            //页面跳转
+            window.location.href='/'
+        } else if (response.status === -1 && response.message === '用户不存在') {
+            message.error('账号或密码错误,请稍后重试~');
+        } else if (response.status === -1 && response.message === '验证失败') {
+            message.error('账号或密码错误,请稍后重试~');
+        } else {
+            message.error('登陆错误,请稍后重试~');
+        }
     }
 
     handleHeight = () => {
@@ -124,7 +121,7 @@ class Login extends Component {
                                                 <Checkbox>Remember me</Checkbox>
                                             </Form.Item>
                                             <br/><br/>
-                                            <a className="login-form-forgot" href="">
+                                            <a className="login-form-forgot" href="/">
                                                 Forgot password
                                             </a>
                                             Or <a href="/register">register now!</a>
@@ -150,4 +147,4 @@ class Login extends Component {
     }
 }
 
-export default withRouter(Login);
+export default withRouter(InsideLogin);

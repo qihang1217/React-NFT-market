@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, Checkbox, Form, Input, InputNumber, message, Select, Steps} from 'antd';
-import HttpUtil from "../Utils/HttpUtil";
-import ApiUtil from "../Utils/ApiUtil";
-import {debounce} from "../Utils/debounce";
+import HttpUtil from "../utils/HttpUtil";
+import ApiUtil from "../utils/ApiUtil";
+import {debounce} from "../utils/debounce";
 //引用CSS
 import "./css/rsregister/font-awesome/css/font-awesome.min.css"
 import "./css/rsregister/css/rstyle.css"

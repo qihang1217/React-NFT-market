@@ -7,7 +7,7 @@ import "./App.css";
 import CryptoBoys from "../abis/CryptoBoys.json";
 import "antd/dist/antd.css";
 
-import loadable from "../Utils/Loadable";
+import loadable from "../utils/Loadable";
 
 const ColorMint = loadable(() => import('./ColorMint/ColorMint'));
 const MarketPlace = loadable(() => import('./MarketPlace/MarketPlace'));

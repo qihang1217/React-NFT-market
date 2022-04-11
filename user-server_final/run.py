@@ -165,77 +165,14 @@ def login_user():
     _token = verify_auth_token(token)
     response = DBUtil.checkUsers(user_data)
     if _token == 'success':
-        response = {
-            'code': 0,
-            'message': "验证成功",
-            'token_message': _token,
-        }
+        response['token_message'] = _token
     elif response['message'] == '验证成功':
         # token并没有验证通过,但账号密码验证通过则生成新的token
         new_token = generate_auth_token(user_data)
         response['token_message'] = _token
         response['token'] = new_token
-    response['responseCode'] = 200
     # print('response',response)
     return jsonify(response)
-
-
-########## Staff接口
-
-# @app.route(apiPrefix + 'updateStaff', methods=['POST'])
-# def updateStaff():
-#     data = request.get_data(as_text=True)
-#     re = DBUtil.addOrUpdateStaff(data)
-#     # if re['code'] >= 0: # 数据保存成功，移动附件
-#     #     FileUtil.fileMoveDir(re['id'])
-#     return json.dumps(re)
-#
-#
-# @app.route(apiPrefix + 'getStaffList/<int:job>')
-# def getStaffList(job):
-#     array = DBUtil.getStaffList(job)  # [('1', '1', '1', '1', '1'), ('1', '1', '2', '3', '4'), ...] 二维数组
-#     jsonStaffs = DBUtil.getStaffsFromData(array)
-#     # print("jsonStaffs:", jsonStaffs)
-#     return json.dumps(jsonStaffs)
-#
-#
-# @app.route(apiPrefix + 'deleteStaff/<int:id>')
-# def deleteStaff(id):
-#     # return str(id)+"hi"
-#     re = DBUtil.deleteStaff(id)
-#     return re
-#
-#
-# @app.route(apiPrefix + 'searchStaff_3')
-# def searchStaff_3():
-#     data = request.args.get('where')
-#     print('searchStaff_3:', data)
-#     where = json.loads(data)
-#     array = DBUtil.searchStaff_3(where)
-#     jsonStaffs = DBUtil.getStaffsFromData_3(array)
-#     re = json.dumps(jsonStaffs)
-#     return re
-#
-#
-# ########## 管理员接口
-#
-# @app.route(apiPrefix + 'checkPassword', methods=['POST'])
-# def checkPassword():
-#     data = request.get_data(as_text=True)
-#     re = DBUtil.myCheck(data)
-#     return json.dumps(re)
-#
-#
-# @app.route(apiPrefix + 'gotoAdmin')  # 进入管理员状态
-# def gotoAdmin(data):
-#     pass
-#
-#
-# @app.route(apiPrefix + 'export_to_file')  # 导出到文件
-# def export_to_file():
-#     array = DBUtil.getStaffList(0)  # [('1', '1', '1', '1', '1'), ('1', '1', '2', '3', '4'), ...] 二维数组
-#     re = Data2File.saveToFile(array)
-#     return json.dumps(re)
 
 
 if __name__ == "__main__":

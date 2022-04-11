@@ -1,5 +1,5 @@
 import React from "react";
-import ApiUtil from "../../Utils/ApiUtil";
+import ApiUtil from "../../utils/ApiUtil";
 import Loading from "../Loading/Loading"
 
 class Museum extends React.Component {

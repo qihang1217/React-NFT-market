@@ -1,4 +1,4 @@
-import loadable from "../Utils/Loadable";
+import loadable from "../utils/Loadable";
 
 const App = loadable(() => import('../components/App'));
 const register = loadable(() => import('../pages/Register'));

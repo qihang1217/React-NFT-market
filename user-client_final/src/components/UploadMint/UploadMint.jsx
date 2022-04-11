@@ -1,7 +1,7 @@
 import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
 import {Button, Form, Input, InputNumber, message, Modal, Upload} from 'antd';
-import ApiUtil from "../../Utils/ApiUtil";
+import ApiUtil from "../../utils/ApiUtil";
 
 const {Dragger} = Upload;
 // const client = ipfsClient('https://ipfs.infura.io:5001/api/v0')
