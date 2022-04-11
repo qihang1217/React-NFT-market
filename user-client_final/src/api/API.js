@@ -30,3 +30,8 @@ export const uploadMint = (formData) => {
             })
     })
 }
+
+//请求分类列表
+export const reqCategories = () => {
+    return HttpUtil.get(ApiUtil.API_CATEGORY_LIST)
+}

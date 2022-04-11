@@ -1,8 +1,9 @@
 import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
-import {Button, Form, Input, InputNumber, message, Modal, Upload} from 'antd';
-import {uploadMint} from "../../api/API";
+import {Button, Form, Input, InputNumber, message, Modal, Select, Upload} from 'antd';
+import {reqCategories, uploadMint} from "../../api/API";
 
+const {Option} = Select;
 const {Dragger} = Upload;
 
 const layout = {
@@ -67,6 +68,7 @@ class UploadMint extends React.Component{
         formData.append('work_name', values.work_name)
         formData.append('price', values.price)
         formData.append('introduction', values.introduction)
+        formData.append('category_id', values.category_id)
         const result = await uploadMint(formData)
         console.log(result)
         if (result.status === 0 && result.message === '上传成功') {
@@ -176,7 +178,7 @@ class UploadMint extends React.Component{
             }
             this.setState({ previewVisible:true,previewTitle: file.name, data: file, previewContent: previewContent })
             //确保传输的文件只有一个
-            formData=new FormData()
+            formData = new FormData()
             formData.append('file', file)
             // console.log(formData)
             // console.log('UploadMint event:', e);
@@ -186,8 +188,36 @@ class UploadMint extends React.Component{
     };
 
 
+    getCategorys = async () => {
+        const result = await reqCategories()
+        if (result.status === 0) {
+            // 成功
+            // 取出分类列表
+            const categorys = result.data
+            // 更新状态categorys数据
+            this.setState({
+                categorys
+            })
+        } else {
+            message.error('获取分类列表失败')
+        }
+    }
+
+    //渲染选择组件
+    renderCategoryOption() {
+        const categorys = this.state.categorys || [{}]
+        return categorys.map(item =>
+            <Option value={item.category_id}>{item.category_name}</Option>
+        )
+    }
+
+    componentDidMount() {
+        //获取分类选择列表数据
+        this.getCategorys()
+    }
+
     render() {
-        const {previewContent ,previewVisible,previewTitle} = this.state;
+        const {previewContent, previewVisible, previewTitle} = this.state;
         return (
             <div>
                 <div className="card mt-1">
@@ -234,6 +264,29 @@ class UploadMint extends React.Component{
                         <Input maxlength="20" placeholder="作品名称"/>
                     </Form.Item>
                     <Form.Item
+                        name="category_id"
+                        label="作品分类"
+                        rules={[
+                            {
+                                required: true,
+                                message: '请选择您的作品分类!'
+                            },
+                        ]}
+                    >
+                        <Select
+                            showSearch
+                            placeholder="请选择您的作品分类"
+                            optionFilterProp="children"
+                            onChange={this.onCategoryChange}
+                            onSearch={this.onCategorySearch}
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                        >
+                            {this.renderCategoryOption()}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
                         name="price"
                         label="价格"
                         initialValue=''
@@ -273,7 +326,6 @@ class UploadMint extends React.Component{
 
         );
     }
-
 }
 
 export default UploadMint;

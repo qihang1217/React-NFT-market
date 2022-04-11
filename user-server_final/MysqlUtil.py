@@ -67,17 +67,27 @@ class Users(db.Model):
     password = db.Column(db.String(44), nullable=False)
 
 
+class Categories(db.Model):
+    # 创建Categories类，映射到数据库中叫Categories表
+    __tablename__ = "Categories"
+    # 创建字段： role_id， 主键和自增涨
+    category_id = db.Column(db.Integer, primary_key=True)
+    category_name = db.Column(db.String(20), unique=True)
+
+
 class Products(db.Model):
     # 创建Roles类，映射到数据库中叫Roles表
     __tablename__ = "Products"
     # 创建字段： role_id， 主键和自增涨
     product_id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(20))
-    owner_id = db.Column(db.String(20), db.ForeignKey('Users.user_id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     price = db.Column(db.Integer)
     pass_status = db.Column(db.Boolean)
-    file_url = db.Column(db.String(100))
+    # 防止文件名可能的重复
+    file_url = db.Column(db.String(100), unique=True)
     description = db.Column(db.Text)
+    category_id = db.Column(db.Integer, db.ForeignKey('Categories.category_id'))
 
 
 # 将创建好的实体类映射回数据库
@@ -251,9 +261,20 @@ def save_upload_product(product_data, upload_file_url):
     work_name = product_data.get('work_name')
     introduction = product_data.get('introduction')
     price = product_data.get('price')
+    category_id = product_data.get('category_id')
     if introduction == 'undefined':
         introduction = ''
     product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, pass_status=False,
-                       description=introduction, price=price)
+                       description=introduction, price=price,category_id=category_id)
     db.session.add(product)
     db.session.commit()
+
+
+def get_categories():
+    try:
+        return class_to_dict(db.session.query(Categories).all()), 0
+    except Exception as e:
+        print(repr(e))
+        return [{}], -1
+    finally:
+        db.session.close()

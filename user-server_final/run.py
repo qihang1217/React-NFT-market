@@ -170,5 +170,15 @@ def login_user():
     return jsonify(response)
 
 
+@app.route(apiPrefix + 'category/list', methods=['GET'], strict_slashes=False)
+def get_category_list():
+    res, status = DBUtil.get_categories()
+    response = {
+        'status': status,
+        'data': res,
+    }
+    return jsonify(response)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
