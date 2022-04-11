@@ -86,6 +86,7 @@ class Products(db.Model):
     pass_status = db.Column(db.Boolean)
     # 防止文件名可能的重复
     file_url = db.Column(db.String(100), unique=True)
+    file_type = db.Column(db.String(10))
     description = db.Column(db.Text)
     category_id = db.Column(db.Integer, db.ForeignKey('Categories.category_id'))
 
@@ -255,7 +256,7 @@ def check_users(user_data):
         db.session.close()
 
 
-def save_upload_product(product_data, upload_file_url):
+def save_upload_product(product_data, upload_file_url,file_type):
     user_data = eval(product_data.get('user_data'))
     user_id = user_data.get('user_id')
     work_name = product_data.get('work_name')
@@ -264,7 +265,7 @@ def save_upload_product(product_data, upload_file_url):
     category_id = product_data.get('category_id')
     if introduction == 'undefined':
         introduction = ''
-    product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, pass_status=False,
+    product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url,file_type=file_type, pass_status=False,
                        description=introduction, price=price,category_id=category_id)
     db.session.add(product)
     db.session.commit()

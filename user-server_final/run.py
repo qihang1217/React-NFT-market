@@ -46,17 +46,17 @@ def api_upload():
         file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])  # 拼接成合法文件夹地址
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)  # 文件夹不存在就创建
-        f = request.files['file']  # 从表单的file字段获取文件
+        f = request.files.get('file')  # 从表单的file字段获取文件
+        file_type = request.files.get('file').content_type  # 获取文件类型(例如image/jpeg)
         if f and allowed_file(f.filename):  # 判断是否是允许上传的文件类型
             file_name = f.filename
             ext = file_name.rsplit('.', 1)[1]  # 获取文件后缀
             unix_time = int(time.time())
             new_filename = str(unix_time) + str(randint(1000, 9999)) + '.' + ext  # 修改文件名
-            # print(str(unix_time))
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             product_data = request.form.to_dict()
-            # print(product_data)
-            DBUtil.save_upload_product(product_data, new_filename)
+            print(product_data)
+            DBUtil.save_upload_product(product_data, new_filename,file_type)
             return jsonify({"message": "上传成功", "status": 0})
         else:
             return jsonify({"message": "上传失败", "status": -1, "detail_message": "文件类型不合格"})
@@ -71,8 +71,20 @@ RESOURCE_FOLDER = 'resource'
 
 @app.route('/js/<path:filename>')
 def send_js(filename):
-    dirpath = os.path.join(app.root_path, RESOURCE_FOLDER + '/js')
-    return send_from_directory(dirpath, filename, as_attachment=True)
+    dir_path = os.path.join(app.root_path, RESOURCE_FOLDER + '/js')
+    return send_from_directory(dir_path, filename, as_attachment=True)
+
+
+########## 后台访问前台flask暂存的用户上传文件
+
+UPLOAD_FOLDER = 'upload'
+
+
+@app.route('/upload_folder/<path:filename>')
+def send_file(filename):
+    dir_path = os.path.join(app.root_path, UPLOAD_FOLDER)
+    print(dir_path)
+    return send_from_directory(dir_path, filename, as_attachment=True)
 
 
 ########## React访问flask上的NTF博物馆
@@ -81,21 +93,6 @@ def api_museum():
     if request.method == 'GET':
         return render_template('index.html')
 
-
-# # show photo
-# @app.route('/show/<string:filename>', methods=['GET'])
-# def show_photo(filename):
-#     file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
-#     if request.method == 'GET':
-#         if filename is None:
-#             pass
-#         else:
-#             image_data = open(os.path.join(file_dir, '%s' % filename), "rb").read()
-#             response = make_response(image_data)
-#             response.headers['Content-Type'] = 'image/png'
-#             return response
-#     else:
-#         pass
 
 ########## Token接口
 def generate_auth_token(data):

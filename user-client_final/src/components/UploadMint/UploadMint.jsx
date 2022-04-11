@@ -47,6 +47,7 @@ class UploadMint extends React.Component{
         previewContent: null,
         data: null,
     }
+    file_type = ''
 
     handleOk = () => this.setState({ previewVisible: false });
 
@@ -69,6 +70,8 @@ class UploadMint extends React.Component{
         formData.append('price', values.price)
         formData.append('introduction', values.introduction)
         formData.append('category_id', values.category_id)
+    
+        // this.file_type
         const result = await uploadMint(formData)
         console.log(result)
         if (result.status === 0 && result.message === '上传成功') {
@@ -133,16 +136,18 @@ class UploadMint extends React.Component{
                     // 获取当前文件的一个内存URL
                     src = URL.createObjectURL(file)
                     //根据文件类型个性生成预览组件
-                    previewContent = <img src={src} alt='上传的图片' />
+                    previewContent = <img src={src} alt='上传的图片'/>
+                    this.file_type = 'image'
                 }
             }else if (/^video\/\S+$/.test(type)) {
                 const isLt = sizeM <= video_limit;
                 if (!isLt) {
                     message.error(`${file.name} 视频文件大小不能超过${audio_limit}M`);
                     return [];
-                }else{
+                }else {
                     src = URL.createObjectURL(file)
-                    previewContent = <video src={src} autoPlay loop controls />
+                    previewContent = <video src={src} loop controls preload/>
+                    this.file_type = 'video'
                 }
             }else if (/^audio\/\S+$/.test(type)) {
                 const isLt = sizeM <= audio_limit;
@@ -152,11 +157,12 @@ class UploadMint extends React.Component{
                 }else{
                     src = URL.createObjectURL(file)
                     previewContent = (
-                        <audio controls autoPlay>
+                        <audio controls preload>
                             <source src={src}/>
                             <embed src={src}/>
                         </audio>
                     )
+                    this.file_type = 'audio'
                 }
             }else if (/^text\/\S+$/.test(type)) {
                 const isLt = sizeM <= text_limit;
@@ -170,8 +176,14 @@ class UploadMint extends React.Component{
                     //注：onload是异步函数，此处需独立处理
                     reader.onload = function (e) {
                         previewContent = <textarea value={this.result} readOnly/>
-                        self.setState({ previewVisible:true,previewTitle: file.name, data: file, previewContent: previewContent })
+                        self.setState({
+                            previewVisible: true,
+                            previewTitle: file.name,
+                            data: file,
+                            previewContent: previewContent
+                        })
                     }
+                    this.file_type = 'text'
                     return;
                 }
 
