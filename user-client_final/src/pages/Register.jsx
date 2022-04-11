@@ -1,13 +1,12 @@
 import React from 'react';
 import {Button, Checkbox, Form, Input, InputNumber, message, Select, Steps} from 'antd';
-import HttpUtil from "../utils/HttpUtil";
-import ApiUtil from "../utils/ApiUtil";
 import {debounce} from "../utils/debounce";
 //引用CSS
 import "./css/rsregister/font-awesome/css/font-awesome.min.css"
 import "./css/rsregister/css/rstyle.css"
 import "./css/rsregister/bootstrap/css/bootstrap.min.css"
 import "./css/rslogin/css/lstyle.css"
+import {checkedAccount, registerAccount} from "../api/API";
 
 const {Step} = Steps;
 const {Option} = Select;
@@ -111,26 +110,19 @@ const Register = () => {
     }
 
 
-    const checkedAccount = (data) => {
-        return HttpUtil.post(ApiUtil.API_CHECK_USERNAME, data)
-    }
+
 
     // 验证账号是否已经被添加过
     const checkAccount = (value, callback) => {
         // 返回一个promise
-        // console.log('校验')
-        const checkPromise = new Promise((resolve, reject) => {
-            checkedAccount({user_name: value}).then(res => { // 这个是后台接口方法
-                if (res.responseCode === 200 && res.message === '用户名重复') {
-                    console.log(res)
-                    resolve(false)
-                } else {
-                    resolve(true)
-                }
-            }).catch(error => {
-                // reject(error)
-                message.error('用户名有效性校验失败', 1)
-            })
+        const checkPromise = new Promise(async (resolve, reject) => {
+            const res = await checkedAccount({user_name: value})
+            if (res.status === 0 && res.message === '用户名重复') {
+                console.log(res)
+                resolve(false)
+            } else {
+                resolve(true)
+            }
         })
 
         checkPromise.then(res => {
@@ -156,9 +148,8 @@ const Register = () => {
         next();
     }
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         //获得前两个表单的数据
-        console.log(values)
         const first_register = JSON.parse(sessionStorage.getItem('first_register') || '{}')
         const second_register = JSON.parse(sessionStorage.getItem('second_register') || '{}')
         values = Object.assign(values, first_register, second_register)
@@ -168,19 +159,16 @@ const Register = () => {
         let md5 = require("./model/md5.js"); //引入md5加密模块
         values.password = md5(values.password);
         // console.log(values)
-        HttpUtil.post(ApiUtil.API_REGISTER, values).then(function (response) {
-            console.log(response)
-            if (response.responseCode === 200 && response.message === '添加成功') {
-                message.success('注册成功~');
-                window.location.href = "/login";
-            } else if (response.message === '用户名重复') {
-                message.error('用户名已被使用,请更换~');
-            } else {
-                message.error('注册失败,请稍后重试~');
-            }
-        }).catch(function (error) {
-            // console.log(error);
-        });
+        const response = await registerAccount(values)
+        console.log(response)
+        if (response.status === 0 && response.message === '添加成功') {
+            message.success('注册成功~');
+            window.location.href = "/login";
+        } else if (response.message === '用户名重复') {
+            message.error('用户名已被使用,请更换~');
+        } else {
+            message.error('注册失败,请稍后重试~');
+        }
     };
 
 

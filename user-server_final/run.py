@@ -37,7 +37,6 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-# TODO: 对传入的相关参数进行处理
 @app.route(apiPrefix + 'upload', methods=['POST'], strict_slashes=False)
 def api_upload():
     # print(request.form.to_dict().get('user_data'))
@@ -49,15 +48,15 @@ def api_upload():
             os.makedirs(file_dir)  # 文件夹不存在就创建
         f = request.files['file']  # 从表单的file字段获取文件
         if f and allowed_file(f.filename):  # 判断是否是允许上传的文件类型
-            fname = f.filename
-            ext = fname.rsplit('.', 1)[1]  # 获取文件后缀
+            file_name = f.filename
+            ext = file_name.rsplit('.', 1)[1]  # 获取文件后缀
             unix_time = int(time.time())
-            new_filename = str(unix_time)+str(randint(1000,9999)) + '.' + ext  # 修改文件名
+            new_filename = str(unix_time) + str(randint(1000, 9999)) + '.' + ext  # 修改文件名
             # print(str(unix_time))
-            f.save(os.path.join(file_dir,new_filename))  # 保存文件到upload目录
-            product_data=request.form.to_dict()
+            f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
+            product_data = request.form.to_dict()
             # print(product_data)
-            DBUtil.saveUploadPorduct(product_data,new_filename)
+            DBUtil.save_upload_product(product_data, new_filename)
             return jsonify({"message": "上传成功", "status": 0})
         else:
             return jsonify({"message": "上传失败", "status": -1, "detail_message": "文件类型不合格"})
@@ -138,10 +137,7 @@ def verify_login(token):
 def register_user():
     json_str = request.get_data(as_text=True)
     user_data = json.loads(json_str)
-    print(user_data)
-    response = DBUtil.addOrUpdateUsers(user_data)
-    response['responseCode'] = 200
-    print(response)
+    response = DBUtil.add_or_update_users(user_data)
     return jsonify(response)
 
 
@@ -150,8 +146,7 @@ def register_user():
 def check_username():
     json_str = request.get_data(as_text=True)
     user_data = json.loads(json_str)
-    response = DBUtil.checkUserNameRepeat(user_data)
-    response['responseCode'] = 200
+    response = DBUtil.check_username_repeat(user_data)
     return jsonify(response)
 
 
@@ -163,7 +158,7 @@ def login_user():
     # print('user_data',user_data)
     token = user_data.get('token', None)
     _token = verify_auth_token(token)
-    response = DBUtil.checkUsers(user_data)
+    response = DBUtil.check_users(user_data)
     if _token == 'success':
         response['token_message'] = _token
     elif response['message'] == '验证成功':

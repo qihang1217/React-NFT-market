@@ -1,10 +1,9 @@
 import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
 import {Button, Form, Input, InputNumber, message, Modal, Upload} from 'antd';
-import ApiUtil from "../../utils/ApiUtil";
+import {uploadMint} from "../../api/API";
 
 const {Dragger} = Upload;
-// const client = ipfsClient('https://ipfs.infura.io:5001/api/v0')
 
 const layout = {
     labelCol: {
@@ -58,40 +57,31 @@ class UploadMint extends React.Component{
     }
 
     //提交整个表单,此时才上传文件
-    onSubmit = (values) => {
+    onSubmit = async (values) => {
         console.log(values)
-        let token = localStorage.getItem('token')||''
-        let user_data=localStorage.getItem('user_data') || {}
+        let token = localStorage.getItem('token') || ''
+        let user_data = localStorage.getItem('user_data') || {}
         // console.log(user_data)
         formData.append('token', token)
-        formData.append('user_data',user_data)
+        formData.append('user_data', user_data)
         formData.append('work_name', values.work_name)
         formData.append('price', values.price)
         formData.append('introduction', values.introduction)
-        fetch(ApiUtil.API_UPLOAD, {
-            //fetch请求
-            method: 'POST',
-            body: formData
-        }).then(response => response.json())
-            .then(result => {
-                console.log(result)
-                if (result.status === 0 && result.message === '上传成功') {
-                    message.success('NTF铸造信息提交成功,正在火速为您审核中~');
-                } else if (result.status === -1 && result.token_message === '未登录') {
-                    message.error('登陆状态无效或未登录,请重新登陆~');
-                    //清除存储的无效登陆信息
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('user_name')
-                    window.location.href = '/login'
-                } else if (result.status === -1 && result.detail_message === '文件类型不合格') {
-                    message.error('作品格式不符合要求,请重新上传作品~');
-                } else {
-                    message.error('NTF铸造信息提交失败,请重新提交~');
-                }
-            })
-            .catch(function (error) {
-                // console.log(error);
-            });
+        const result = await uploadMint(formData)
+        console.log(result)
+        if (result.status === 0 && result.message === '上传成功') {
+            message.success('NTF铸造信息提交成功,正在火速为您审核中~');
+        } else if (result.status === -1 && result.token_message === '未登录') {
+            message.error('登陆状态无效或未登录,请重新登陆~');
+            //清除存储的无效登陆信息
+            localStorage.removeItem('token')
+            localStorage.removeItem('user_name')
+            window.location.href = '/login'
+        } else if (result.status === -1 && result.detail_message === '文件类型不合格') {
+            message.error('作品格式不符合要求,请重新上传作品~');
+        } else {
+            message.error('NTF铸造信息提交失败,请重新提交~');
+        }
     };
 
 

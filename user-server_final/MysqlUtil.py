@@ -4,6 +4,7 @@ from run import db
 
 pymysql.install_as_MySQLdb()
 
+
 # 单表查询的数据转换为dict,然后可以jsonfiy
 def class_to_dict(obj):
     is_list = obj.__class__ == [].__class__
@@ -25,6 +26,8 @@ def class_to_dict(obj):
             del a['_sa_instance_state']
         dict.update(a)
         return dict
+
+
 # {
 #   "real_name": "1",
 #   "id_number": "1",
@@ -63,29 +66,28 @@ class Users(db.Model):
     # 创建字段：password，长度为44的字符串(存储加密后的密码)，不允许为空
     password = db.Column(db.String(44), nullable=False)
 
+
 class Products(db.Model):
     # 创建Roles类，映射到数据库中叫Roles表
     __tablename__ = "Products"
     # 创建字段： role_id， 主键和自增涨
     product_id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(20))
-    owner_id = db.Column(db.String(20),db.ForeignKey('Users.user_id'))
-    price=db.Column(db.Integer)
-    pass_status=db.Column(db.Boolean)
-    file_url=db.Column(db.String(100))
-    description=db.Column(db.Text)
+    owner_id = db.Column(db.String(20), db.ForeignKey('Users.user_id'))
+    price = db.Column(db.Integer)
+    pass_status = db.Column(db.Boolean)
+    file_url = db.Column(db.String(100))
+    description = db.Column(db.Text)
+
 
 # 将创建好的实体类映射回数据库
 # db.create_all()
 
 
-staffColumns = ("id", "service", "money", "card_number", "name", "phone", "project", \
-                "shop_guide", "teacher", "financial", "remarks1", "collect_money", "remarks2")  # id没写可把我害惨了
-
 staffColumns = ("id", "real_name", "id_name", "age", "email", "phone_number", "gender", "user_name", "password")
 
 
-def addOrUpdateUsers(user_data):
+def add_or_update_users(user_data):
     try:
         # 获取用户id,没有则赋为0
         id = user_data.get('id', 0)
@@ -165,7 +167,7 @@ def addOrUpdateUsers(user_data):
             result = '更新成功'
             print(result)
         re = {
-            'code': 0,
+            'status': 0,
             'id': new_id,
             'message': result
         }
@@ -173,7 +175,7 @@ def addOrUpdateUsers(user_data):
     except Exception as e:
         print(repr(e))
         re = {
-            'code': -1,
+            'status': -1,
             'message': repr(e)
         }
         return re
@@ -181,23 +183,32 @@ def addOrUpdateUsers(user_data):
         db.session.close()
 
 
-def checkUserNameRepeat(user_data):
+def check_username_repeat(user_data):
     # 防止用户名重复
-    res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
-    db.session.commit()
-    if len(res) == 0:
-        result = '用户名不重复'
-    else:
-        result = '用户名重复'
-    re = {
-        'code': 0,
-        'message': result
-    }
-    db.session.close()
-    return re
+    try:
+        res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
+        db.session.commit()
+        if len(res) == 0:
+            result = '用户名不重复'
+        else:
+            result = '用户名重复'
+        re = {
+            'status': 0,
+            'message': result
+        }
+        return re
+    except Exception as e:
+        print(repr(e))
+        re = {
+            'status': -1,
+            'message': repr(e)
+        }
+        return re
+    finally:
+        db.session.close()
 
 
-def checkUsers(user_data):
+def check_users(user_data):
     # 验证密码是否正确
     try:
         res = db.session.query(Users).filter(Users.user_name == user_data['user_name']).all()
@@ -233,14 +244,16 @@ def checkUsers(user_data):
     finally:
         db.session.close()
 
-def saveUploadPorduct(product_data,upload_file_url):
-    user_data=eval(product_data.get('user_data'))
-    user_id=user_data.get('user_id')
-    work_name=product_data.get('work_name')
-    introduction=product_data.get('introduction')
+
+def save_upload_product(product_data, upload_file_url):
+    user_data = eval(product_data.get('user_data'))
+    user_id = user_data.get('user_id')
+    work_name = product_data.get('work_name')
+    introduction = product_data.get('introduction')
     price = product_data.get('price')
     if introduction == 'undefined':
-        introduction=''
-    product=Products(product_name=work_name,owner_id=user_id,file_url=upload_file_url,pass_status=False,description=introduction,price=price)
+        introduction = ''
+    product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, pass_status=False,
+                       description=introduction, price=price)
     db.session.add(product)
     db.session.commit()
