@@ -58,11 +58,11 @@ def api_upload():
             product_data=request.form.to_dict()
             # print(product_data)
             DBUtil.saveUploadPorduct(product_data,new_filename)
-            return jsonify({"message": "上传成功", "responseCode": 200})
+            return jsonify({"message": "上传成功", "status": 0})
         else:
-            return jsonify({"message": "上传失败", "responseCode": -1, "detail_message": "文件类型不合格"})
+            return jsonify({"message": "上传失败", "status": -1, "detail_message": "文件类型不合格"})
     else:
-        return jsonify({"message": "上传失败", 'token_message': '未登录', "responseCode": -1})
+        return jsonify({"message": "上传失败", 'token_message': '未登录', "status": -1})
 
 
 ########## React访问flask资源

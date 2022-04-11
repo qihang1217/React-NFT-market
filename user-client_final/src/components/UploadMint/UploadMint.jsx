@@ -75,15 +75,15 @@ class UploadMint extends React.Component{
         }).then(response => response.json())
             .then(result => {
                 console.log(result)
-                if (result.responseCode === 200 && result.message === '上传成功') {
+                if (result.status === 0 && result.message === '上传成功') {
                     message.success('NTF铸造信息提交成功,正在火速为您审核中~');
-                } else if (result.responseCode === -1 && result.token_message === '未登录') {
+                } else if (result.status === -1 && result.token_message === '未登录') {
                     message.error('登陆状态无效或未登录,请重新登陆~');
                     //清除存储的无效登陆信息
                     localStorage.removeItem('token')
                     localStorage.removeItem('user_name')
                     window.location.href = '/login'
-                } else if (result.responseCode === -1 && result.detail_message === '文件类型不合格') {
+                } else if (result.status === -1 && result.detail_message === '文件类型不合格') {
                     message.error('作品格式不符合要求,请重新上传作品~');
                 } else {
                     message.error('NTF铸造信息提交失败,请重新提交~');
