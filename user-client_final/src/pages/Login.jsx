@@ -29,7 +29,7 @@ class Login extends Component {
                 localStorage.setItem("token", response.token)
             }
             //页面跳转
-            window.location.href='/'
+            this.props.history.push('/')
         } else if (response.status === -1 && response.message === '用户不存在') {
             message.error('账号或密码错误,请稍后重试~');
         } else if (response.status === -1 && response.message === '验证失败') {

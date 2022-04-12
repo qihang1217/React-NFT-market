@@ -32,8 +32,8 @@ class InsideLogin extends Component {
                 localStorage.setItem("user_data", JSON.stringify(response.data[0]))
                 localStorage.setItem("token", response.token)
             }
-            //页面跳转
-            window.location.href='/'
+            //页面跳转到原界面
+            this.props.history.push(this.props.location.pathname)
         } else if (response.status === -1 && response.message === '用户不存在') {
             message.error('账号或密码错误,请稍后重试~');
         } else if (response.status === -1 && response.message === '验证失败') {
