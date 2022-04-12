@@ -9,6 +9,7 @@ import Content3 from './Content3';
 
 import {Banner00DataSource, Content00DataSource, Content10DataSource, Content30DataSource,} from './data.source';
 import './less/antMotionStyle.less';
+import {delete_padding, revive_padding} from "../../utils/ControlPadding";
 
 let isMobile;
 enquireScreen((b) => {
@@ -27,6 +28,8 @@ export default class Home extends React.Component {
     }
 
     componentDidMount() {
+        //清除外部的边界框
+        delete_padding()
         // 适配手机屏幕;
         enquireScreen((b) => {
             this.setState({isMobile: !!b});
@@ -42,7 +45,12 @@ export default class Home extends React.Component {
         }
         /* 如果不是 dva 2.0 请删除 end */
     }
-
+    
+    componentWillUnmount() {
+        //恢复外部的边界框
+        revive_padding()
+    }
+    
     render() {
         const children = [
             /* <Nav3

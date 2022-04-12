@@ -7,11 +7,14 @@ import "./InsideLogin.css"
 import "../.././pages/css/rslogin/css/lstyle.css"
 import "../.././pages/css/rslogin/css/font-awesome.min.css"
 import {reqLogin} from "../../api/API";
+import {delete_padding, revive_padding} from "../../utils/ControlPadding";
 
 class InsideLogin extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            height: `${document.documentElement.clientHeight - 64}px`
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -44,26 +47,27 @@ class InsideLogin extends Component {
         const screenHeight = document.documentElement.clientHeight;
         let height = `${screenHeight - 64}px`;
         this.setState({
-            height,
+            height: height,
         })
     }
 
     componentWillMount() {
-        this.props.revive_footer()
         message.error('未登录,请先登录~', 1);
     }
 
     componentDidMount() {
+        //清除外部的边界框
+        delete_padding()
+        //删除页脚
         this.props.delete_footer()
-        const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight - 64}px`;
-        this.setState({
-            height,
-        })
+        //设置自适应高度
+        this.handleHeight()
         window.addEventListener('resize', this.handleHeight);
     }
 
     componentWillUnmount() {
+        revive_padding()
+        this.props.revive_footer()
         window.removeEventListener('resize', this.handleHeight);
     }
 

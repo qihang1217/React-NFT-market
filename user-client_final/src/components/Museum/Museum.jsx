@@ -1,6 +1,7 @@
 import React from "react";
 import ApiUtil from "../../utils/ApiUtil";
 import Loading from "../Loading/Loading"
+import {delete_padding, revive_padding} from "../../utils/ControlPadding";
 
 class Museum extends React.Component {
     constructor(props) {
@@ -11,13 +12,20 @@ class Museum extends React.Component {
             iframeVisible: 'none'
         }
     }
-
-    componentWillUnmount() {
-        this.props.revive_footer()
-        window.removeEventListener('resize', this.handleHeight);
+    
+    
+    handleHeight = () => {
+        const screenHeight = document.documentElement.clientHeight;
+        let height = `${screenHeight - 64}px`;
+        this.setState({
+            height,
+        })
     }
-
+    
+    
     componentDidMount() {
+        //清除外部的边界框
+        delete_padding()
         this.props.delete_footer()
         const screenHeight = document.documentElement.clientHeight;
         let height = `${screenHeight - 64}px`;
@@ -26,15 +34,15 @@ class Museum extends React.Component {
         })
         window.addEventListener('resize', this.handleHeight);
     }
-
-    handleHeight = () => {
-        const screenHeight = document.documentElement.clientHeight;
-        let height = `${screenHeight - 64}px`;
-        this.setState({
-            height,
-        })
+    
+    componentWillUnmount() {
+        //恢复外部的边界框
+        revive_padding()
+        this.props.revive_footer()
+        window.removeEventListener('resize', this.handleHeight);
     }
-
+    
+    
     render() {
         return (
             <>

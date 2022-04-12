@@ -22,7 +22,7 @@ const Museum = loadable(() => import('./Museum/Museum'));
 const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
 
 
-const {Footer} = Layout;
+const {Footer, Content} = Layout;
 const ipfsClient = require("ipfs-http-client");
 const ipfs = ipfsClient({
     host: "localhost",
@@ -102,23 +102,31 @@ class App extends Component {
                     for (var i = 1; i <= cryptoBoysCount; i++) {
                         const cryptoBoy = await cryptoBoysContract.methods
                             .allCryptoBoys(i)
-                            .call();
+                        .call();
                         this.setState({
                             cryptoBoys: [...this.state.cryptoBoys, cryptoBoy],
                         });
                     }
                     //获取已经铸造的cryptoBoys总数
                     let totalTokensMinted = await cryptoBoysContract.methods
-                        .getNumberOfTokensMinted()
-                        .call();
+                    .getNumberOfTokensMinted()
+                    .call();
                     // fixme:可能存在bug,totalTokensMinted值错误
-                    totalTokensMinted = totalTokensMinted.toNumber();
+                    if (totalTokensMinted !== null) {
+                        totalTokensMinted = totalTokensMinted.toNumber();
+                    } else {
+                        totalTokensMinted = 0
+                    }
                     this.setState({totalTokensMinted});
                     //获取所拥有的cryptoBoys总数
                     let totalTokensOwnedByAccount = await cryptoBoysContract.methods
-                        .getTotalNumberOfTokensOwnedByAnAddress(this.state.accountAddress)
-                        .call();
-                    totalTokensOwnedByAccount = totalTokensOwnedByAccount.toNumber();
+                    .getTotalNumberOfTokensOwnedByAnAddress(this.state.accountAddress)
+                    .call();
+                    if (totalTokensOwnedByAccount !== null) {
+                        totalTokensOwnedByAccount = totalTokensOwnedByAccount.toNumber();
+                    } else {
+                        totalTokensOwnedByAccount = 0
+                    }
                     this.setState({totalTokensOwnedByAccount});
                     this.setState({loading: false});
                 } else {
@@ -364,134 +372,135 @@ class App extends Component {
     //渲染网页
     render() {
         return (
-            <div>
                 <>
                     <Router basename="/">
                         {/*导航菜单*/}
                         <Navbar/>
-                        {/*路由配置*/}
-                        <Switch>
-                            <Route
-                                exact path="/"
-                                render={() => (
-                                    <Home/>
-                                )}
-                            />
-                            <Route
-                                path="/mint"
-                                render={() => (
-                                    this.state.isAuthenticated ? (
-                                        <Mint
-                                            connectToMetamask={this.connectToMetamask}
-                                            metamaskConnected={this.state.metamaskConnected}
-                                            contractDetected={this.state.contractDetected}
-                                            loading={this.state.loading}
-                                        />
-                                    ) : <InsideLogin
-                                        delete_footer={this.delete_footer}
-                                        revive_footer={this.revive_footer}
+                        <Content style={{padding: '0 50px'}}>
+                            <div className="site-layout-content">
+                                {/*路由配置*/}
+                                <Switch>
+                                    <Route
+                                        exact path="/"
+                                        render={() => (
+                                            <Home/>
+                                        )}
                                     />
-                                )}
-                            />
-                            <Route
-                                path="/color_mint"
-                                render={() => (
-                                    this.state.isAuthenticated ? (
-                                        <ColorMint
-                                            mintMyNFT={this.mintMyNFT}
-                                            nameIsUsed={this.state.nameIsUsed}
-                                            colorIsUsed={this.state.colorIsUsed}
-                                            colorsUsed={this.state.colorsUsed}
-                                            setMintBtnTimer={this.setMintBtnTimer}
-                                        />
-                                    ) : <InsideLogin
-                                        delete_footer={this.delete_footer}
-                                        revive_footer={this.revive_footer}
+                                    <Route
+                                        path="/mint"
+                                        render={() => (
+                                            this.state.isAuthenticated ? (
+                                                <Mint
+                                                    connectToMetamask={this.connectToMetamask}
+                                                    metamaskConnected={this.state.metamaskConnected}
+                                                    contractDetected={this.state.contractDetected}
+                                                    loading={this.state.loading}
+                                                />) : (<InsideLogin
+                                                delete_footer={this.delete_footer}
+                                                revive_footer={this.revive_footer}
+                                            />)
+                                        )}
                                     />
-                                )}
-                            />
-                            <Route
-                                path="/upload_mint"
-                                render={() => (
-                                    this.state.isAuthenticated ? (
-                                        <UploadMint
-                                        />
-                                    ) : <InsideLogin
-                                        delete_footer={this.delete_footer}
-                                        revive_footer={this.revive_footer}
+                                    <Route
+                                        path="/color_mint"
+                                        render={() => (
+                                            this.state.isAuthenticated ? (
+                                                <ColorMint
+                                                    mintMyNFT={this.mintMyNFT}
+                                                    nameIsUsed={this.state.nameIsUsed}
+                                                    colorIsUsed={this.state.colorIsUsed}
+                                                    colorsUsed={this.state.colorsUsed}
+                                                    setMintBtnTimer={this.setMintBtnTimer}
+                                                />
+                                            ) : <InsideLogin
+                                                delete_footer={this.delete_footer}
+                                                revive_footer={this.revive_footer}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                            <Route
-                                path="/marketplace"
-                                render={() => (
-                                    <MarketPlace
-                                        accountAddress={this.state.accountAddress}
-                                        cryptoBoys={this.state.cryptoBoys}
-                                        totalTokensMinted={this.state.totalTokensMinted}
-                                        changeTokenPrice={this.changeTokenPrice}
-                                        toggleForSale={this.toggleForSale}
-                                        buyCryptoBoy={this.buyCryptoBoy}
+                                    <Route
+                                        path="/upload_mint"
+                                        render={() => (
+                                            this.state.isAuthenticated ? (
+                                                <UploadMint
+                                                />
+                                            ) : <InsideLogin
+                                                delete_footer={this.delete_footer}
+                                                revive_footer={this.revive_footer}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                            <Route
-                                path="/my-tokens"
-                                render={() => (
-                                    this.state.isAuthenticated ? (
-                                        <MyTokens
-                                            accountAddress={this.state.accountAddress}
-                                            cryptoBoys={this.state.cryptoBoys}
-                                            totalTokensOwnedByAccount={
-                                                this.state.totalTokensOwnedByAccount
-                                            }
-                                        />
-                                    ) : <InsideLogin
-                                        delete_footer={this.delete_footer}
-                                        revive_footer={this.revive_footer}
+                                    <Route
+                                        path="/marketplace"
+                                        render={() => (
+                                            <MarketPlace
+                                                accountAddress={this.state.accountAddress}
+                                                cryptoBoys={this.state.cryptoBoys}
+                                                totalTokensMinted={this.state.totalTokensMinted}
+                                                changeTokenPrice={this.changeTokenPrice}
+                                                toggleForSale={this.toggleForSale}
+                                                buyCryptoBoy={this.buyCryptoBoy}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                            <Route
-                                path="/queries"
-                                render={() => (
-                                    <Queries cryptoBoysContract={this.state.cryptoBoysContract}/>
-                                )}
-                            />
-                            <Route
-                                path="/museum"
-                                render={() => (
-                                    <Museum
-                                        delete_footer={this.delete_footer}
-                                        revive_footer={this.revive_footer}
+                                    <Route
+                                        path="/my-tokens"
+                                        render={() => (
+                                            this.state.isAuthenticated ? (
+                                                <MyTokens
+                                                    accountAddress={this.state.accountAddress}
+                                                    cryptoBoys={this.state.cryptoBoys}
+                                                    totalTokensOwnedByAccount={
+                                                        this.state.totalTokensOwnedByAccount
+                                                    }
+                                                />
+                                            ) : <InsideLogin
+                                                delete_footer={this.delete_footer}
+                                                revive_footer={this.revive_footer}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                            <Route
-                                path="/my"
-                                render={() => (
-                                    this.state.isAuthenticated ? (
-                                        <MyAccount
-                                            connectToMetamask={this.connectToMetamask}
-                                            metamaskConnected={this.state.metamaskConnected}
-                                            contractDetected={this.state.contractDetected}
-                                            loading={this.state.loading}
-                                            accountAddress={this.state.accountAddress}
-                                            accountBalance={this.state.accountBalance}
-                                        />
-                                    ) : <InsideLogin
-                                        delete_footer={this.delete_footer}
-                                        revive_footer={this.revive_footer}
+                                    <Route
+                                        path="/queries"
+                                        render={() => (
+                                            <Queries cryptoBoysContract={this.state.cryptoBoysContract}/>
+                                        )}
                                     />
-                                )}
-                            />
-                        </Switch>
+                                    <Route
+                                        path="/museum"
+                                        render={() => (
+                                            <Museum
+                                                delete_footer={this.delete_footer}
+                                                revive_footer={this.revive_footer}
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        path="/my"
+                                        render={() => (
+                                            this.state.isAuthenticated ? (
+                                                <MyAccount
+                                                    connectToMetamask={this.connectToMetamask}
+                                                    metamaskConnected={this.state.metamaskConnected}
+                                                    contractDetected={this.state.contractDetected}
+                                                    loading={this.state.loading}
+                                                    accountAddress={this.state.accountAddress}
+                                                    accountBalance={this.state.accountBalance}
+                                                />
+                                            ) : <InsideLogin
+                                                delete_footer={this.delete_footer}
+                                                revive_footer={this.revive_footer}
+                                            />
+                                        )}
+                                    />
+                                </Switch>
+                            </div>
+                        </Content>
                         <Footer style={{textAlign: 'center', display: this.state.footerVisible}}>
                             NFT marketplace ©2021
                         </Footer>
                     </Router>
                 </>
-            </div>
         );
     }
 }
