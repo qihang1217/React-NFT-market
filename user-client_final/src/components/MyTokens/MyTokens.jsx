@@ -37,7 +37,7 @@ const MyTokens = ({
 	}, [cryptoBoys]);
 	
 	
-	useEffect(async () => {
+	const reqProductData = async () => {
 		let result
 		// 发请求获取数据
 		const userData = JSON.parse(localStorage.getItem('user_data'))
@@ -50,6 +50,11 @@ const MyTokens = ({
 			setProducts(list)
 			setProductTotal(total)
 		}
+	}
+	
+	
+	useEffect(() => {
+		reqProductData()
 	}, []);
 	// {
 	//     "0": {
@@ -71,9 +76,9 @@ const MyTokens = ({
 			setProductCard(products.map(item => {
 				let status_name
 				if (item.pass_status === true) {
-					status_name = '通过'
+					status_name = '审核通过'
 				} else if (item.pass_status === false)
-					status_name = '不通过'
+					status_name = '审核未通过'
 				const filename = item.file_url
 				const ext = filename.substring(filename.lastIndexOf('.') + 1);
 				const filetype = item.file_type

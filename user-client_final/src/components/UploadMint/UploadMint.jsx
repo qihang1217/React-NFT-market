@@ -2,7 +2,7 @@ import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
 import {Button, Form, Input, InputNumber, message, Modal, Select, Upload} from 'antd';
 import {reqCategories, uploadMint} from "../../api/API";
-import FileViewer from "react-file-viewer/src/components";
+import FileViewer from "react-file-viewer";
 import {ALLOWED_EXTENSIONS} from "../../constants/constants";
 
 const {Option} = Select;
@@ -54,10 +54,12 @@ class UploadMint extends React.Component{
     handleOk = () => this.setState({ previewVisible: false });
 
     handleCancel = () => {
-        this.setState({ previewVisible: false })
+        this.setState({previewVisible: false})
         //点击外部删除按钮,删除提交的文件
         let delete_button = document.getElementsByClassName("ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn")[0];
-        delete_button.click();
+        if (delete_button) {
+            delete_button.click();
+        }
     }
 
     //提交整个表单,此时才上传文件
@@ -117,7 +119,14 @@ class UploadMint extends React.Component{
             let src, previewContent, type = file.type;
             //文件扩展名
             const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
-            if (!(ext in ALLOWED_EXTENSIONS)) {
+            let isValid = false
+            let item
+            for (item in ALLOWED_EXTENSIONS) {
+                if (ALLOWED_EXTENSIONS[item] === ext) {
+                    isValid = true
+                }
+            }
+            if (!isValid) {
                 message.error(`${file.name} 需为指定格式的图片、视频、音频或文本`);
                 return [];
             }
@@ -261,7 +270,7 @@ class UploadMint extends React.Component{
                             <p className="ant-upload-hint">
                                 支持单次或批量上传,仅支持图片、音频、视频或文本
                             </p>
-                            <p>
+                            <p className="ant-upload-hint">
                                 (具体为bmp, png, gif, jpg, jpeg, mp4, mp3,docx,pdf格式)
                             </p>
                         </Dragger>
