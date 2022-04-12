@@ -74,11 +74,17 @@ const MyTokens = ({
 	useEffect(() => {
 		if (products) {
 			setProductCard(products.map(item => {
-				let status_name
+				let status_name, status_content, status_action
 				if (item.pass_status === true) {
 					status_name = '审核通过'
-				} else if (item.pass_status === false)
+					status_action = '开始铸造'
+					status_content = (<span className='bottom-value'>{status_name}</span>)
+				} else if (item.pass_status === false) {
 					status_name = '审核未通过'
+					status_action = '重新提交'
+					status_content = (
+						<span style={{color: '#F63638FF'}} className='bottom-value'>{status_name}</span>)
+				}
 				const filename = item.file_url
 				const ext = filename.substring(filename.lastIndexOf('.') + 1);
 				const filetype = item.file_type
@@ -99,7 +105,8 @@ const MyTokens = ({
 					previewContent = (
 						<FileViewer
 							fileType={ext}
-							filePath={src}/>
+							filePath={src}
+						/>
 					)
 				}
 				return (<Col span={card_cols}>
@@ -109,6 +116,10 @@ const MyTokens = ({
 						cover={
 							previewContent
 						}
+						actions={[
+							<Button>详情</Button>,
+							<Button type='primary'>{status_action}</Button>
+						]}
 					>
 						<div style={{display: 'flex', 'justify-content': 'space-between'}}>
 							<div>
@@ -117,7 +128,7 @@ const MyTokens = ({
 							</div>
 							<div className='right-content'>
 								<div className='top-attribute'>状态</div>
-								<Button type="primary" className='bottom-value'>{status_name}</Button>
+								{status_content}
 							</div>
 						</div>
 					</Card>
