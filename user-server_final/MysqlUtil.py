@@ -85,8 +85,8 @@ class Products(db.Model):
     price = db.Column(db.Integer)
     pass_status = db.Column(db.Boolean)
     # 防止文件名可能的重复
-    file_url = db.Column(db.String(100), unique=True)
-    file_type = db.Column(db.String(10))
+    file_url = db.Column(db.String(30), unique=True)
+    file_type = db.Column(db.String(100))
     description = db.Column(db.Text)
     category_id = db.Column(db.Integer, db.ForeignKey('Categories.category_id'))
 
@@ -274,6 +274,16 @@ def save_upload_product(product_data, upload_file_url,file_type):
 def get_categories():
     try:
         return class_to_dict(db.session.query(Categories).all()), 0
+    except Exception as e:
+        print(repr(e))
+        return [{}], -1
+    finally:
+        db.session.close()
+
+
+def get_own_product_list(user_id):
+    try:
+        return class_to_dict(Products.query.filter(Products.owner_id==user_id).all()), 0
     except Exception as e:
         print(repr(e))
         return [{}], -1

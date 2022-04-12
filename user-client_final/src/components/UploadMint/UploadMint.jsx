@@ -2,6 +2,8 @@ import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
 import {Button, Form, Input, InputNumber, message, Modal, Select, Upload} from 'antd';
 import {reqCategories, uploadMint} from "../../api/API";
+import FileViewer from "react-file-viewer/src/components";
+import {ALLOWED_EXTENSIONS} from "../../constants/constants";
 
 const {Option} = Select;
 const {Dragger} = Upload;
@@ -18,7 +20,7 @@ const layout = {
 const props = {
     name: 'file',
     multiple: false,
-    accept: "image/*,video/*,audio/*",
+    // accept: "image/*,video/*,audio/*",
     maxCount: 1,
     listType:'picture',
     onChange(info) {
@@ -110,31 +112,32 @@ class UploadMint extends React.Component{
         }
         else {
             //添加文件时
-
+    
             //校验文件类型
-            let src,previewContent,type=file.type;
-            const isSatisfy = /^image\/\S+$/.test(type) || /^video\/\S+$/.test(type) || /^audio\/\S+$/.test(type)||/^text\/\S+$/.test(type);
-            if (!isSatisfy) {
-                message.error(`${file.name} 需为图片、视频、音频或文本`);
+            let src, previewContent, type = file.type;
+            //文件扩展名
+            const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
+            if (!(ext in ALLOWED_EXTENSIONS)) {
+                message.error(`${file.name} 需为指定格式的图片、视频、音频或文本`);
                 return [];
             }
-
+    
             //校验文件大小
             let size = file.size;
             let sizeM = size / 1024 / 1024;
             // console.log(sizeM)
             const image_limit = 10;
-            const audio_limit = 10;
-            const video_limit = 100;
-            const text_limit = 10;
+            const audio_limit = 50;
+            const video_limit = 80;
+            const text_limit = 50;
+            // 获取当前文件的一个内存URL
+            src = URL.createObjectURL(file)
             if (/^image\/\S+$/.test(type)) {
                 const isLt = sizeM <= image_limit;
                 if (!isLt) {
                     message.error(`${file.name} 图片文件大小不能超过${image_limit}M`);
                     return [];
-                }else{
-                    // 获取当前文件的一个内存URL
-                    src = URL.createObjectURL(file)
+                } else {
                     //根据文件类型个性生成预览组件
                     previewContent = <img src={src} alt='上传的图片'/>
                     this.file_type = 'image'
@@ -145,7 +148,6 @@ class UploadMint extends React.Component{
                     message.error(`${file.name} 视频文件大小不能超过${audio_limit}M`);
                     return [];
                 }else {
-                    src = URL.createObjectURL(file)
                     previewContent = <video src={src} loop controls preload/>
                     this.file_type = 'video'
                 }
@@ -154,8 +156,7 @@ class UploadMint extends React.Component{
                 if (!isLt) {
                     message.error(`${file.name} 音频文件大小不能超过${video_limit}M`);
                     return [];
-                }else{
-                    src = URL.createObjectURL(file)
+                } else {
                     previewContent = (
                         <audio controls preload>
                             <source src={src}/>
@@ -164,29 +165,28 @@ class UploadMint extends React.Component{
                     )
                     this.file_type = 'audio'
                 }
-            }else if (/^text\/\S+$/.test(type)) {
+            } else if (ext === 'docx' || ext === 'pdf') {
                 const isLt = sizeM <= text_limit;
                 if (!isLt) {
                     message.error(`${file.name} 文本文件大小不能超过${video_limit}M`);
                     return [];
-                }else{
-                    const self = this;
-                    const reader = new FileReader();
-                    reader.readAsText(file);
-                    //注：onload是异步函数，此处需独立处理
-                    reader.onload = function (e) {
-                        previewContent = <textarea value={this.result} readOnly/>
-                        self.setState({
-                            previewVisible: true,
-                            previewTitle: file.name,
-                            data: file,
-                            previewContent: previewContent
-                        })
-                    }
+                } else {
+                    previewContent = (
+                        <FileViewer
+                            fileType={ext}
+                            filePath={src}
+                        />
+                    )
                     this.file_type = 'text'
-                    return;
                 }
-
+            } else {
+                previewContent = (
+                    <FileViewer
+                        fileType={ext}
+                        filePath={src}
+                    />
+                )
+                this.file_type = 'else'
             }
             this.setState({ previewVisible:true,previewTitle: file.name, data: file, previewContent: previewContent })
             //确保传输的文件只有一个
@@ -259,7 +259,10 @@ class UploadMint extends React.Component{
                             </p>
                             <p className="ant-upload-text">单击或拖动文件到此区域以上传</p>
                             <p className="ant-upload-hint">
-                                支持单次或批量上传,仅支持图片、音频或视频
+                                支持单次或批量上传,仅支持图片、音频、视频或文本
+                            </p>
+                            <p>
+                                (具体为bmp, png, gif, jpg, jpeg, mp4, mp3,docx,pdf格式)
                             </p>
                         </Dragger>
                     </Form.Item>
@@ -333,9 +336,7 @@ class UploadMint extends React.Component{
                 >
                     {previewContent}
                 </Modal>
-
             </div>
-
         );
     }
 }

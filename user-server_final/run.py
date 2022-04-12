@@ -28,8 +28,7 @@ apiPrefix = '/api/v1/'
 UPLOAD_FOLDER = 'upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # 设置文件上传的目标文件夹
 basedir = os.path.abspath(os.path.dirname(__file__))  # 获取当前项目的绝对路径
-ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'rmvb', 'avi', 'ts', 'wav',
-                      'midi', 'cda', 'mp3', 'wma'}  # 允许上传的文件后缀
+ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'mp3','docx','pdf'}  # 允许上传的文件后缀
 
 
 # 判断文件是否合法
@@ -173,6 +172,18 @@ def get_category_list():
     response = {
         'status': status,
         'data': res,
+    }
+    return jsonify(response)
+
+
+@app.route(apiPrefix + 'product/own/list', methods=['GET'], strict_slashes=False)
+def get_own_product_list():
+    args=request.args.to_dict()
+    user_id=args.get('userId')
+    res, status = DBUtil.get_own_product_list(user_id)
+    response = {
+        'status': status,
+        'data': {'list': res},
     }
     return jsonify(response)
 

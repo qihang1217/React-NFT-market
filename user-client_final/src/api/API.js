@@ -35,3 +35,15 @@ export const uploadMint = (formData) => {
 export const reqCategories = () => {
     return HttpUtil.get(ApiUtil.API_CATEGORY_LIST)
 }
+
+
+/* 获取个人拥有的NFT列表 */
+export const reqOwnedProducts = (userId) => {
+    return HttpUtil.get(ApiUtil.API_OWN_PRODUCT_LIST + `?userId=${userId}`)
+}
+
+
+/* 根据NFT ID获取NFT详细信息 */
+export const reqProduct = (productId) => {
+    return HttpUtil.get(ApiUtil.API_PRODUCT_BY_ID + `?productId=${productId}`)
+}
