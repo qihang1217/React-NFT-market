@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import CryptoBoyNFTImage from "../CryptoBoyNFTImage/CryptoBoyNFTImage";
+import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
 
 // source: https://stackoverflow.com/questions/1484506/random-color-generator
 //随机设定颜色
@@ -252,7 +252,7 @@ class ColorMint extends Component {
 							</div>
 						</div>
 						<div className="col-md-6 d-flex justify-content-center align-items-center">
-							<CryptoBoyNFTImage colors={this.state.userSelectedColors[0]}/>
+							<ColorNFTImage colors={this.state.userSelectedColors[0]}/>
 						</div>
 					</div>
 					<div className="row">

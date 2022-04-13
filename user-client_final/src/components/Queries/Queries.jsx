@@ -15,9 +15,9 @@ const Queries = (props) => {
     const getTokenOwner = async (e) => {
         e.preventDefault();
         try {
-            const owner = await props.cryptoBoysContract.methods
-                .getTokenOwner(tokenIdForOwner)
-                .call();
+            const owner = await props.OwnedEverythingsContract.methods
+            .getTokenOwner(tokenIdForOwner)
+            .call();
             setTokenOwner(owner);
             setTimeout(() => {
                 setTokenOwner("");
@@ -32,9 +32,9 @@ const Queries = (props) => {
     const getTokenMetadata = async (e) => {
         e.preventDefault();
         try {
-            const metadata = await props.cryptoBoysContract.methods
-                .getTokenMetaData(tokenIdForMetadata)
-                .call();
+            const metadata = await props.OwnedEverythingsContract.methods
+            .getTokenMetaData(tokenIdForMetadata)
+            .call();
             setTokenMetadata(
                 metadata.substr(0, 60) + "..." + metadata.slice(metadata.length - 5)
             );

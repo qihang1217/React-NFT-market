@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import CryptoBoyNFTImage from "../CryptoBoyNFTImage/CryptoBoyNFTImage";
-import MyCryptoBoyNFTDetails from "../MyCryptoBoyNFTDetails/MyCryptoBoyNFTDetails";
+import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
 import Loading from "../Loading/Loading";
-import {Button, Card, Col, Empty, Row} from 'antd';
+import {Button, Card, Col, Empty, Form, Input, Row} from 'antd';
 import './MyTokens.less'
 import {reqOwnedProducts} from "../../api/API";
 import ApiUtil from "../../utils/ApiUtil";
@@ -12,29 +11,144 @@ const empty = require('./empty.svg')
 
 const MyTokens = ({
 	                  accountAddress,
-	                  cryptoBoys,
+	                  OwnedEverythings,
 	                  totalTokensOwnedByAccount,
+	                  toggleForSale,
+	                  changeTokenPrice,
                   }) => {
 	const [loading, setLoading] = useState(false);
-	const [myCryptoBoys, setMyCryptoBoys] = useState([]);
 	const [products, setProducts] = useState([]);
 	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);
+	const [chainDataCard, setChainDataCard] = useState([]);
 	
 	//加载个人在链上拥有的nft数据
 	useEffect(() => {
-		if (cryptoBoys.length !== 0) {
-			if (cryptoBoys[0].metaData !== undefined) {
+		if (OwnedEverythings.length !== 0) {
+			if (OwnedEverythings[0].metaData !== undefined) {
 				setLoading(loading);
 			} else {
 				setLoading(false);
 			}
 		}
-		const my_crypto_boys = cryptoBoys.filter(
-			(cryptoboy) => cryptoboy.currentOwner === accountAddress
+		
+		//筛选出个人所拥有的数藏万物
+		const MyOwnedEverythings = OwnedEverythings.filter(
+			(OwnedEverything) => OwnedEverything.currentOwner === accountAddress
 		);
-		setMyCryptoBoys(my_crypto_boys);
-	}, [cryptoBoys]);
+		
+		const ChainDataCard = MyOwnedEverythings.map((item) => {
+			const {
+				tokenName,
+				price,
+			} = item;
+			
+			//进行上架或者下架操作
+			const handleUnderOrUp = () => {
+				toggleForSale(
+					item.tokenId.toNumber()
+				)
+			}
+			
+			//点击被隐藏的按钮,进行表单提交
+			const handleChangePrice = (e) => {
+				const text = item.tokenId
+				const submit = document.getElementById(text)
+				submit.click()
+			}
+			
+			const callChangeTokenPriceFromApp = (tokenId, newPrice) => {
+				changeTokenPrice(tokenId, newPrice);
+			};
+			
+			//处理表单提交的数据
+			const handleSubmit = (value) => {
+				const price = value.price
+				callChangeTokenPriceFromApp(
+					item.tokenId.toNumber(),
+					price
+				);
+			}
+			
+			
+			//设置出售状态及其样式
+			const sale_status = (accountAddress === item.currentOwner) ?
+				(item.forSale ? ('下架') : ('上架')) : null
+			const sale_status_button_style = (accountAddress === item.currentOwner) ?
+				(!!item.forSale) : null
+			
+			return (<Col span={card_cols}>
+					<Card
+						className='inside-card'
+						hoverable
+						bordered
+						cover={!loading ? (
+							<ColorNFTImage
+								colors={
+									item.metaData !== undefined ?
+										item.metaData.metaData.colors : ""
+								}
+							/>) : (<Loading/>)
+						}
+						actions={[
+							<Button type="primary" ghost
+							        onClick={(e) => {
+								        handleChangePrice(e)
+							        }}
+							>
+								修改价格
+							</Button>,
+							<Button type='primary' danger={sale_status_button_style}
+							        onClick={() => handleUnderOrUp()}
+							>
+								{sale_status}
+							</Button>,
+						]}
+					>
+						<div style={{display: 'flex', justifyContent: 'space-between'}}>
+							<div>
+								<div className='top-attribute'>NFT名字</div>
+								<div>{tokenName}</div>
+							</div>
+							<div className='right-content'>
+								<div className='top-attribute'>价格</div>
+								{window.web3.utils.fromWei(price.toString(), "Ether")} Ξ
+							</div>
+						</div>
+						<Form
+							onFinish={handleSubmit}
+						>
+							<Form.Item
+								name="price"
+								initialValue={window.web3.utils.fromWei(price.toString(), "Ether") || ''}
+								rules={[
+									{required: true, message: '价格必须输入'},
+									{
+										validator(rule, value, callback) {
+											if (value === '') {
+												return Promise.reject()
+											} else if (value * 1 <= 0) {
+												return Promise.reject('价格必须大于0')
+											} else {
+												return Promise.resolve()
+											}
+										}
+									}
+								]}
+							>
+								<Input type="number" placeholder="请输入新的价格"/>
+							</Form.Item>
+							<Form.Item style={{height: 0, width: 0}}>
+								<Button type="primary" htmlType="submit" style={{height: 0, width: 0}}
+								        id={item.tokenId}/>
+							</Form.Item>
+						</Form>
+					</Card>
+				</Col>
+			)
+		})
+		setChainDataCard(ChainDataCard)
+	}, [OwnedEverythings]);
 	
 	//获取个人拥有的nft数据
 	const reqProductData = async () => {
@@ -109,6 +223,7 @@ const MyTokens = ({
 				}
 				return (<Col span={card_cols}>
 					<Card
+						className='inside-card'
 						hoverable
 						bordered
 						cover={
@@ -119,7 +234,7 @@ const MyTokens = ({
 							<Button type="primary" danger>删除</Button>,
 						]}
 					>
-						<div style={{display: 'flex', 'justify-content': 'space-between'}}>
+						<div style={{display: 'flex', justifyContent: 'space-between'}}>
 							<div>
 								<div className='top-attribute'>NFT名字</div>
 								<div>{item.product_name}</div>
@@ -135,52 +250,11 @@ const MyTokens = ({
 		}
 	}, [products]);
 	
-	const ChainData = (<div>
-		<div className="card mt-1">
-			<div className="card-body align-items-center d-flex justify-content-center">
-				<h5>
-					Total No. of CryptoBoy's You Own : {totalTokensOwnedByAccount}
-				</h5>
-			</div>
-		</div>
-		<div className="d-flex flex-wrap mb-2">
-			{myCryptoBoys.map((cryptoboy) => {
-				return (
-					<div
-						key={cryptoboy.tokenId.toNumber()}
-						className="w-50 p-4 mt-1 border"
-					>
-						<div className="row">
-							<div className="col-md-6">
-								{!loading ? (
-									<CryptoBoyNFTImage
-										colors={
-											cryptoboy.metaData !== undefined
-												? cryptoboy.metaData.metaData.colors
-												: ""
-										}
-									/>
-								) : (
-									<Loading/>
-								)}
-							</div>
-							<div className="col-md-6 text-center">
-								<MyCryptoBoyNFTDetails
-									cryptoboy={cryptoboy}
-									accountAddress={accountAddress}
-								/>
-							</div>
-						</div>
-					</div>
-				);
-			})}
-		</div>
-	</div>)
 	
 	return (
 		<div className='my-token'>
 			<div className='content-title'>
-				<span>您的NFT</span>
+				<span>您的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
 			</div>
 			<Card className='under-chain' title="待上链的NFT" extra={<span>总数:{productTotal}</span>}>
 				{
@@ -189,10 +263,7 @@ const MyTokens = ({
 						imageStyle={{
 							height: 120,
 						}}
-						description={
-							<span>
-                            您还没有专属于您的NFT哦,快去创建一个吧~
-                        </span>
+						description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
 						}
 					>
 						<Button type="primary" href="/mint">立即创建</Button>
@@ -202,25 +273,24 @@ const MyTokens = ({
 						</Row>
 					)
 				}
-			</Card>
-			<Card title="已上链的NFT" extra={<span>总数:{totalTokensOwnedByAccount}</span>}>
-				{!totalTokensOwnedByAccount ? (
-						<Empty
-							image={empty}
-							imageStyle={{
-								height: 120,
-							}}
-							description={
-								<span>
-                            您还没有专属于您的NFT哦,快去创建一个吧~
-                        </span>
-							}
-						>
-							<Button type="primary" href="/mint">立即创建</Button>
-						</Empty>) :
-					(
-						{ChainData}
-					)}
+				<Card title="已上链的NFT" extra={<span>总数:{totalTokensOwnedByAccount}</span>}>
+					{!totalTokensOwnedByAccount ? (
+							<Empty
+								image={empty}
+								imageStyle={{
+									height: 120,
+								}}
+								description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
+								}
+							>
+								<Button type="primary" href="/mint">立即创建</Button>
+							</Empty>) :
+						(
+							<Row gutter={[24, 16]}>
+								{chainDataCard}
+							</Row>
+						)}
+				</Card>
 			</Card>
 		</div>
 	);

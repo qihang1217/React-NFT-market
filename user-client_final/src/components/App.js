@@ -4,7 +4,7 @@ import {Layout, message} from 'antd';
 import Web3 from "web3";
 
 import "./App.css";
-import CryptoBoys from "../abis/CryptoBoys.json";
+import OwnedEverythings from "../abis/OwnedEverythings.json";
 import "antd/dist/antd.css";
 
 import loadable from "../utils/Loadable";
@@ -36,9 +36,9 @@ class App extends Component {
         this.state = {
             accountAddress: "",
             accountBalance: "",
-            cryptoBoysContract: null,
-            cryptoBoysCount: 0,
-            cryptoBoys: [],
+            OwnedEverythingsContract: null,
+            OwnedEverythingsCount: 0,
+            OwnedEverythings: [],
             loading: true,
             metamaskConnected: false,
             contractDetected: false,
@@ -84,42 +84,42 @@ class App extends Component {
                 this.setState({accountBalance});
                 this.setState({loading: false});
                 const networkId = await web3.eth.net.getId();
-                const networkData = CryptoBoys.networks[networkId];
+                const networkData = OwnedEverythings.networks[networkId];
                 if (networkData) {
+                    console.log(networkData)
                     this.setState({loading: true});
-                    const cryptoBoysContract = web3.eth.Contract(
-                        CryptoBoys.abi,
+                    const OwnedEverythingsContract = web3.eth.Contract(
+                        OwnedEverythings.abi,
                         networkData.address
                     );
-                    this.setState({cryptoBoysContract});
+                    this.setState({OwnedEverythingsContract});
                     this.setState({contractDetected: true});
-                    //调用cryptoBoyCounter合约cryptoBoyCounter方法,获取已提交的cryptoBoys总数
-                    const cryptoBoysCount = await cryptoBoysContract.methods
-                        .cryptoBoyCounter()
-                        .call();
-                    this.setState({cryptoBoysCount});
-                    //获取所有cryptoBoys
-                    for (var i = 1; i <= cryptoBoysCount; i++) {
-                        const cryptoBoy = await cryptoBoysContract.methods
-                            .allCryptoBoys(i)
+                    //调用ownedeverythingCounter合约ownedeverythingCounter方法,获取已提交的OwnedEverythings总数
+                    const OwnedEverythingsCount = await OwnedEverythingsContract.methods
+                    .ownedeverythingCounter()
+                    .call();
+                    this.setState({OwnedEverythingsCount});
+                    //获取所有OwnedEverythings
+                    for (var i = 1; i <= OwnedEverythingsCount; i++) {
+                        const cryptoBoy = await OwnedEverythingsContract.methods
+                        .allOwnedEverythings(i)
                         .call();
                         this.setState({
-                            cryptoBoys: [...this.state.cryptoBoys, cryptoBoy],
+                            OwnedEverythings: [...this.state.OwnedEverythings, cryptoBoy],
                         });
                     }
-                    //获取已经铸造的cryptoBoys总数
-                    let totalTokensMinted = await cryptoBoysContract.methods
+                    //获取已经铸造的OwnedEverythings总数
+                    let totalTokensMinted = await OwnedEverythingsContract.methods
                     .getNumberOfTokensMinted()
                     .call();
-                    // fixme:可能存在bug,totalTokensMinted值错误
                     if (totalTokensMinted !== null) {
                         totalTokensMinted = totalTokensMinted.toNumber();
                     } else {
                         totalTokensMinted = 0
                     }
                     this.setState({totalTokensMinted});
-                    //获取所拥有的cryptoBoys总数
-                    let totalTokensOwnedByAccount = await cryptoBoysContract.methods
+                    //获取所拥有的OwnedEverythings总数
+                    let totalTokensOwnedByAccount = await OwnedEverythingsContract.methods
                     .getTotalNumberOfTokensOwnedByAnAddress(this.state.accountAddress)
                     .call();
                     if (totalTokensOwnedByAccount !== null) {
@@ -138,12 +138,12 @@ class App extends Component {
 
     //获取在ifps上存放的源数据,并且添加到state中
     setMetaData = async () => {
-        if (this.state.cryptoBoys.length !== 0) {
-            this.state.cryptoBoys.map(async (cryptoboy) => {
+        if (this.state.OwnedEverythings.length !== 0) {
+            this.state.OwnedEverythings.map(async (cryptoboy) => {
                 const result = await fetch(cryptoboy.tokenURI);
                 const metaData = await result.json();
                 this.setState({
-                    cryptoBoys: this.state.cryptoBoys.map((cryptoboy) =>
+                    OwnedEverythings: this.state.OwnedEverythings.map((cryptoboy) =>
                         cryptoboy.tokenId.toNumber() === Number(metaData.tokenId)
                             ? {
                                 ...cryptoboy,
@@ -208,9 +208,9 @@ class App extends Component {
         //检查颜色是否被使用过
         for (let i = 0; i < colorsArray.length; i++) {
             if (colorsArray[i] !== "") {
-                let colorIsUsed = await this.state.cryptoBoysContract.methods
-                    .colorExists(colorsArray[i])
-                    .call();
+                let colorIsUsed = await this.state.OwnedEverythingsContract.methods
+                .colorExists(colorsArray[i])
+                .call();
                 if (colorIsUsed) {
                     colorsUsed = [...colorsUsed, colorsArray[i]];
                 } else {
@@ -219,9 +219,9 @@ class App extends Component {
             }
         }
         //检查所铸造的作品名称是否重复
-        const nameIsUsed = await this.state.cryptoBoysContract.methods
-            .tokenNameExists(name)
-            .call();
+        const nameIsUsed = await this.state.OwnedEverythingsContract.methods
+        .tokenNameExists(name)
+        .call();
         //检验合格之后进行铸造
         if (colorsUsed.length === 0 && !nameIsUsed) {
             const {
@@ -241,15 +241,15 @@ class App extends Component {
                 bodyBackgroundColor,
                 bodyBorderColor,
             } = colors;
-
+    
             //在原有的tokenid上加一
             let previousTokenId;
-            previousTokenId = await this.state.cryptoBoysContract.methods
-                .cryptoBoyCounter()
-                .call();
+            previousTokenId = await this.state.OwnedEverythingsContract.methods
+            .ownedeverythingCounter()
+            .call();
             previousTokenId = previousTokenId.toNumber();
             const tokenId = previousTokenId + 1;
-
+    
             const tokenObject = {
                 tokenName: "Crypto Boy",
                 tokenSymbol: "CB",
@@ -279,14 +279,14 @@ class App extends Component {
             const cid = await ipfs.add(JSON.stringify(tokenObject));
             let tokenURI = `http://127.0.0.1:8080/ipfs/${cid.path}`;
             const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
-            this.state.cryptoBoysContract.methods
-                .mintCryptoBoy(name, tokenURI, price, colorsArray)
-                .send({from: this.state.accountAddress})
-                .on("confirmation", () => {
-                    localStorage.setItem(this.state.accountAddress, new Date().getTime());
-                    this.setState({loading: false});
-                    window.location.reload();
-                });
+            this.state.OwnedEverythingsContract.methods
+            .mintownedeverything(name, tokenURI, price, colorsArray)
+            .send({from: this.state.accountAddress})
+            .on("confirmation", () => {
+                localStorage.setItem(this.state.accountAddress, new Date().getTime());
+                this.setState({loading: false});
+                window.location.reload();
+            });
         } else {
             if (nameIsUsed) {
                 this.setState({nameIsUsed: true});
@@ -302,7 +302,7 @@ class App extends Component {
     //
     toggleForSale = (tokenId) => {
         this.setState({loading: true});
-        this.state.cryptoBoysContract.methods
+        this.state.OwnedEverythingsContract.methods
             .toggleForSale(tokenId)
             .send({from: this.state.accountAddress})
             .on("confirmation", () => {
@@ -315,7 +315,7 @@ class App extends Component {
     changeTokenPrice = (tokenId, newPrice) => {
         this.setState({loading: true});
         const newTokenPrice = window.web3.utils.toWei(newPrice, "Ether");
-        this.state.cryptoBoysContract.methods
+        this.state.OwnedEverythingsContract.methods
             .changeTokenPrice(tokenId, newTokenPrice)
             .send({from: this.state.accountAddress})
             .on("confirmation", () => {
@@ -327,7 +327,7 @@ class App extends Component {
     //购买
     buyCryptoBoy = (tokenId, price) => {
         this.setState({loading: true});
-        this.state.cryptoBoysContract.methods
+        this.state.OwnedEverythingsContract.methods
             .buyToken(tokenId)
             .send({from: this.state.accountAddress, value: price})
             .on("confirmation", () => {
@@ -435,7 +435,7 @@ class App extends Component {
                                         render={() => (
                                             <MarketPlace
                                                 accountAddress={this.state.accountAddress}
-                                                cryptoBoys={this.state.cryptoBoys}
+                                                OwnedEverythings={this.state.OwnedEverythings}
                                                 totalTokensMinted={this.state.totalTokensMinted}
                                                 changeTokenPrice={this.changeTokenPrice}
                                                 toggleForSale={this.toggleForSale}
@@ -449,10 +449,12 @@ class App extends Component {
                                             this.state.isAuthenticated ? (
                                                 <MyTokens
                                                     accountAddress={this.state.accountAddress}
-                                                    cryptoBoys={this.state.cryptoBoys}
+                                                    OwnedEverythings={this.state.OwnedEverythings}
                                                     totalTokensOwnedByAccount={
                                                         this.state.totalTokensOwnedByAccount
                                                     }
+                                                    toggleForSale={this.toggleForSale}
+                                                    changeTokenPrice={this.changeTokenPrice}
                                                 />
                                             ) : <InsideLogin
                                                 delete_footer={this.delete_footer}
@@ -463,7 +465,7 @@ class App extends Component {
                                     <Route
                                         path="/queries"
                                         render={() => (
-                                            <Queries cryptoBoysContract={this.state.cryptoBoysContract}/>
+                                            <Queries OwnedEverythingsContract={this.state.OwnedEverythingsContract}/>
                                         )}
                                     />
                                     <Route

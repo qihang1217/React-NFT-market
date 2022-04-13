@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import CryptoBoyNFTImage from "../CryptoBoyNFTImage/CryptoBoyNFTImage";
+import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
 import CryptoBoyNFTDetails from "../CryptoBoyNFTDetails/CryptoBoyNFTDetails";
 import Loading from "../Loading/Loading";
 
 const MarketPlace = ({
-                         cryptoBoys,
+                         OwnedEverythings,
                          accountAddress,
                          totalTokensMinted,
                          changeTokenPrice,
@@ -12,16 +12,16 @@ const MarketPlace = ({
                          buyCryptoBoy,
                      }) => {
     const [loading, setLoading] = useState(false);
-
+    
     useEffect(() => {
-        if (cryptoBoys.length !== 0) {
-            if (cryptoBoys[0].metaData !== undefined) {
+        if (OwnedEverythings.length !== 0) {
+            if (OwnedEverythings[0].metaData !== undefined) {
                 setLoading(loading);
             } else {
                 setLoading(false);
             }
         }
-    }, [cryptoBoys]);
+    }, [OwnedEverythings]);
 
     return (
         <div>
@@ -34,14 +34,14 @@ const MarketPlace = ({
                 </div>
             </div>
             <div className="d-flex flex-wrap mb-2">
-                {cryptoBoys.map((cryptoboy) => {
+                {OwnedEverythings.map((cryptoboy) => {
                     return (
                         <div
                             key={cryptoboy.tokenId.toNumber()}
                             className="w-50 p-4 mt-1 border"
                         >
                             {!loading ? (
-                                <CryptoBoyNFTImage
+                                <ColorNFTImage
                                     colors={
                                         cryptoboy.metaData !== undefined
                                             ? cryptoboy.metaData.metaData.colors

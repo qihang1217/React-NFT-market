@@ -1,6 +1,6 @@
 import React from "react";
 
-const CryptoBoyNFTImage = ({colors}) => {
+const ColorNFTImage = ({colors}) => {
     const {
         cardBorderColor,
         cardBackgroundColor,
@@ -20,8 +20,6 @@ const CryptoBoyNFTImage = ({colors}) => {
     } = colors;
 
     const cryptoboy_card = {
-        width: "280px",
-        height: "260px",
         margin: "auto",
         backgroundColor: `${cardBackgroundColor}`,
         border: `10px solid ${cardBorderColor}`,
@@ -136,20 +134,20 @@ const CryptoBoyNFTImage = ({colors}) => {
         <div style={cryptoboy_card}>
             <div style={head}>
                 <div style={eyeLeft}>
-                    <div style={pupilLeft}></div>
+                    <div style={pupilLeft}/>
                 </div>
                 <div style={eyeRight}>
-                    <div style={pupilRight}></div>
+                    <div style={pupilRight}/>
                 </div>
-                <div style={mouth}></div>
+                <div style={mouth}/>
             </div>
-            <div style={neck}></div>
+            <div style={neck}/>
             <div style={body}>
-                <div style={leftHand}></div>
-                <div style={rightHand}></div>
+                <div style={leftHand}/>
+                <div style={rightHand}/>
             </div>
         </div>
     );
 };
 
-export default CryptoBoyNFTImage;
+export default ColorNFTImage;
