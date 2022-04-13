@@ -21,7 +21,7 @@ const MyTokens = ({
 	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);
 	
-	
+	//加载个人在链上拥有的nft数据
 	useEffect(() => {
 		if (cryptoBoys.length !== 0) {
 			if (cryptoBoys[0].metaData !== undefined) {
@@ -36,7 +36,7 @@ const MyTokens = ({
 		setMyCryptoBoys(my_crypto_boys);
 	}, [cryptoBoys]);
 	
-	
+	//获取个人拥有的nft数据
 	const reqProductData = async () => {
 		let result
 		// 发请求获取数据
@@ -52,25 +52,23 @@ const MyTokens = ({
 		}
 	}
 	
-	
+	//初次加载时获取个人拥有的nft数据
 	useEffect(() => {
 		reqProductData()
 	}, []);
-	// {
-	//     "0": {
-	//     "category_id": 9,
-	//         "description": "4",
-	//         "file_type": "image/jpeg",
-	//         "file_url": "16497037748897.jpg",
-	//         "owner_id": 1,
-	//         "pass_status": true,
-	//         "price": 3,
-	//         "product_id": 1,
-	//         "product_name": "1"
-	// }
-	// }
+	
+	const handleCastOrRetry = async (e) => {
+		const value = e.target.innerHTML
+		if (value === '开始铸造') {
+		
+		} else if (value === '重新提交') {
+		
+		}
+	}
+	
 	const card_cols = 6
 	
+	//获取个人拥有的nft数据后进行渲染
 	useEffect(() => {
 		if (products) {
 			setProductCard(products.map(item => {
@@ -117,8 +115,8 @@ const MyTokens = ({
 							previewContent
 						}
 						actions={[
-							<Button>详情</Button>,
-							<Button type='primary'>{status_action}</Button>
+							<Button type='primary' onClick={(e) => handleCastOrRetry(e)}>{status_action}</Button>,
+							<Button type="primary" danger>删除</Button>,
 						]}
 					>
 						<div style={{display: 'flex', 'justify-content': 'space-between'}}>
@@ -137,16 +135,56 @@ const MyTokens = ({
 		}
 	}, [products]);
 	
+	const ChainData = (<div>
+		<div className="card mt-1">
+			<div className="card-body align-items-center d-flex justify-content-center">
+				<h5>
+					Total No. of CryptoBoy's You Own : {totalTokensOwnedByAccount}
+				</h5>
+			</div>
+		</div>
+		<div className="d-flex flex-wrap mb-2">
+			{myCryptoBoys.map((cryptoboy) => {
+				return (
+					<div
+						key={cryptoboy.tokenId.toNumber()}
+						className="w-50 p-4 mt-1 border"
+					>
+						<div className="row">
+							<div className="col-md-6">
+								{!loading ? (
+									<CryptoBoyNFTImage
+										colors={
+											cryptoboy.metaData !== undefined
+												? cryptoboy.metaData.metaData.colors
+												: ""
+										}
+									/>
+								) : (
+									<Loading/>
+								)}
+							</div>
+							<div className="col-md-6 text-center">
+								<MyCryptoBoyNFTDetails
+									cryptoboy={cryptoboy}
+									accountAddress={accountAddress}
+								/>
+							</div>
+						</div>
+					</div>
+				);
+			})}
+		</div>
+	</div>)
 	
 	return (
-		<div>
-			<Card title="待上链的NFT">
-				<Row gutter={[24, 16]}>
-					{productCard}
-				</Row>
-			</Card>
-			{!totalTokensOwnedByAccount ? (
-					<Empty
+		<div className='my-token'>
+			<div className='content-title'>
+				<span>您的NFT</span>
+			</div>
+			<Card className='under-chain' title="待上链的NFT" extra={<span>总数:{productTotal}</span>}>
+				{
+					productTotal === 0 ? (<Empty
 						image={empty}
 						imageStyle={{
 							height: 120,
@@ -158,50 +196,32 @@ const MyTokens = ({
 						}
 					>
 						<Button type="primary" href="/mint">立即创建</Button>
-					</Empty>) :
-				(
-					<div>
-						<div className="card mt-1">
-							<div className="card-body align-items-center d-flex justify-content-center">
-								<h5>
-									Total No. of CryptoBoy's You Own : {totalTokensOwnedByAccount}
-								</h5>
-							</div>
-						</div>
-						<div className="d-flex flex-wrap mb-2">
-							{myCryptoBoys.map((cryptoboy) => {
-								return (
-									<div
-										key={cryptoboy.tokenId.toNumber()}
-										className="w-50 p-4 mt-1 border"
-									>
-										<div className="row">
-											<div className="col-md-6">
-												{!loading ? (
-													<CryptoBoyNFTImage
-														colors={
-															cryptoboy.metaData !== undefined
-																? cryptoboy.metaData.metaData.colors
-																: ""
-														}
-													/>
-												) : (
-													<Loading/>
-												)}
-											</div>
-											<div className="col-md-6 text-center">
-												<MyCryptoBoyNFTDetails
-													cryptoboy={cryptoboy}
-													accountAddress={accountAddress}
-												/>
-											</div>
-										</div>
-									</div>
-								);
-							})}
-						</div>
-					</div>
-				)}
+					</Empty>) : (
+						<Row gutter={[24, 16]}>
+							{productCard}
+						</Row>
+					)
+				}
+			</Card>
+			<Card title="已上链的NFT" extra={<span>总数:{totalTokensOwnedByAccount}</span>}>
+				{!totalTokensOwnedByAccount ? (
+						<Empty
+							image={empty}
+							imageStyle={{
+								height: 120,
+							}}
+							description={
+								<span>
+                            您还没有专属于您的NFT哦,快去创建一个吧~
+                        </span>
+							}
+						>
+							<Button type="primary" href="/mint">立即创建</Button>
+						</Empty>) :
+					(
+						{ChainData}
+					)}
+			</Card>
 		</div>
 	);
 };

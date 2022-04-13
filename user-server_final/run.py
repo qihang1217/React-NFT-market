@@ -181,9 +181,10 @@ def get_own_product_list():
     args=request.args.to_dict()
     user_id=args.get('userId')
     res, status = DBUtil.get_own_product_list(user_id)
+    total = len(res)
     response = {
         'status': status,
-        'data': {'list': res},
+        'data': {'list': res,'total':total},
     }
     return jsonify(response)
 

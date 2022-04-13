@@ -7,7 +7,7 @@ export function delete_padding() {
 }
 
 export function revive_padding() {
-	//清除外部的边界框
+	//恢复外部的边界框
 	const parent = document.querySelector('.ant-layout-content')
 	parent.style.setProperty("padding", '0px 50px');
 	const insideParent = document.querySelector('.site-layout-content')
