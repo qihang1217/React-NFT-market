@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
 import Loading from "../Loading/Loading";
-import {Button, Card, Col, Empty, Form, Input, Row} from 'antd';
+import {Button, Card, Col, Empty, Form, Input, message, Row} from 'antd';
 import './MyTokens.less'
-import {reqOwnedProducts} from "../../api/API";
+import {reqDelete, reqOwnedProducts, reqResubmit} from "../../api/API";
 import ApiUtil from "../../utils/ApiUtil";
 import FileViewer from 'react-file-viewer';
+import throttle from 'lodash/throttle'
 
 const empty = require('./empty.svg')
 
@@ -70,7 +71,6 @@ const MyTokens = ({
 				);
 			}
 			
-			
 			//设置出售状态及其样式
 			const sale_status = (accountAddress === item.currentOwner) ?
 				(item.forSale ? ('下架') : ('上架')) : null
@@ -79,6 +79,9 @@ const MyTokens = ({
 			
 			return (<Col span={card_cols}>
 					<Card
+						onClick={() => {
+							console.log(item)
+						}}
 						className='inside-card'
 						hoverable
 						bordered
@@ -171,32 +174,83 @@ const MyTokens = ({
 		reqProductData()
 	}, []);
 	
-	const handleCastOrRetry = async (e) => {
-		const value = e.target.innerHTML
-		if (value === '开始铸造') {
-		
-		} else if (value === '重新提交') {
-		
-		}
-	}
 	
 	const card_cols = 6
 	
 	//获取个人拥有的nft数据后进行渲染
 	useEffect(() => {
 		if (products) {
-			setProductCard(products.map(item => {
-				let status_name, status_content, status_action
+			const productCard = products.map((item) => {
+				
+				//处理铸造或者重新提交
+				const handleCastOrRetry = throttle(async (e) => {
+					const value = e.target.innerHTML
+					const object = e.target
+					// const product=item
+					if (value === '开始铸造') {
+						//todo:进行铸造
+					} else if (value === '重新提交') {
+						const result = await reqResubmit(item.product_id)
+						if (result.status === 0) {
+							//删除成功后,禁用提交按钮并修改其中内容为审核中
+							object.setAttribute('disabled', true)
+							object.innerHTML = '审核中'
+							message.success('重新提交审核成功~')
+						}
+					}
+				}, 2000)
+				
+				//处理删除
+				const handleDelete = throttle(async (e) => {
+					const value = e.target.innerHTML
+					const object = e.target
+					console.log(value)
+					if (value === '删 除') {
+						const result = await reqDelete(item.product_id)
+						if (result.status === 0) {
+							//提交成功后,禁用提交按钮
+							object.setAttribute('disabled', true)
+							object.innerHTML = '已删除'
+							message.success('删除成功~')
+						}
+					}
+				}, 2000)
+				let examine_status_name, examine_status_content, examine_status_action, examine_disabled_status = false,
+					delete_name = '删除', delete_disabled_status = false
 				if (item.pass_status === true) {
-					status_name = '审核通过'
-					status_action = '开始铸造'
-					status_content = (<span className='bottom-value'>{status_name}</span>)
+					//审核通过
+					if (item.examine_status === true) {
+						examine_status_name = '审核通过'
+						examine_status_action = '开始铸造'
+						examine_status_content = (<span className='bottom-value'>{examine_status_name}</span>)
+					}
 				} else if (item.pass_status === false) {
-					status_name = '审核未通过'
-					status_action = '重新提交'
-					status_content = (
-						<span style={{color: '#F63638FF'}} className='bottom-value'>{status_name}</span>)
+					//审核状态不是通过
+					examine_status_name = '审核中'
+					examine_disabled_status = true
+					if (item.examine_status === true) {
+						//已经审核
+						examine_status_name = '审核未通过'
+						examine_disabled_status = false
+						if (item.usable_chances === 0) {
+							//可用的尝试机会为0
+							examine_status_name = '无剩余审核机会'
+							examine_disabled_status = true
+						}
+					}
+					examine_status_action = '重新提交'
+					examine_status_content = (
+						<span style={{color: '#F63638FF'}} className='bottom-value'>{examine_status_name}</span>)
 				}
+				if (item.delete_status) {
+					//	如果已经删除
+					delete_disabled_status = true
+					examine_disabled_status = true
+					delete_name = '已删除'
+					examine_status_content = (
+						<span style={{color: '#F63638FF'}} className='bottom-value'>已删除</span>)
+				}
+				console.log(examine_status_name)
 				const filename = item.file_url
 				const ext = filename.substring(filename.lastIndexOf('.') + 1);
 				const filetype = item.file_type
@@ -221,32 +275,55 @@ const MyTokens = ({
 						/>
 					)
 				}
-				return (<Col span={card_cols}>
-					<Card
-						className='inside-card'
-						hoverable
-						bordered
-						cover={
-							previewContent
-						}
-						actions={[
-							<Button type='primary' onClick={(e) => handleCastOrRetry(e)}>{status_action}</Button>,
-							<Button type="primary" danger>删除</Button>,
-						]}
-					>
-						<div style={{display: 'flex', justifyContent: 'space-between'}}>
-							<div>
-								<div className='top-attribute'>NFT名字</div>
-								<div>{item.product_name}</div>
+				return (
+					<Col span={card_cols} key={item.product_id}>
+						<Card
+							key={item.product_id}
+							className='inside-card'
+							hoverable
+							bordered
+							//封面
+							cover={
+								previewContent
+							}
+							//下方操作
+							actions={[
+								<Button
+									type='primary'
+									id={item.product_id}
+									disabled={examine_disabled_status}
+									onClick={(e) => {
+										handleCastOrRetry(e)
+									}}
+								>
+									{examine_status_action}
+								</Button>,
+								<Button
+									danger
+									type="primary"
+									disabled={delete_disabled_status}
+									onClick={(e) => {
+										handleDelete(e)
+									}}
+								>
+									{delete_name}
+								</Button>,
+							]}
+						>
+							<div style={{display: 'flex', justifyContent: 'space-between'}}>
+								<div>
+									<div className='top-attribute'>NFT名字</div>
+									<div>{item.product_name}</div>
+								</div>
+								<div className='right-content'>
+									<div className='top-attribute'>状态</div>
+									{examine_status_content}
+								</div>
 							</div>
-							<div className='right-content'>
-								<div className='top-attribute'>状态</div>
-								{status_content}
-							</div>
-						</div>
-					</Card>
-				</Col>)
-			}))
+						</Card>
+					</Col>)
+			})
+			setProductCard(productCard)
 		}
 	}, [products]);
 	

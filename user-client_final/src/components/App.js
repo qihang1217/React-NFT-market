@@ -358,7 +358,7 @@ class App extends Component {
         // 启动循环定时器,每隔一秒检查登陆状态
         this.intervalLoginId = setInterval(() => {
             this.setState({
-                isAuthenticated: localStorage.getItem("token") ? true : false
+                isAuthenticated: !!localStorage.getItem("token")
             })
         }, 1000);
     };

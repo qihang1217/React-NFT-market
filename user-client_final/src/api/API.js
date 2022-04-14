@@ -1,3 +1,4 @@
+//实际使用的各种API
 import ApiUtil from "../utils/ApiUtil";
 import HttpUtil from "../utils/HttpUtil";
 
@@ -23,11 +24,11 @@ export const uploadMint = (formData) => {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
-            .then(result => resolve(result))
-            .catch(error => {
-                reject(error);
-            })
+        .then(response => response.json())
+        .then(result => resolve(result))
+        .catch(error => {
+            reject(error);
+        })
     })
 }
 
@@ -37,13 +38,23 @@ export const reqCategories = () => {
 }
 
 
-/* 获取个人拥有的NFT列表 */
+//获取个人拥有的NFT列表
 export const reqOwnedProducts = (userId) => {
     return HttpUtil.get(ApiUtil.API_OWN_PRODUCT_LIST + `?userId=${userId}`)
 }
 
 
-/* 根据NFT ID获取NFT详细信息 */
+//根据NFT ID获取NFT详细信息
 export const reqProduct = (productId) => {
     return HttpUtil.get(ApiUtil.API_PRODUCT_BY_ID + `?productId=${productId}`)
+}
+
+//根据NFT ID再次重新提交审核
+export const reqResubmit = (productId) => {
+    return HttpUtil.post(ApiUtil.API_PRODUCT_RESUBMIT, {'productId': productId})
+}
+
+//根据NFT ID删除铸造申请
+export const reqDelete = (productId) => {
+    return HttpUtil.post(ApiUtil.API_PRODUCT_DELETE, {'productId': productId})
 }

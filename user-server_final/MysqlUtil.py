@@ -83,7 +83,14 @@ class Products(db.Model):
     product_name = db.Column(db.String(20))
     owner_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     price = db.Column(db.Integer)
-    pass_status = db.Column(db.Boolean)
+    # 通过状态.是否通过审核
+    pass_status = db.Column(db.Boolean, default=False)
+    # 审核状态,是否已经审核
+    examine_status = db.Column(db.Boolean, default=False)
+    # 用户有一次重复提交的机会
+    usable_chances = db.Column(db.Integer, default=2)
+    # 伪删除状态
+    delete_status = db.Column(db.Boolean, default=False)
     # 防止文件名可能的重复
     file_url = db.Column(db.String(30), unique=True)
     file_type = db.Column(db.String(100))
@@ -266,7 +273,7 @@ def save_upload_product(product_data, upload_file_url,file_type):
     if introduction == 'undefined':
         introduction = ''
     product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url,file_type=file_type, pass_status=False,
-                       description=introduction, price=price,category_id=category_id)
+                       examine_status=False,description=introduction, price=price,category_id=category_id)
     db.session.add(product)
     db.session.commit()
 
@@ -287,5 +294,29 @@ def get_own_product_list(user_id):
     except Exception as e:
         print(repr(e))
         return [{}], -1
+    finally:
+        db.session.close()
+
+
+def resubmit_product(product_id):
+    try:
+        Products.query.filter(Products.product_id==product_id).update({'examine_status':False})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
+    finally:
+        db.session.close()
+
+
+def delete_product(product_id):
+    try:
+        Products.query.filter(Products.product_id == product_id).update({'delete_status': True})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
     finally:
         db.session.close()

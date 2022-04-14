@@ -28,7 +28,7 @@ apiPrefix = '/api/v1/'
 UPLOAD_FOLDER = 'upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # 设置文件上传的目标文件夹
 basedir = os.path.abspath(os.path.dirname(__file__))  # 获取当前项目的绝对路径
-ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'mp3','docx','pdf'}  # 允许上传的文件后缀
+ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'mp3', 'docx', 'pdf'}  # 允许上传的文件后缀
 
 
 # 判断文件是否合法
@@ -55,7 +55,7 @@ def api_upload():
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             product_data = request.form.to_dict()
             print(product_data)
-            DBUtil.save_upload_product(product_data, new_filename,file_type)
+            DBUtil.save_upload_product(product_data, new_filename, file_type)
             return jsonify({"message": "上传成功", "status": 0})
         else:
             return jsonify({"message": "上传失败", "status": -1, "detail_message": "文件类型不合格"})
@@ -178,13 +178,41 @@ def get_category_list():
 
 @app.route(apiPrefix + 'product/own/list', methods=['GET'], strict_slashes=False)
 def get_own_product_list():
-    args=request.args.to_dict()
-    user_id=args.get('userId')
+    args = request.args.to_dict()
+    user_id = args.get('userId')
     res, status = DBUtil.get_own_product_list(user_id)
     total = len(res)
     response = {
         'status': status,
-        'data': {'list': res,'total':total},
+        'data': {'list': res, 'total': total},
+    }
+    return jsonify(response)
+
+
+@app.route(apiPrefix + 'product/resubmit', methods=['POST'], strict_slashes=False)
+def resubmit_product():
+    json_str = request.get_data(as_text=True)
+    product_data = json.loads(json_str)
+    print(product_data)
+    product_id = product_data.get('productId')
+    print(product_id)
+    status = DBUtil.resubmit_product(product_id)
+    response = {
+        'status': status,
+    }
+    return jsonify(response)
+
+
+@app.route(apiPrefix + 'product/delete', methods=['POST'], strict_slashes=False)
+def delete_product():
+    json_str = request.get_data(as_text=True)
+    product_data = json.loads(json_str)
+    print(product_data)
+    product_id = product_data.get('productId')
+    print(product_id)
+    status = DBUtil.delete_product(product_id)
+    response = {
+        'status': status,
     }
     return jsonify(response)
 

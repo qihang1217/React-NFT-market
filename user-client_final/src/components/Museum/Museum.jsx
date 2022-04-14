@@ -26,6 +26,7 @@ class Museum extends React.Component {
     componentDidMount() {
         //清除外部的边界框
         delete_padding()
+        //删除底部
         this.props.delete_footer()
         const screenHeight = document.documentElement.clientHeight;
         let height = `${screenHeight - 64}px`;
@@ -38,6 +39,7 @@ class Museum extends React.Component {
     componentWillUnmount() {
         //恢复外部的边界框
         revive_padding()
+        //恢复底部
         this.props.revive_footer()
         window.removeEventListener('resize', this.handleHeight);
     }

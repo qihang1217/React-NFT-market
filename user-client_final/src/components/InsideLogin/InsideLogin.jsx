@@ -52,7 +52,9 @@ class InsideLogin extends Component {
     }
 
     componentWillMount() {
-        message.error('未登录,请先登录~', 1);
+        if (!!!localStorage.getItem("token")) {
+            message.error('未登录,请先登录~', 1);
+        }
     }
 
     componentDidMount() {
@@ -139,7 +141,7 @@ class InsideLogin extends Component {
                                     </Form>
                                 </div>
                                 {/*放图片的区域*/}
-                                <div className="w3l_form align-self"></div>
+                                <div className="w3l_form align-self"/>
                             </div>
                         </div>
 
