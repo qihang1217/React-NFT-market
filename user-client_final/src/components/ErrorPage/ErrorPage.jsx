@@ -35,7 +35,6 @@ class ErrorPage extends Component {
         return (<>
                 <Navbar/>
                 <iframe
-                    title="resg"
                     srcDoc={html}
                     style={{width: "100%", height: `${this.state.height}`, display: "block"}}
                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
