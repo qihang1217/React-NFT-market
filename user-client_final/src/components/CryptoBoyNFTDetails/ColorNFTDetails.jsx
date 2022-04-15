@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class CryptoBoyNFTDetails extends Component {
+class ColorNFTDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -173,4 +173,4 @@ class CryptoBoyNFTDetails extends Component {
     }
 }
 
-export default CryptoBoyNFTDetails;
+export default ColorNFTDetails;

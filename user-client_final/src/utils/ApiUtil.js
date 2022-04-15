@@ -22,5 +22,6 @@ export default class ApiUtil {
     static API_PRODUCT_RESUBMIT = ApiUtil.URL_INTERFACE + '/product/resubmit';
     static API_PRODUCT_DELETE = ApiUtil.URL_INTERFACE + '/product/delete';
     static API_UPLOAD_MINT = ApiUtil.URL_INTERFACE + '/upload_mint';
+	static API_CONFIRM_MINTED= ApiUtil.URL_INTERFACE + '/confirm_minted';
     
 }

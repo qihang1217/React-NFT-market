@@ -52,7 +52,7 @@ class MixToJson:
 
 
 # 创建模型类 - Models
-class Users(db.Model,MixToJson):
+class Users(db.Model, MixToJson):
     # 创建Users类，映射到数据库中叫Users表
     __tablename__ = "Users"
     # 创建字段： id， 主键和自增涨
@@ -75,7 +75,7 @@ class Users(db.Model,MixToJson):
     password = db.Column(db.String(44), nullable=False)
 
 
-class Categories(db.Model,MixToJson):
+class Categories(db.Model, MixToJson):
     # 创建Categories类，映射到数据库中叫Categories表
     __tablename__ = "Categories"
     # 创建字段： role_id， 主键和自增涨
@@ -83,7 +83,7 @@ class Categories(db.Model,MixToJson):
     category_name = db.Column(db.String(20), unique=True)
 
 
-class Products(db.Model,MixToJson):
+class Products(db.Model, MixToJson):
     # 创建Roles类，映射到数据库中叫Roles表
     __tablename__ = "Products"
     # 创建字段： role_id， 主键和自增涨
@@ -99,6 +99,8 @@ class Products(db.Model,MixToJson):
     usable_chances = db.Column(db.Integer, default=2)
     # 伪删除状态
     delete_status = db.Column(db.Boolean, default=False)
+    # 铸造状态
+    mint_status = db.Column(db.Boolean, default=False)
     # 防止文件名可能的重复
     file_url = db.Column(db.String(30), unique=True)
     file_type = db.Column(db.String(100))
@@ -271,7 +273,7 @@ def check_users(user_data):
         db.session.close()
 
 
-def save_upload_product(product_data, upload_file_url,file_type):
+def save_upload_product(product_data, upload_file_url, file_type):
     user_data = eval(product_data.get('user_data'))
     user_id = user_data.get('user_id')
     work_name = product_data.get('work_name')
@@ -280,8 +282,9 @@ def save_upload_product(product_data, upload_file_url,file_type):
     category_id = product_data.get('category_id')
     if introduction == 'undefined':
         introduction = ''
-    product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url,file_type=file_type, pass_status=False,
-                       examine_status=False,description=introduction, price=price,category_id=category_id)
+    product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, file_type=file_type,
+                       pass_status=False,
+                       examine_status=False, description=introduction, price=price, category_id=category_id)
     db.session.add(product)
     db.session.commit()
 
@@ -298,7 +301,7 @@ def get_categories():
 
 def get_own_product_list(user_id):
     try:
-        return class_to_dict(Products.query.filter(Products.owner_id==user_id).all()), 0
+        return class_to_dict(Products.query.filter(Products.owner_id == user_id).all()), 0
     except Exception as e:
         print(repr(e))
         return [{}], -1
@@ -308,7 +311,7 @@ def get_own_product_list(user_id):
 
 def resubmit_product(product_id):
     try:
-        Products.query.filter(Products.product_id==product_id).update({'examine_status':False})
+        Products.query.filter(Products.product_id == product_id).update({'examine_status': False})
         db.session.commit()
         return 0
     except Exception as e:
@@ -338,5 +341,17 @@ def get_product_by_id(product_id):
     except Exception as e:
         print(repr(e))
         return [{}], -1
+    finally:
+        db.session.close()
+
+
+def set_minted_product_by_id(product_id):
+    try:
+        Products.query.filter(Products.product_id == product_id).update({Products.mint_status:True})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
     finally:
         db.session.close()

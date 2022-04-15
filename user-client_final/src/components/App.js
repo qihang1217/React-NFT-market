@@ -85,7 +85,7 @@ class App extends Component {
 				const networkId = await web3.eth.net.getId();
 				const networkData = OwnedEverythings.networks[networkId];
 				if (networkData) {
-					console.log(networkData)
+					// console.log(networkData)
 					this.setState({loading: true});
 					const OwnedEverythingsContract = web3.eth.Contract(
 						OwnedEverythings.abi,
@@ -292,21 +292,26 @@ class App extends Component {
 				const stand_price = window.web3.utils.toWei(price.toString(), "Ether");
 				
 				if (this.state.accountAddress) {
-					this.state.OwnedEverythingsContract.methods
-					.mintownedeverything(product_name, tokenURI, stand_price, [], '')
-					.send({from: this.state.accountAddress})
-					.on("confirmation", () => {
-						localStorage.setItem(this.state.accountAddress, new Date().getTime());
-						this.setState({loading: false});
-						
-					});
+					await new Promise((resolve, reject) => {
+						this.state.OwnedEverythingsContract.methods
+						.mintownedeverything(product_name, tokenURI, stand_price, [], '')
+						.send({from: this.state.accountAddress})
+						.on("confirmation", () => {
+							localStorage.setItem(this.state.accountAddress, new Date().getTime());
+							this.setState({loading: false});
+							resolve(0)
+						})
+					})
+					return 0
 				}
 			} catch (e) {
 				console.error(e);
 				message.error("铸造失败,请稍后重试")
 				this.setState({loading: false});
+				return -1
 			}
 		}
+		return -1
 	}
 	
 	

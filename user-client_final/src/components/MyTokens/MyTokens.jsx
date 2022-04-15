@@ -3,9 +3,10 @@ import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
 import Loading from "../Loading/Loading";
 import {Button, Card, Col, Empty, Form, Input, message, Row} from 'antd';
 import './MyTokens.less'
-import {reqDelete, reqOwnedProducts, reqProductMint, reqResubmit} from "../../api/API";
+import {reqConfirmMinted, reqDelete, reqOwnedProducts, reqProductMint, reqResubmit} from "../../api/API";
 import ApiUtil from "../../utils/ApiUtil";
 import FileViewer from 'react-file-viewer';
+import FileNFT from "../FileNFT/FileNFT";
 
 const empty = require('./empty.svg')
 
@@ -52,7 +53,7 @@ const MyTokens = ({
 			}
 			
 			//点击被隐藏的按钮,进行表单提交
-			const handleChangePrice = (e) => {
+			const handleChangePriceClick = (e) => {
 				const text = item.tokenId
 				const submit = document.getElementById(text)
 				submit.click()
@@ -63,7 +64,7 @@ const MyTokens = ({
 			};
 			
 			//处理表单提交的数据
-			const handleSubmit = (value) => {
+			const handlePriceChangeSubmit = (value) => {
 				const price = value.price
 				callChangeTokenPriceFromApp(
 					item.tokenId.toNumber(),
@@ -86,17 +87,29 @@ const MyTokens = ({
 						hoverable
 						bordered
 						cover={!loading ? (
-							<ColorNFTImage
-								colors={
-									item.metaData !== undefined ?
-										item.metaData.metaData.colors : ""
-								}
-							/>) : (<Loading/>)
-						}
+							(item.metaData.metaData.type === 'color') ?
+								(<ColorNFTImage
+									colors={
+										item.metaData
+											? item.metaData.metaData.colors
+											: ""
+									}
+								/>) : (
+									<FileNFT
+										tokenURL={
+											item.metaData
+												? item.metaData.metaData.file_url.file_tokenURl
+												: ""
+										}
+									/>
+								)
+						) : (
+							<Loading/>
+						)}
 						actions={[
 							<Button type="primary" ghost
 							        onClick={(e) => {
-								        handleChangePrice(e)
+								        handleChangePriceClick(e)
 							        }}
 							>
 								修改价格
@@ -119,7 +132,7 @@ const MyTokens = ({
 							</div>
 						</div>
 						<Form
-							onFinish={handleSubmit}
+							onFinish={handlePriceChangeSubmit}
 						>
 							<Form.Item
 								name="price"
@@ -181,41 +194,51 @@ const MyTokens = ({
 	useEffect(() => {
 		if (products) {
 			const productCard = products.map((item) => {
-				
 				//处理铸造或者重新提交
 				const handleCastOrRetry = async (e) => {
 					const value = e.target.innerHTML
 					const object = e.target
 					// const product=item
 					if (value === '开始铸造') {
-						console.log(item)
-						// {
-						// 	"category_id": 5,
-						// 	"delete_status": false,
-						// 	"description": "",
-						// 	"examine_status": true,
-						// 	"file_type": "image/jpeg",
-						// 	"file_url": "16499421975962.jpeg",
-						// 	"owner_id": 1,
-						// 	"pass_status": true,
-						// 	"price": 2,
-						// 	"product_id": 4,
-						// 	"product_name": "4",
-						// 	"usable_chances": 2
-						// }
 						const productId = item.product_id;
+						object.setAttribute('disabled', true)
+						object.offsetParent.setAttribute('disabled', true)
+						object.innerHTML = '铸造中'
+						console.log(object)
 						const result = await reqProductMint(productId)
-						console.log(result)
+						// console.log(result)
 						const tokenURI = result.tokenURI
-						await mintMyFileNFT(item, tokenURI);
-						//todo:进行铸造
+						const status = await mintMyFileNFT(item, tokenURI);
+						if (status === 0) {
+							//	表示铸造成功
+							console.log('铸造成功')
+							const status = await reqConfirmMinted(productId)
+							if (status.status === 0) {
+								message.success('铸造成功且更新铸造状态成功~')
+								console.log('铸造成功且更新铸造状态成功')
+							} else {
+								console.log('铸造成功但更新铸造状态失败')
+								message.error('铸造成功但更新铸造状态失败~')
+							}
+						} else {
+							console.log('铸造失败')
+							message.error('铸造失败,请稍后重试~')
+							object.setAttribute('disabled', false)
+							object.innerHTML = '重新铸造'
+						}
 					} else if (value === '重新提交') {
 						const result = await reqResubmit(item.product_id)
 						if (result.status === 0) {
 							//删除成功后,禁用提交按钮并修改其中内容为审核中
 							object.setAttribute('disabled', true)
+							object.offsetParent.setAttribute('disabled', true)
 							object.innerHTML = '审核中'
 							message.success('重新提交审核成功~')
+						} else {
+							message.error('重新提交审核失败,请稍后重试~')
+							object.setAttribute('disabled', true)
+							object.offsetParent.setAttribute('disabled', true)
+							object.innerHTML = '重新提交'
 						}
 					}
 				}
@@ -224,25 +247,31 @@ const MyTokens = ({
 				const handleDelete = async (e) => {
 					const value = e.target.innerHTML
 					const object = e.target
-					console.log(value)
+					console.log(e.target)
 					if (value === '删 除') {
+						object.setAttribute('disabled', true)
+						object.offsetParent.setAttribute('disabled', true)
 						const result = await reqDelete(item.product_id)
 						if (result.status === 0) {
 							//提交成功后,禁用提交按钮
 							object.setAttribute('disabled', true)
+							object.offsetParent.setAttribute('disabled', true)
 							object.innerHTML = '已删除'
 							message.success('删除成功~')
 						}
 					}
 				}
+				
+				
 				let examine_status_name, examine_status_content, examine_status_action, examine_disabled_status = false,
-					delete_name = '删除', delete_disabled_status = false
+					delete_name = '删除', delete_disabled_status = false, examine_status_color = '#000'
 				if (item.pass_status === true) {
 					//审核通过
 					if (item.examine_status === true) {
 						examine_status_name = '审核通过'
 						examine_status_action = '开始铸造'
-						examine_status_content = (<span className='bottom-value'>{examine_status_name}</span>)
+						examine_status_color = '#4bbf73'
+						examine_status_content = examine_status_name
 					}
 				} else if (item.pass_status === false) {
 					//审核状态不是通过
@@ -252,25 +281,35 @@ const MyTokens = ({
 						//已经审核
 						examine_status_name = '审核未通过'
 						examine_disabled_status = false
+						examine_status_color = '#F63638FF'
 						if (item.usable_chances === 0) {
 							//可用的尝试机会为0
 							examine_status_name = '无剩余审核机会'
 							examine_disabled_status = true
+							examine_status_color = '#F63638FF'
 						}
 					}
 					examine_status_action = '重新提交'
-					examine_status_content = (
-						<span style={{color: '#F63638FF'}} className='bottom-value'>{examine_status_name}</span>)
+					examine_status_content = examine_status_name
 				}
+				
 				if (item.delete_status) {
 					//	如果已经删除
 					delete_disabled_status = true
 					examine_disabled_status = true
 					delete_name = '已删除'
-					examine_status_content = (
-						<span style={{color: '#F63638FF'}} className='bottom-value'>已删除</span>)
+					examine_status_color = '#F63638FF'
+					examine_status_content = delete_name
 				}
-				console.log(examine_status_name)
+				
+				if (item.mint_status) {
+					//如果已经铸造
+					delete_disabled_status = true
+					examine_disabled_status = true
+					examine_status_content = '已铸造'
+					examine_status_color = '#4bbf73'
+				}
+				// console.log(examine_status_name)
 				const filename = item.file_url
 				const ext = filename.substring(filename.lastIndexOf('.') + 1);
 				const filetype = item.file_type
@@ -337,7 +376,7 @@ const MyTokens = ({
 								</div>
 								<div className='right-content'>
 									<div className='top-attribute'>状态</div>
-									{examine_status_content}
+									<span style={{color: examine_status_color}}>{examine_status_content}</span>
 								</div>
 							</div>
 						</Card>

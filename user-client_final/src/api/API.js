@@ -58,3 +58,13 @@ export const reqResubmit = (productId) => {
 export const reqDelete = (productId) => {
     return HttpUtil.post(ApiUtil.API_PRODUCT_DELETE, {'productId': productId})
 }
+
+//根据NFT ID申请进行铸造
+export const reqProductMint = (productId) => {
+    return HttpUtil.get(ApiUtil.API_UPLOAD_MINT + `?productId=${productId}`)
+}
+
+//根据NFT ID确认铸造成功
+export const reqConfirmMinted = (productId) => {
+    return HttpUtil.get(ApiUtil.API_CONFIRM_MINTED + `?productId=${productId}`)
+}

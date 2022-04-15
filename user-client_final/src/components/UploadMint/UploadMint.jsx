@@ -1,6 +1,6 @@
 import React from "react";
 import {InboxOutlined} from '@ant-design/icons';
-import {Button, Form, Input, InputNumber, message, Modal, Select, Upload} from 'antd';
+import {Button, Form, Input, message, Modal, Select, Upload} from 'antd';
 import {reqCategories, uploadMint} from "../../api/API";
 import FileViewer from "react-file-viewer";
 import {ALLOWED_EXTENSIONS} from "../../constants/constants";

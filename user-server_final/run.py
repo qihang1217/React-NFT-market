@@ -40,6 +40,7 @@ app.config['COLOR_UPLOAD_FOLDER'] = COLOR_UPLOAD_FOLDER
 
 basedir = os.path.abspath(os.path.dirname(__file__))  # 获取当前项目的绝对路径
 
+
 # 判断文件是否合法
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -71,24 +72,43 @@ def api_upload():
     else:
         return jsonify({"message": "上传失败", 'token_message': '未登录', "status": -1})
 
+
+# 上传文件的铸造
 @app.route(apiPrefix + 'upload_mint', methods=['GET'], strict_slashes=False)
 def upload_mint():
     args = request.args.to_dict()
     product_id = args.get('productId')
-    res,status=DBUtil.get_product_by_id(product_id)
-    tokenURI=''
-    if status==0:
+    res, status = DBUtil.get_product_by_id(product_id)
+    tokenURI = ''
+    # 如果查询到响应的数据,则进行将文件上传操作
+    if status == 0:
+        # 将用户上传的文件上传到ipfs
         ipfs = ipfshttpclient.connect('/dns/localhost/tcp/5001/http')
         file_dir = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
         # print(file_dir)
-        filename=file_dir+'\\'+res.get('file_url')
+        filename = file_dir + '\\' + res.get('file_url')
         cid = ipfs.add(filename)
         # print(cid)
-        tokenURI = 'http://127.0.0.1:8080/ipfs/'+cid.get('Hash')
+        tokenURI = 'http://127.0.0.1:8080/ipfs/' + cid.get('Hash')
         # print(tokenURI)
+        # 修改其状态为已铸造
+        # status = DBUtil.set_minted_product_by_id(product_id)
     response = {
         'status': status,
-        'tokenURI':tokenURI,
+        'tokenURI': tokenURI,
+    }
+    return jsonify(response)
+
+
+# 确认已经铸造
+@app.route(apiPrefix + 'confirm_minted', methods=['GET'], strict_slashes=False)
+def confirm_minted():
+    args = request.args.to_dict()
+    product_id = args.get('productId')
+    # 修改其状态为已铸造
+    status = DBUtil.set_minted_product_by_id(product_id)
+    response = {
+        'status': status,
     }
     return jsonify(response)
 
@@ -119,6 +139,8 @@ def api_color_upload():
         #     return jsonify({"message": "上传失败", "status": -1, "detail_message": "文件类型不合格"})
     else:
         return jsonify({"message": "上传失败", 'token_message': '未登录', "status": -1})
+
+
 ########## React访问flask资源
 
 RESOURCE_FOLDER = 'resource'

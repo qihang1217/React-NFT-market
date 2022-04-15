@@ -55,7 +55,6 @@ class ColorMint extends Component {
 	componentDidMount = async () => {
 		//获取分类选择列表数据
 		this.getCategorys()
-		await this.props.setMintBtnTimer();
 	};
 	
 
