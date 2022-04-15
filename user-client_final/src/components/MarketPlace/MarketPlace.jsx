@@ -12,14 +12,14 @@ const MarketPlace = ({
 	                     toggleForSale,
 	                     buyOwnedEverything,
                      }) => {
-	const [loading, setLoading] = useState(false);
+	const [insideLoading, setInsideLoading] = useState(false);
 	
 	useEffect(() => {
 		if (OwnedEverythings.length !== 0) {
 			if (OwnedEverythings[0].metaData !== undefined) {
-				setLoading(loading);
+				setInsideLoading(insideLoading);
 			} else {
-				setLoading(false);
+				setInsideLoading(false);
 			}
 			console.log(OwnedEverythings)
 		}
@@ -43,7 +43,7 @@ const MarketPlace = ({
 							key={ownedEverything.tokenId.toNumber()}
 							className="w-50 p-4 mt-1 border"
 						>
-							{!loading ? (
+							{!insideLoading ? (
 								(ownedEverything.metaData.metaData.type === 'color') ?
 									(<ColorNFTImage
 										colors={
