@@ -7,10 +7,16 @@ import {reqConfirmMinted, reqDelete, reqOwnedProducts, reqProductMint, reqResubm
 import ApiUtil from "../../utils/ApiUtil";
 import FileViewer from 'react-file-viewer';
 import FileNFT from "../FileNFT/FileNFT";
+import ConnectToMetamask from "../ConnectMetamask/ConnectToMetamask";
+import ContractNotDeployed from "../ContractNotDeployed/ContractNotDeployed";
 
 const empty = require('./empty.svg')
 
 const MyTokens = ({
+	                  connectToMetamask,
+	                  metamaskConnected,
+	                  contractDetected,
+	                  loading,
 	                  accountAddress,
 	                  OwnedEverythings,
 	                  totalTokensOwnedByAccount,
@@ -18,7 +24,7 @@ const MyTokens = ({
 	                  changeTokenPrice,
 	                  mintMyFileNFT,
                   }) => {
-	const [loading, setLoading] = useState(false);
+	const [insideLoading, setInsideLoading] = useState(false);
 	const [products, setProducts] = useState([]);
 	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);
@@ -28,9 +34,9 @@ const MyTokens = ({
 	useEffect(() => {
 		if (OwnedEverythings.length !== 0) {
 			if (OwnedEverythings[0].metaData !== undefined) {
-				setLoading(loading);
+				setInsideLoading(insideLoading);
 			} else {
-				setLoading(false);
+				setInsideLoading(false);
 			}
 		}
 		
@@ -86,7 +92,7 @@ const MyTokens = ({
 						className='inside-card'
 						hoverable
 						bordered
-						cover={!loading ? (
+						cover={!insideLoading ? (
 							(item.metaData.metaData.type === 'color') ?
 								(<ColorNFTImage
 									colors={
@@ -388,47 +394,54 @@ const MyTokens = ({
 	
 	
 	return (
-		<div className='my-token'>
-			<div className='content-mainTitle'>
-				<span>您的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
-			</div>
-			<Card className='under-chain' title="待上链的NFT" extra={<span>总数:{productTotal}</span>}>
-				{
-					productTotal === 0 ? (<Empty
-						image={empty}
-						imageStyle={{
-							height: 120,
-						}}
-						description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
-						}
-					>
-						<Button type="primary" href="/mint">立即创建</Button>
-					</Empty>) : (
-						<Row gutter={[24, 16]}>
-							{productCard}
-						</Row>
-					)
-				}
-				<Card title="已上链的NFT" extra={<span>总数:{totalTokensOwnedByAccount}</span>}>
-					{!totalTokensOwnedByAccount ? (
-							<Empty
-								image={empty}
-								imageStyle={{
-									height: 120,
-								}}
-								description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
-								}
-							>
-								<Button type="primary" href="/mint">立即创建</Button>
-							</Empty>) :
-						(
+		!metamaskConnected ? (
+			<ConnectToMetamask connectToMetamask={connectToMetamask}/>
+		) : !contractDetected ? (
+			<ContractNotDeployed/>
+		) : loading ? (
+			<Loading/>
+		) : (
+			<div className='my-token'>
+				<div className='content-mainTitle'>
+					<span>您的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
+				</div>
+				<Card className='under-chain' title="待上链的NFT" extra={<span>总数:{productTotal}</span>}>
+					{
+						productTotal === 0 ? (<Empty
+							image={empty}
+							imageStyle={{
+								height: 120,
+							}}
+							description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
+							}
+						>
+							<Button type="primary" href="/mint">立即创建</Button>
+						</Empty>) : (
 							<Row gutter={[24, 16]}>
-								{chainDataCard}
+								{productCard}
 							</Row>
-						)}
+						)
+					}
+					<Card title="已上链的NFT" extra={<span>总数:{totalTokensOwnedByAccount}</span>}>
+						{!totalTokensOwnedByAccount ? (
+								<Empty
+									image={empty}
+									imageStyle={{
+										height: 120,
+									}}
+									description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
+									}
+								>
+									<Button type="primary" href="/mint">立即创建</Button>
+								</Empty>) :
+							(
+								<Row gutter={[24, 16]}>
+									{chainDataCard}
+								</Row>
+							)}
+					</Card>
 				</Card>
-			</Card>
-		</div>
+			</div>)
 	);
 };
 

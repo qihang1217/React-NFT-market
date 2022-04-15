@@ -464,6 +464,10 @@ class App extends Component {
 									render={() => (
 										this.state.isAuthenticated ? (
 											<MyTokens
+												connectToMetamask={this.connectToMetamask}
+												metamaskConnected={this.state.metamaskConnected}
+												contractDetected={this.state.contractDetected}
+												loading={this.state.loading}
 												accountAddress={this.state.accountAddress}
 												OwnedEverythings={this.state.OwnedEverythings}
 												totalTokensOwnedByAccount={
