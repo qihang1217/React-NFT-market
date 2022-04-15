@@ -20,6 +20,7 @@ const MyAccount = loadable(() => import('./MyAccount/MyAccount'));
 const Mint = loadable(() => import('./Mint/Mint'));
 const Museum = loadable(() => import('./Museum/Museum'));
 const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
+const ProductDetail = loadable(() => import('./ProductDetail/ProductDetail'));
 
 
 const {Footer, Content} = Layout;
@@ -516,6 +517,7 @@ class App extends Component {
 										/>
 									)}
 								/>
+								<Route path="/ownedEverything/detail/:id" component={ProductDetail}/>
 							</Switch>
 						</div>
 					</Content>

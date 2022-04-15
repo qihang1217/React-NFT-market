@@ -58,6 +58,11 @@ const MarketPlace = ({
 			                                        ? ownedEverything.metaData.metaData.file_url.file_tokenURl
 			                                        : ""
 	                                        }
+	                                        productId={
+		                                        ownedEverything.metaData !== undefined
+			                                        ? ownedEverything.metaData.productId
+			                                        : ""
+	                                        }
                                         />
 									)
 							) : (
