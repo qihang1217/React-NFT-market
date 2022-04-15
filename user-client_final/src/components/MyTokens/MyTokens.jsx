@@ -389,7 +389,7 @@ const MyTokens = ({
 	
 	return (
 		<div className='my-token'>
-			<div className='content-title'>
+			<div className='content-mainTitle'>
 				<span>您的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
 			</div>
 			<Card className='under-chain' title="待上链的NFT" extra={<span>总数:{productTotal}</span>}>

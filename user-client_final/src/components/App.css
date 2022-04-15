@@ -36,3 +36,15 @@ input[type="color"]:hover {
     color: #218bec;
     font-weight: bold;
 }
+
+/*页面主标题*/
+.content-mainTitle {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.content-mainTitle span {
+    font-size: 22px;
+    font-weight: 500;
+    text-align: center;
+}

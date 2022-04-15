@@ -4,6 +4,7 @@ import {Button, Form, Input, message, Modal, Select, Upload} from 'antd';
 import {reqCategories, uploadMint} from "../../api/API";
 import FileViewer from "react-file-viewer";
 import {ALLOWED_EXTENSIONS} from "../../constants/constants";
+import "./UploadMint.less"
 
 const {Option} = Select;
 const {Dragger} = Upload;
@@ -240,12 +241,10 @@ class UploadMint extends React.Component{
     render() {
         const {previewContent, previewVisible, previewTitle} = this.state;
         return (
-            <div>
-                <div className="card mt-1">
-                    <div className="card-body align-items-center d-flex justify-content-center">
-                        <h5>
-                            上传你的作品，让你的作品独一无二！
-                        </h5>
+            <div className='upload-mint'>
+                <div>
+                    <div className='content-mainTitle'>
+                        <span>上传你的作品，让你的<span id='nft_name' style={{fontSize: 32}}>作品</span>独一无二！</span>
                     </div>
                 </div>
                 <Form {...layout} onFinish={this.onSubmit}>
