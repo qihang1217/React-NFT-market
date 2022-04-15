@@ -23,6 +23,7 @@ const ColorNFTImage = ({colors}) => {
         margin: "auto",
         backgroundColor: `${cardBackgroundColor}`,
         border: `10px solid ${cardBorderColor}`,
+        width: '216.8px',
     };
 
     const head = {
@@ -94,7 +95,7 @@ const ColorNFTImage = ({colors}) => {
 
     const neck = {
         position: "relative",
-        left: "7.7rem",
+        left: "6.8rem",
         top: "-0.1rem",
         width: "15px",
         height: "30px",

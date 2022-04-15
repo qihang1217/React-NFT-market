@@ -30,21 +30,32 @@ contract OwnedEverythings is ERC721 {
 
     // id=>代币
     mapping(uint256 => ownedeverything) public allOwnedEverythings;
-    // 检查名称是否存在
-    mapping(string => bool) public tokenNameExists;
     // 检查颜色是否存在
     mapping(string => bool) public colorExists;
     // 检查url是否存在
     mapping(string => bool) public tokenURIExists;
 
     // 在部署时使用合约的集合名称和代币初始化合约
-    constructor() ERC721("OwnedEverythings", "OE_Thing") {
+    constructor() ERC721("OwnedEverythings", "OW_EThing") {
         collectionName = name();
         collectionNameSymbol = symbol();
     }
 
+    // 字符串比较函数
+    function isEqual(string memory a, string memory b) public pure returns (bool) {
+        bytes memory aa = bytes(a);
+        bytes memory bb = bytes(b);
+        // 如果长度不等，直接返回
+        if (aa.length != bb.length) return false;
+        // 按位比较
+        for(uint i = 0; i < aa.length; i ++) {
+            if(aa[i] != bb[i]) return false;
+        }
+        return true;
+    }
+
     // 铸造一个新的代币
-    function mintownedeverything(string memory _name, string memory _tokenURI, uint256 _price, string[] calldata _colors) external {
+    function mintownedeverything(string memory _name, string memory _tokenURI, uint256 _price, string[] calldata _colors,string memory _tokenType) external {
         // 检查函数调用者是否不是零地址帐户
         require(msg.sender != address(0));
         // 递增计数器
@@ -52,28 +63,29 @@ contract OwnedEverythings is ERC721 {
         // 检查是否存在具有上述代币 id => 递增计数器的代币
         require(!_exists(ownedeverythingCounter));
 
-        // 遍历传入的颜色并检查每种颜色是否已经存在
-        for (uint i = 0; i < _colors.length; i++) {
-            require(!colorExists[_colors[i]]);
+        if (isEqual(_tokenType,'color')){
+            // 遍历传入的颜色并检查每种颜色是否已经存在
+            for (uint i = 0; i < _colors.length; i++) {
+                require(!colorExists[_colors[i]]);
+            }
         }
+
         // 检查代币 URI 是否已经存在
         require(!tokenURIExists[_tokenURI]);
-        // 检查代币名称是否已经存在
-        require(!tokenNameExists[_name]);
 
         // 铸造代币
         _mint(msg.sender, ownedeverythingCounter);
         // 设置代币 URI（将代币 ID 与传入的代币 URI 绑定）
         _setTokenURI(ownedeverythingCounter, _tokenURI);
 
-        // 循环传入的颜色并使每种颜色都存在，因为代币已经铸造
-        for (uint i = 0; i < _colors.length; i++) {
-            colorExists[_colors[i]] = true;
+        if (isEqual(_tokenType,'color')){
+            // 循环传入的颜色并使每种颜色都存在，因为代币已经铸造
+            for (uint i = 0; i < _colors.length; i++) {
+                colorExists[_colors[i]] = true;
+            }
         }
         // 设置的代币 URI 存在
         tokenURIExists[_tokenURI] = true;
-        // 设置代币名称存在
-        tokenNameExists[_name] = true;
 
         // 创建一个新的代币（结构）并传入新值
         ownedeverything memory newownedeverything = ownedeverything(

@@ -248,7 +248,7 @@ class UploadMint extends React.Component{
                         </h5>
                     </div>
                 </div>
-                <Form {...layout} name="nest-messages" onFinish={this.onSubmit}>
+                <Form {...layout} onFinish={this.onSubmit}>
                     <Form.Item
                         name="upload-file"
                         label='文件上传'
@@ -285,7 +285,7 @@ class UploadMint extends React.Component{
                             },
                         ]}
                     >
-                        <Input maxlength="20" placeholder="作品名称"/>
+                        <Input maxlength="20" placeholder="数藏万物名称"/>
                     </Form.Item>
                     <Form.Item
                         name="category_id"
@@ -301,8 +301,6 @@ class UploadMint extends React.Component{
                             showSearch
                             placeholder="请选择您的作品分类"
                             optionFilterProp="children"
-                            onChange={this.onCategoryChange}
-                            onSearch={this.onCategorySearch}
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
@@ -324,14 +322,14 @@ class UploadMint extends React.Component{
                             },
                         ]}
                     >
-                        <InputNumber/>
+                        <Input type="number" placeholder="请输入价格"/>
                     </Form.Item>
                     <Form.Item name='introduction' label="作品介绍">
-                        <Input.TextArea maxlength="1000" placeholder="请输入您的作品描述"/>
+                        <Input.TextArea maxlength="100" placeholder="请输入您的作品描述"/>
                     </Form.Item>
                     <Form.Item wrapperCol={{...layout.wrapperCol, offset: 6}}>
                         <Button type="primary" htmlType="submit">
-                            提交
+                            提交审核
                         </Button>
                     </Form.Item>
                 </Form>

@@ -44,7 +44,6 @@ class App extends Component {
             contractDetected: false,
             totalTokensMinted: 0,
             totalTokensOwnedByAccount: 0,
-            nameIsUsed: false,
             colorIsUsed: false,
             colorsUsed: [],
             lastMintTime: null,
@@ -139,58 +138,24 @@ class App extends Component {
     //获取在ifps上存放的源数据,并且添加到state中
     setMetaData = async () => {
         if (this.state.OwnedEverythings.length !== 0) {
-            this.state.OwnedEverythings.map(async (cryptoboy) => {
-                const result = await fetch(cryptoboy.tokenURI);
+            this.state.OwnedEverythings.map(async (ownedEverything) => {
+                const result = await fetch(ownedEverything.tokenURI);
                 const metaData = await result.json();
                 this.setState({
-                    OwnedEverythings: this.state.OwnedEverythings.map((cryptoboy) =>
-                        cryptoboy.tokenId.toNumber() === Number(metaData.tokenId)
+                    OwnedEverythings: this.state.OwnedEverythings.map((ownedEverything) =>
+                        ownedEverything.tokenId.toNumber() === Number(metaData.tokenId)
                             ? {
-                                ...cryptoboy,
+                                ...ownedEverything,
                                 metaData,
                             }
-                            : cryptoboy
+                            : ownedEverything
                     ),
                 });
             });
         }
 
     };
-
-    //设置是否显示Mint My Crypto Boy(可以铸造)
-    setMintBtnTimer = () => {
-        const mintBtn = document.getElementById("mintBtn");
-        if (mintBtn !== undefined && mintBtn !== null) {
-            this.setState({
-                lastMintTime: localStorage.getItem(this.state.accountAddress),
-            });
-            this.state.lastMintTime === undefined || this.state.lastMintTime === null
-                ? (mintBtn.innerHTML = "Mint My Crypto Boy")
-                : this.checkIfCanMint(parseInt(this.state.lastMintTime));
-        }
-    };
-
-    //检查是否可以进行铸造和倒计时显示
-    checkIfCanMint = (lastMintTime) => {
-        const mintBtn = document.getElementById("mintBtn");
-        const timeGap = 300000; //5min in milliseconds
-        const countDownTime = lastMintTime + timeGap;//倒计时结束时间
-        const interval = setInterval(() => {
-            const now = new Date().getTime();
-            const diff = countDownTime - now;
-            if (diff < 0) {
-                mintBtn.removeAttribute("disabled");
-                mintBtn.innerHTML = "Mint My Crypto Boy";
-                localStorage.removeItem(this.state.accountAddress);
-                clearInterval(interval);
-            } else {
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                mintBtn.setAttribute("disabled", true);
-                mintBtn.innerHTML = `Next mint in ${minutes}m ${seconds}s`;
-            }
-        }, 1000);
-    };
+    
 
     //连接到Matemask
     connectToMetamask = async () => {
@@ -201,7 +166,7 @@ class App extends Component {
     };
 
     //进行铸造
-    mintMyNFT = async (colors, name, tokenPrice) => {
+    mintMyColorNFT = async (colors, workName, categoryId, tokenPrice, introduction) => {
         this.setState({loading: true});
         const colorsArray = Object.values(colors);
         let colorsUsed = [];
@@ -218,12 +183,8 @@ class App extends Component {
                 }
             }
         }
-        //检查所铸造的作品名称是否重复
-        const nameIsUsed = await this.state.OwnedEverythingsContract.methods
-        .tokenNameExists(name)
-        .call();
         //检验合格之后进行铸造
-        if (colorsUsed.length === 0 && !nameIsUsed) {
+        if (colorsUsed.length === 0) {
             const {
                 cardBorderColor,
                 cardBackgroundColor,
@@ -251,10 +212,12 @@ class App extends Component {
             const tokenId = previousTokenId + 1;
     
             const tokenObject = {
-                tokenName: "Crypto Boy",
-                tokenSymbol: "CB",
+                tokenName: "数藏万物",
+                tokenSymbol: "OW_EThing",
                 tokenId: `${tokenId}`,
-                name: name,
+                workName: workName,
+                categoryId:categoryId,
+                introduction:introduction,
                 metaData: {
                     type: "color",
                     colors: {
@@ -276,22 +239,29 @@ class App extends Component {
                     },
                 },
             };
-            const cid = await ipfs.add(JSON.stringify(tokenObject));
-            let tokenURI = `http://127.0.0.1:8080/ipfs/${cid.path}`;
-            const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
-            this.state.OwnedEverythingsContract.methods
-            .mintownedeverything(name, tokenURI, price, colorsArray)
-            .send({from: this.state.accountAddress})
-            .on("confirmation", () => {
-                localStorage.setItem(this.state.accountAddress, new Date().getTime());
-                this.setState({loading: false});
-                window.location.reload();
-            });
+            try {
+                const cid = await ipfs.add(JSON.stringify(tokenObject));
+                let tokenURI = `http://127.0.0.1:8080/ipfs/${cid.path}`;
+                const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
+                console.log(workName, tokenURI, price, colorsArray)
+                
+                if(this.state.accountAddress){
+                    this.state.OwnedEverythingsContract.methods
+                    .mintownedeverything(workName, tokenURI, price, colorsArray,'color')
+                    .send({from: this.state.accountAddress})
+                    .on("confirmation", () => {
+                        localStorage.setItem(this.state.accountAddress, new Date().getTime());
+                        this.setState({loading: false});
+                        window.location.reload();
+                    });
+                }
+                
+            } catch (e) {
+                console.error(e);
+                message.error("铸造失败,请稍后重试")
+            }
         } else {
-            if (nameIsUsed) {
-                this.setState({nameIsUsed: true});
-                this.setState({loading: false});
-            } else if (colorsUsed.length !== 0) {
+            if (colorsUsed.length !== 0) {
                 this.setState({colorIsUsed: true});
                 this.setState({colorsUsed});
                 this.setState({loading: false});
@@ -299,7 +269,7 @@ class App extends Component {
         }
     };
 
-    //
+    //上架和下架
     toggleForSale = (tokenId) => {
         this.setState({loading: true});
         this.state.OwnedEverythingsContract.methods
@@ -354,7 +324,6 @@ class App extends Component {
         await this.loadWeb3();
         await this.loadBlockchainData();
         await this.setMetaData();
-        await this.setMintBtnTimer();
         // 启动循环定时器,每隔一秒检查登陆状态
         this.intervalLoginId = setInterval(() => {
             this.setState({
@@ -406,8 +375,7 @@ class App extends Component {
                                         render={() => (
                                             this.state.isAuthenticated ? (
                                                 <ColorMint
-                                                    mintMyNFT={this.mintMyNFT}
-                                                    nameIsUsed={this.state.nameIsUsed}
+                                                    mintMyColorNFT={this.mintMyColorNFT}
                                                     colorIsUsed={this.state.colorIsUsed}
                                                     colorsUsed={this.state.colorsUsed}
                                                     setMintBtnTimer={this.setMintBtnTimer}

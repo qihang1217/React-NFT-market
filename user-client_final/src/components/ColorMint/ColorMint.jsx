@@ -1,5 +1,8 @@
 import React, {Component} from "react";
 import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
+import {Button, Form, Input, message, Select} from "antd";
+import {Option} from "antd/es/mentions";
+import {reqCategories} from "../../api/API";
 
 // source: https://stackoverflow.com/questions/1484506/random-color-generator
 //随机设定颜色
@@ -11,6 +14,15 @@ function getRandomColor() {
 	}
 	return color;
 }
+
+const layout = {
+	labelCol: {
+		span: 6,
+	},
+	wrapperCol: {
+		span: 16,
+	},
+};
 
 class ColorMint extends Component {
 	constructor(props) {
@@ -41,17 +53,57 @@ class ColorMint extends Component {
 	}
 	
 	componentDidMount = async () => {
+		//获取分类选择列表数据
+		this.getCategorys()
 		await this.props.setMintBtnTimer();
 	};
 	
-	callMintMyNFTFromApp = (e) => {
-		e.preventDefault();
-		this.props.mintMyNFT(
+
+	callMintMyNFTFromApp = (values) => {
+		console.log(values)
+		this.props.mintMyColorNFT(
 			this.state.userSelectedColors[0],
-			this.state.cryptoBoyName,
-			this.state.cryptoBoyPrice
+			values.work_name,
+			values.category_id,
+			values.price,
+			values.introduction,
 		);
 	};
+	
+	
+	getCategorys = async () => {
+		const result = await reqCategories()
+		if (result.status === 0) {
+			// 成功
+			// 取出分类列表
+			const categorys = result.data
+			// 更新状态categorys数据
+			this.setState({
+				categorys
+			})
+		} else {
+			message.error('获取分类列表失败')
+		}
+	}
+	
+	//渲染选择组件
+	renderCategoryOption() {
+		const categorys = this.state.categorys || [{}]
+		return categorys.map(item =>
+			<Option value={item.category_id}>{item.category_name}</Option>
+		)
+	}
+	
+	//自定义校验价格
+	validatePrice=(rule,value)=>{
+		if(value===''){
+			return Promise.reject()
+		}else if(value*1<=0){
+			return Promise.reject('价格必须大于0')
+		}else{
+			return Promise.resolve()
+		}
+	}
 	
 	render() {
 		return (
@@ -61,7 +113,7 @@ class ColorMint extends Component {
 						<h5>Color Your Crypto Boy As You Want It To be!</h5>
 					</div>
 				</div>
-				<form onSubmit={this.callMintMyNFTFromApp} className="pt-4 mt-1">
+				<Form {...layout} onFinish={this.callMintMyNFTFromApp} className="pt-4 mt-1">
 					<div className="row">
 						<div className="col-md-3">
 							<div className="form-group">
@@ -420,55 +472,78 @@ class ColorMint extends Component {
 							</div>
 						</div>
 						<div className="col-md-6">
-							<div className="form-group">
-								<label htmlFor="cryptoBoyName">Name</label>
-								<input
+							<Form.Item
+								name="work_name"
+								label="作品名称"
+								rules={[
+									{
+										required: true,
+										message: '请输入您的作品名称!'
+									},
+								]}
+							>
+								<Input
 									required
 									type="text"
 									value={this.state.cryptoBoyName}
-									className="form-control"
-									placeholder="Enter Your Crypto Boy's Name"
+									placeholder="数藏万物名称"
 									onChange={(e) =>
 										this.setState({cryptoBoyName: e.target.value})
 									}
 								/>
-							</div>
-							<div>
-								<label htmlFor="price">Price</label>
-								<input
+							</Form.Item>
+							<Form.Item
+								name="category_id"
+								label="作品分类"
+								rules={[
+									{
+										required: true,
+										message: '请选择您的作品分类!'
+									},
+								]}
+							>
+								<Select
+									showSearch
+									placeholder="请选择您的作品分类"
+									optionFilterProp="children"
+									filterOption={(input, option) =>
+										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
+								>
+									{this.renderCategoryOption()}
+								</Select>
+							</Form.Item>
+							<Form.Item
+								name="price"
+								label="价格"
+								initialValue=''
+								rules={[
+									{
+										required: true,
+										message: '请输入价格!',
+									},
+									{
+										validator:this.validatePrice
+									},
+								]}
+							>
+								<Input
 									required
 									type="number"
 									name="price"
-									id="cryptoBoyPrice"
-									value={this.state.cryptoBoyPrice}
-									className="form-control"
-									placeholder="Enter Price In Ξ"
-									onChange={(e) =>
-										this.setState({cryptoBoyPrice: e.target.value})
-									}
+									placeholder="请输入价格"
 								/>
-							</div>
-							<button
-								id="mintBtn"
-								style={{fontSize: "0.9rem", letterSpacing: "0.14rem"}}
-								type="submit"
-								className="btn mt-4 btn-block btn-outline-primary"
-							>
-								Mint My Crypto Boy
-							</button>
+							</Form.Item>
+							<Form.Item name='introduction' label="作品介绍">
+								<Input.TextArea maxlength="100" placeholder="请输入您的作品描述"/>
+							</Form.Item>
+							<Form.Item wrapperCol={{...layout.wrapperCol, offset: 6}}>
+								<Button type="primary" htmlType="submit">
+									提交审核
+								</Button>
+							</Form.Item>
 							<div className="mt-4">
-								{this.props.nameIsUsed ? (
-									<div className="alert alert-danger alert-dissmissible">
-										<button
-											type="button"
-											className="close"
-											data-dismiss="alert"
-										>
-											<span>&times;</span>
-										</button>
-										<strong>This name is taken!</strong>
-									</div>
-								) : this.props.colorIsUsed ? (
+								{this.props.colorIsUsed ? (
 									<>
 										<div className="alert alert-danger alert-dissmissible">
 											<button
@@ -508,7 +583,7 @@ class ColorMint extends Component {
 							</div>
 						</div>
 					</div>
-				</form>
+				</Form>
 			</div>
 		);
 	}
