@@ -1,39 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="../static/css/style.css" rel="stylesheet">
-    <title>3D的画廊</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/css/gallery.css">
+  <title>3D的画廊</title>
 </head>
 <body>
-<div id="container"></div>
-<script src="../static/js/three.min.js"></script>
-<script src="../static/js/OrbitControls.js"></script>
-<script src="../static/js/GLTFLoader.js"></script>
-<script src="../static/js/joystick.js"></script>
-<script src="../static/js/RectAreaLightUniformsLib.js"></script>
-<script src="../static/js/app.js"></script>
-<script>
-    document.addEventListener('click', onDocumentMouseDown, false);
-
-    function onDocumentMouseDown(event) {
-        var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
-        vector = vector.unproject(camera); // 将屏幕的坐标转换成三维场景中的坐标
-        var raycaster = new THREE.Raycaster(this.camera.position,
-            vector.sub(camera.position).normalize());// 创建光线投射，计算出鼠标移过了什么物体
-        var intersects = raycaster.intersectObjects();//射线只检查画
-        alert(intersects)
-        if (intersects.length > 0) {
-            alert(1)
-            //intersects[0].object.material.color.set("#ff0000");
-        }
-    }
-
-    function onMouseMove(event) {
-
-    }
-</script>
+  <div id="container"> 
+  </div>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="../static/js/three.min.js"></script>
+  <script src="../static/js/OrbitControls.js"></script>
+  <script src="../static/js/GLTFLoader.js"></script>
+  <script src="../static/js/joystick.js"></script>
+  <script src="../static/js/dat.gui.js"></script>
+  <script src="../static/js/app.js"></script>
 </body>
 </html>
