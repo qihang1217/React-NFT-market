@@ -9,7 +9,7 @@ const MarketPlace = ({
                          totalTokensMinted,
                          changeTokenPrice,
                          toggleForSale,
-                         buyCryptoBoy,
+                         buyOwnedEverything,
                      }) => {
     const [loading, setLoading] = useState(false);
     
@@ -34,17 +34,17 @@ const MarketPlace = ({
                 </div>
             </div>
             <div className="d-flex flex-wrap mb-2">
-                {OwnedEverythings.map((cryptoboy) => {
+                {OwnedEverythings.map((ownedEverything) => {
                     return (
                         <div
-                            key={cryptoboy.tokenId.toNumber()}
+                            key={ownedEverything.tokenId.toNumber()}
                             className="w-50 p-4 mt-1 border"
                         >
                             {!loading ? (
                                 <ColorNFTImage
                                     colors={
-                                        cryptoboy.metaData !== undefined
-                                            ? cryptoboy.metaData.metaData.colors
+                                        ownedEverything.metaData !== undefined
+                                            ? ownedEverything.metaData.metaData.colors
                                             : ""
                                     }
                                 />
@@ -52,11 +52,11 @@ const MarketPlace = ({
                                 <Loading/>
                             )}
                             <CryptoBoyNFTDetails
-                                cryptoboy={cryptoboy}
+                                ownedEverything={ownedEverything}
                                 accountAddress={accountAddress}
                                 changeTokenPrice={changeTokenPrice}
                                 toggleForSale={toggleForSale}
-                                buyCryptoBoy={buyCryptoBoy}
+                                buyOwnedEverything={buyOwnedEverything}
                             />
                         </div>
                     );

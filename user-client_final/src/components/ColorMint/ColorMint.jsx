@@ -59,15 +59,17 @@ class ColorMint extends Component {
 	};
 	
 
-	callMintMyNFTFromApp = (values) => {
+	callMintMyNFTFromApp =async (values) => {
 		console.log(values)
-		this.props.mintMyColorNFT(
-			this.state.userSelectedColors[0],
-			values.work_name,
-			values.category_id,
-			values.price,
-			values.introduction,
-		);
+		//todo:颜色上传的审核
+		
+		// this.props.mintMyColorNFT(
+		// 	this.state.userSelectedColors[0],
+		// 	values.work_name,
+		// 	values.category_id,
+		// 	values.price,
+		// 	values.introduction,
+		// );
 	};
 	
 	

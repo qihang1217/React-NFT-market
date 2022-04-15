@@ -28,23 +28,31 @@ def class_to_dict(obj):
         return dict
 
 
-# {
-#   "real_name": "1",
-#   "id_number": "1",
-#   "age": "1",
-#   "email": "1",
-#   "prefix": "86",
-#   "phone_number": "1",
-#   "gender": "男",
-#   "user_name": "1",
-#   "password": "tF0l/p7VDxtzFoAijp2kEQ==",
-#   "confirm": "1",
-#   "agreement": true,
-#   "email_end": "@qq.com"
-# }
+# 查询结果转换成json
+class MixToJson:
+    # 查询单条数据
+    def single_to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    # 多条数据
+    def double_to_dict(self):
+        result = {}
+        for key in self.__mapper__.c.keys():
+            if getattr(self, key) is not None:
+                result[key] = str(getattr(self, key))
+            else:
+                result[key] = getattr(self, key)
+        return result
+
+    # 配合double_to_dict一起使用
+    @staticmethod
+    def to_json(all_vendors):
+        v = [ven.dobule_to_dict() for ven in all_vendors]
+        return v
+
 
 # 创建模型类 - Models
-class Users(db.Model):
+class Users(db.Model,MixToJson):
     # 创建Users类，映射到数据库中叫Users表
     __tablename__ = "Users"
     # 创建字段： id， 主键和自增涨
@@ -67,7 +75,7 @@ class Users(db.Model):
     password = db.Column(db.String(44), nullable=False)
 
 
-class Categories(db.Model):
+class Categories(db.Model,MixToJson):
     # 创建Categories类，映射到数据库中叫Categories表
     __tablename__ = "Categories"
     # 创建字段： role_id， 主键和自增涨
@@ -75,7 +83,7 @@ class Categories(db.Model):
     category_name = db.Column(db.String(20), unique=True)
 
 
-class Products(db.Model):
+class Products(db.Model,MixToJson):
     # 创建Roles类，映射到数据库中叫Roles表
     __tablename__ = "Products"
     # 创建字段： role_id， 主键和自增涨
@@ -318,5 +326,17 @@ def delete_product(product_id):
     except Exception as e:
         print(repr(e))
         return -1
+    finally:
+        db.session.close()
+
+
+def get_product_by_id(product_id):
+    try:
+        res = Products.query.get(product_id)
+        db.session.commit()
+        return res.single_to_dict(), 0
+    except Exception as e:
+        print(repr(e))
+        return [{}], -1
     finally:
         db.session.close()

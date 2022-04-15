@@ -3,10 +3,9 @@ import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
 import Loading from "../Loading/Loading";
 import {Button, Card, Col, Empty, Form, Input, message, Row} from 'antd';
 import './MyTokens.less'
-import {reqDelete, reqOwnedProducts, reqResubmit} from "../../api/API";
+import {reqDelete, reqOwnedProducts, reqProductMint, reqResubmit} from "../../api/API";
 import ApiUtil from "../../utils/ApiUtil";
 import FileViewer from 'react-file-viewer';
-import throttle from 'lodash/throttle'
 
 const empty = require('./empty.svg')
 
@@ -16,6 +15,7 @@ const MyTokens = ({
 	                  totalTokensOwnedByAccount,
 	                  toggleForSale,
 	                  changeTokenPrice,
+	                  mintMyFileNFT,
                   }) => {
 	const [loading, setLoading] = useState(false);
 	const [products, setProducts] = useState([]);
@@ -183,11 +183,31 @@ const MyTokens = ({
 			const productCard = products.map((item) => {
 				
 				//处理铸造或者重新提交
-				const handleCastOrRetry = throttle(async (e) => {
+				const handleCastOrRetry = async (e) => {
 					const value = e.target.innerHTML
 					const object = e.target
 					// const product=item
 					if (value === '开始铸造') {
+						console.log(item)
+						// {
+						// 	"category_id": 5,
+						// 	"delete_status": false,
+						// 	"description": "",
+						// 	"examine_status": true,
+						// 	"file_type": "image/jpeg",
+						// 	"file_url": "16499421975962.jpeg",
+						// 	"owner_id": 1,
+						// 	"pass_status": true,
+						// 	"price": 2,
+						// 	"product_id": 4,
+						// 	"product_name": "4",
+						// 	"usable_chances": 2
+						// }
+						const productId = item.product_id;
+						const result = await reqProductMint(productId)
+						console.log(result)
+						const tokenURI = result.tokenURI
+						await mintMyFileNFT(item, tokenURI);
 						//todo:进行铸造
 					} else if (value === '重新提交') {
 						const result = await reqResubmit(item.product_id)
@@ -198,10 +218,10 @@ const MyTokens = ({
 							message.success('重新提交审核成功~')
 						}
 					}
-				}, 2000)
+				}
 				
 				//处理删除
-				const handleDelete = throttle(async (e) => {
+				const handleDelete = async (e) => {
 					const value = e.target.innerHTML
 					const object = e.target
 					console.log(value)
@@ -214,7 +234,7 @@ const MyTokens = ({
 							message.success('删除成功~')
 						}
 					}
-				}, 2000)
+				}
 				let examine_status_name, examine_status_content, examine_status_action, examine_disabled_status = false,
 					delete_name = '删除', delete_disabled_status = false
 				if (item.pass_status === true) {
