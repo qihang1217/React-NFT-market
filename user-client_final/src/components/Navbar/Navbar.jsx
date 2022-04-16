@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import icon from "./favicon-32x32.png";
 import {Link, withRouter} from "react-router-dom";
 import {Avatar, Layout, Menu, message, Modal} from 'antd';
-import "./Navbar.css"
+import "./Navbar.less"
 import {
     BankTwoTone,
     CloseSquareTwoTone,
@@ -11,30 +11,27 @@ import {
     SettingTwoTone,
     UserOutlined
 } from '@ant-design/icons';
+import storageUtils from "../../utils/storageUtils";
 
 const {Header} = Layout;
 const {SubMenu} = Menu;
 //菜单项数据
 const tabItems = [
-    {
-        key: '/mint',
-        title: '铸造NFT',
-    },
+    // {
+    //     key: '/mint',
+    //     title: '铸造NFT',
+    // },
     {
         key: '/upload_mint',
-        title: '上传铸造',
+        title: '作品铸造',
     },
-    {
-        key: '/color_mint',
-        title: '色彩铸造',
-    },
+    // {
+    //     key: '/color_mint',
+    //     title: '色彩铸造',
+    // },
     {
         key: '/marketplace',
         title: '市场交易',
-    },
-    {
-        key: '/my-tokens',
-        title: '我的代币',
     },
     {
         key: '/queries',
@@ -51,7 +48,7 @@ class Navbar extends Component {
 
     //退出登陆
     logout = () => {
-        const isAuthenticated = localStorage.getItem("token") ? true : false
+        const isAuthenticated = storageUtils.getToken() ? true : false
         if (isAuthenticated) {
             //已登录
             // 显示确认提示
@@ -104,7 +101,7 @@ class Navbar extends Component {
                     <div className="logo">
                         <img src={icon} alt="logo" className="logoImage"/>
                         <Link to="/" className="brand">
-                            NFT's
+                            数藏万物
                         </Link>
                     </div>
                     <Menu theme="light" mode="horizontal" defaultSelectedKeys={[selectKey]}>

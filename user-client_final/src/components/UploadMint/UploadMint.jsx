@@ -5,6 +5,7 @@ import {reqCategories, uploadMint} from "../../api/API";
 import FileViewer from "react-file-viewer";
 import {ALLOWED_EXTENSIONS} from "../../constants/constants";
 import "./UploadMint.less"
+import storageUtils from "../../utils/storageUtils";
 
 const {Option} = Select;
 const {Dragger} = Upload;
@@ -66,8 +67,8 @@ class UploadMint extends React.Component{
     //提交整个表单,此时才上传文件
     onSubmit = async (values) => {
         console.log(values)
-        let token = localStorage.getItem('token') || ''
-        let user_data = localStorage.getItem('user_data') || {}
+        let token = storageUtils.getToken()
+        let user_data = storageUtils.getUser()
         // console.log(user_data)
         formData.append('token', token)
         formData.append('user_data', user_data)
@@ -84,8 +85,8 @@ class UploadMint extends React.Component{
         } else if (result.status === -1 && result.token_message === '未登录') {
             message.error('登陆状态无效或未登录,请重新登陆~');
             //清除存储的无效登陆信息
-            localStorage.removeItem('token')
-            localStorage.removeItem('user_name')
+            storageUtils.removeToken()
+            storageUtils.removeUser()
             window.location.href = '/login'
         } else if (result.status === -1 && result.detail_message === '文件类型不合格') {
             message.error('作品格式不符合要求,请重新上传作品~');

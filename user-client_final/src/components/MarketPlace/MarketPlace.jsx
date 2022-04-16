@@ -16,11 +16,13 @@ const MarketPlace = ({
 	let OwnedEverythings = storageUtils.getProducts()
 	
 	useEffect(() => {
-		if (OwnedEverythings.length !== 0) {
-			if (OwnedEverythings[0].metaData !== undefined) {
-				setInsideLoading(insideLoading);
-			} else {
-				setInsideLoading(false);
+		if (OwnedEverythings) {
+			if (OwnedEverythings.length !== 0) {
+				if (OwnedEverythings[0].metaData !== undefined) {
+					setInsideLoading(insideLoading);
+				} else {
+					setInsideLoading(false);
+				}
 			}
 		}
 	}, [OwnedEverythings]);
@@ -29,13 +31,8 @@ const MarketPlace = ({
 	return (
 		storageUtils.getFinish() ? (
 			<div>
-				<div className="card mt-1">
-					<div className="card-body align-items-center d-flex justify-content-center">
-						<h5>
-							Total No. of CryptoBoy's Minted On The Platform :{" "}
-							{totalTokensMinted}
-						</h5>
-					</div>
+				<div className='content-mainTitle'>
+					<span>链上总共有<span id='nft_name' style={{fontSize: 32}}>{totalTokensMinted}个数藏万物</span></span>
 				</div>
 				<div className="d-flex flex-wrap mb-2">
 					{OwnedEverythings.map((ownedEverything) => {

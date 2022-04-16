@@ -196,7 +196,7 @@ const Register = () => {
                             },
                         ]}
                     >
-                        <Input placeholder="真实姓名"/>
+                        <Input placeholder="请输入您的真实姓名"/>
                     </Form.Item>
                     <Form.Item
                         name="id_number"
@@ -208,21 +208,21 @@ const Register = () => {
                                 message: '请输入您的身份证号!',
                                 whitespace: true,
                             },
-                            // ({getFieldValue}) => ({
-                            //     validator(_, value) {
-                            //         if ((value.length === 15 && value.match(/^([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}$/))
-                            //             ||
-                            //             (value.length === 18 && value.match(/^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/))
-                            //         ) {
-                            //             return Promise.resolve();
-                            //         }
-                            //
-                            //         return Promise.reject(new Error('身份号码格式错误!'));
-                            //     },
-                            // }),
+                            ({getFieldValue}) => ({
+                                validator(_, value) {
+                                    if ((value.length === 15 && value.match(/^([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}$/))
+                                        ||
+                                        (value.length === 18 && value.match(/^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/))
+                                    ) {
+                                        return Promise.resolve();
+                                    }
+            
+                                    return Promise.reject(new Error('身份号码格式错误!'));
+                                },
+                            }),
                         ]}
                     >
-                        <Input/>
+                        <Input placeholder="请输入您的身份证号"/>
                     </Form.Item>
                     <Form.Item
                         name="age"
@@ -238,7 +238,7 @@ const Register = () => {
                             },
                         ]}
                     >
-                        <InputNumber/>
+                        <InputNumber placeholder="请选择年龄"/>
                     </Form.Item>
                     <Form.Item
                         name="gender"
@@ -313,10 +313,10 @@ const Register = () => {
                                 message: '请输入您的电话号码!',
                                 whitespace: true,
                             },
-                            // {
-                            //     pattern: "[1][34578][0-9]{9}",
-                            //     message: '手机号码格式不正确!',
-                            // }
+                            {
+                                pattern: "[1][34578][0-9]{9}",
+                                message: '手机号码格式不正确!',
+                            }
                         ]}
                     >
                         <Input

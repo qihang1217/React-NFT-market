@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Redirect, Route} from "react-router-dom";
+import storageUtils from "../utils/storageUtils";
 
 class FrontendAuth extends Component {
     render() {
@@ -7,7 +8,7 @@ class FrontendAuth extends Component {
         const {routerConfig, location} = this.props;
         const {pathname} = location;
         var isLogin = false
-        if (localStorage.getItem("token")) {
+        if (storageUtils.getToken()) {
             isLogin = true;
         }
         // console.log(isLogin)

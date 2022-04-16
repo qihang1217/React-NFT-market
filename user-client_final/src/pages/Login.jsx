@@ -5,6 +5,7 @@ import {reqLogin} from "../api/API";
 //引用CSS
 import "./css/rslogin/css/lstyle.css"
 import "./css/rslogin/css/font-awesome.min.css"
+import storageUtils from "../utils/storageUtils";
 
 
 class Login extends Component {
@@ -18,15 +19,15 @@ class Login extends Component {
     async handleSubmit(e) {
         let md5 = require("./model/md5.js"); //引入md5加密模块
         e.password = md5(e.password);
-        e['token'] = localStorage.getItem("token")
+        e['token'] = storageUtils.getToken()
         const response=await reqLogin(e)
         console.log(response);
         if (response.status === 0 && response.message === '验证成功') {
             message.success('登陆成功~');
             if (response.token_message !== 'success') {
                 // 将生成token存储到localStorage
-                localStorage.setItem("user_data", JSON.stringify(response.data[0]))
-                localStorage.setItem("token", response.token)
+                storageUtils.saveUser(response.data[0])
+                storageUtils.saveToken(response.token)
             }
             //页面跳转
             this.props.history.push('/')
@@ -61,9 +62,9 @@ class Login extends Component {
                         <div className="workinghny-form-grid">
                             <div className="main-hotair">
                                 <div className="content-wthree">
-                                    <h3 style={{'text-align': 'center'}}>Log In</h3>
-                                    <p>To Your Account</p>
-
+                                    <h3 style={{'text-align': 'center'}}>登陆</h3>
+                                    <p>到您的账户</p>
+        
                                     <Form
                                         name="normal_login" className="login-form"
                                         initialValues={{
@@ -76,42 +77,41 @@ class Login extends Component {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: 'Please input your Username!',
+                                                    message: '请输入您的用户名!',
                                                 },
                                             ]}
                                         >
-                                            <Input placeholder="Username"/>
+                                            <Input placeholder="用户名"/>
                                         </Form.Item>
                                         <Form.Item
                                             name="password"
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: 'Please input your Password!',
+                                                    message: '请输入密码!',
                                                 },
                                             ]}
                                         >
                                             {/*prefix={<LockOutlined className="site-form-item-icon"/>}*/}
                                             <Input
-
                                                 type="password"
-                                                placeholder="Password"
+                                                placeholder="密码"
                                             />
                                         </Form.Item>
                                         <Form.Item>
                                             <Form.Item name="remember" valuePropName="checked" noStyle>
-                                                <Checkbox>Remember me</Checkbox>
+                                                <Checkbox>记住我</Checkbox>
                                             </Form.Item>
                                             <br/><br/>
                                             <a className="login-form-forgot" href="">
-                                                Forgot password
+                                                忘记密码
                                             </a>
-                                            Or <a href="/register">register now!</a>
+                                            或者 <a href="/register">立即注册!</a>
                                         </Form.Item>
 
                                         <Form.Item>
                                             <Button type="primary" htmlType="submit" className='login-form-button'>
-                                                Log in
+                                                登录
                                             </Button>
                                         </Form.Item>
                                     </Form>

@@ -7,13 +7,13 @@ const ConnectToMetamask = ({connectToMetamask}) => {
     return (
         <div className="connect">
             <h1 className="top_title">
-                您需要一个以太坊钱包才能访问Opensea
+                您需要一个以太坊钱包才能访问数藏万物
             </h1>
             <div>
-                <p className="top_subtitle">
-                    连接我们现有的钱包或创建一个新的{" "}
-                    <i style={{"color": "#2081E2"}}>Crypto Boy NFTs</i> and manage them.
-                </p>
+	            <p className="top_subtitle">
+		            连接现有的钱包或创建一个新的{" "}
+		            <i style={{"color": "#2081E2"}}>MetaMask</i>并且连接到它
+	            </p>
             </div>
             <div className="select_list">
                 <Button type="primary" onClick={connectToMetamask} className="connect_button"

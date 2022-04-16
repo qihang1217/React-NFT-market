@@ -14,10 +14,10 @@ const ColorMint = loadable(() => import('./ColorMint/ColorMint'));
 const MarketPlace = loadable(() => import('./MarketPlace/MarketPlace'));
 const Home = loadable(() => import('./Home/Home'));
 const Navbar = loadable(() => import('./Navbar/Navbar'));
-const MyTokens = loadable(() => import('./MyTokens/MyTokens'));
+const MyTokens = loadable(() => import('./MyTokens/MyMintedTokens'));
 const Queries = loadable(() => import('./Queries/Queries'));
 const UploadMint = loadable(() => import('./UploadMint/UploadMint'));
-const MyAccount = loadable(() => import('./MyAccount/MyAccount'));
+const MyMintedTokens = loadable(() => import('./MyAccount/MyAccount'));
 const Mint = loadable(() => import('./Mint/Mint'));
 const Museum = loadable(() => import('./Museum/Museum'));
 const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
@@ -379,7 +379,7 @@ class App extends Component {
 		// 启动循环定时器,每隔一秒检查登陆状态
 		this.intervalLoginId = setInterval(() => {
 			this.setState({
-				isAuthenticated: !!localStorage.getItem("token")
+				isAuthenticated: !!storageUtils.getToken()
 			})
 		}, 1000);
 	};
@@ -463,29 +463,6 @@ class App extends Component {
 									)}
 								/>
 								<Route
-									path="/my-tokens"
-									render={() => (
-										this.state.isAuthenticated ? (
-											<MyTokens
-												connectToMetamask={this.connectToMetamask}
-												metamaskConnected={this.state.metamaskConnected}
-												contractDetected={this.state.contractDetected}
-												loading={this.state.loading}
-												accountAddress={this.state.accountAddress}
-												totalTokensOwnedByAccount={
-													this.state.totalTokensOwnedByAccount
-												}
-												toggleForSale={this.toggleForSale}
-												changeTokenPrice={this.changeTokenPrice}
-												mintMyFileNFT={this.mintMyFileNFT}
-											/>
-										) : <InsideLogin
-											delete_footer={this.delete_footer}
-											revive_footer={this.revive_footer}
-										/>
-									)}
-								/>
-								<Route
 									path="/queries"
 									render={() => (
 										<Queries OwnedEverythingsContract={this.state.OwnedEverythingsContract}/>
@@ -504,7 +481,13 @@ class App extends Component {
 									path="/my"
 									render={() => (
 										this.state.isAuthenticated ? (
-											<MyAccount
+											<MyMintedTokens
+												totalTokensOwnedByAccount={
+													this.state.totalTokensOwnedByAccount
+												}
+												toggleForSale={this.toggleForSale}
+												changeTokenPrice={this.changeTokenPrice}
+												mintMyFileNFT={this.mintMyFileNFT}
 												connectToMetamask={this.connectToMetamask}
 												metamaskConnected={this.state.metamaskConnected}
 												contractDetected={this.state.contractDetected}
@@ -523,7 +506,7 @@ class App extends Component {
 						</div>
 					</Content>
 					<Footer style={{textAlign: 'center', display: this.state.footerVisible}}>
-						NFT marketplace ©2021
+						数藏万物 ©2021
 					</Footer>
 				</Router>
 			</>

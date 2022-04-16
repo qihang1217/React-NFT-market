@@ -51,10 +51,8 @@ const Queries = (props) => {
 
     return (
         <div>
-            <div className="card mt-1">
-                <div className="card-body align-items-center d-flex justify-content-center">
-                    <h5>查询</h5>
-                </div>
+            <div className='content-mainTitle'>
+                <span>查询<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
             </div>
             <div className="p-4 mt-1 border">
                 <div className="row">

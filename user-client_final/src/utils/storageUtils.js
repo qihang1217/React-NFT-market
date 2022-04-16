@@ -41,7 +41,7 @@ export default {
 	返回一个token对象, 如果没有返回一个{}
 	*/
 	getToken() {
-		return store.get(TOKEN_KEY) || null
+		return store.get(TOKEN_KEY) || ''
 	},
 	
 	/*

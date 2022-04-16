@@ -8,6 +8,7 @@ import "../.././pages/css/rslogin/css/lstyle.css"
 import "../.././pages/css/rslogin/css/font-awesome.min.css"
 import {reqLogin} from "../../api/API";
 import {delete_padding, revive_padding} from "../../utils/ControlPadding";
+import storageUtils from "../../utils/storageUtils";
 
 class InsideLogin extends Component {
     constructor(props) {
@@ -22,15 +23,15 @@ class InsideLogin extends Component {
     async handleSubmit(e) {
         let md5 = require("../../pages/model/md5"); //引入md5加密模块
         e.password = md5(e.password);
-        e['token'] = localStorage.getItem("token")
+        e['token'] = storageUtils.getToken()
         const response=await reqLogin(e)
         console.log(response);
         if (response.status === 0 && response.message === '验证成功') {
             message.success('登陆成功~');
             if (response.token_message !== 'success') {
                 // 将生成token存储到localStorage
-                localStorage.setItem("user_data", JSON.stringify(response.data[0]))
-                localStorage.setItem("token", response.token)
+                storageUtils.saveUser(response.data[0])
+                storageUtils.saveToken(response.token)
             }
             //页面跳转到原界面
             this.props.history.push(this.props.location.pathname)
@@ -52,7 +53,7 @@ class InsideLogin extends Component {
     }
 
     componentWillMount() {
-        if (!!!localStorage.getItem("token")) {
+        if (!!!storageUtils.getToken()) {
             message.error('未登录,请先登录~', 1);
         }
     }
@@ -104,7 +105,7 @@ class InsideLogin extends Component {
                                                 },
                                             ]}
                                         >
-                                            <Input placeholder="Username"/>
+                                            <Input placeholder="用户名"/>
                                         </Form.Item>
                                         <Form.Item
                                             name="password"
@@ -117,7 +118,6 @@ class InsideLogin extends Component {
                                         >
                                             {/*prefix={<LockOutlined className="site-form-item-icon"/>}*/}
                                             <Input
-
                                                 type="password"
                                                 placeholder="密码"
                                             />
@@ -130,7 +130,7 @@ class InsideLogin extends Component {
                                             <a className="login-form-forgot" href="/">
                                                 忘记密码
                                             </a>
-                                            Or <a href="/register">立即注册!</a>
+                                            或者 <a href="/register">立即注册!</a>
                                         </Form.Item>
 
                                         <Form.Item>
