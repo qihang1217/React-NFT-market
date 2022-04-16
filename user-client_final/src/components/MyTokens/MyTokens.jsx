@@ -195,7 +195,7 @@ const MyTokens = ({
 	
 	
 	const card_cols = 6
-	
+
 	//获取个人拥有的nft数据后进行渲染
 	useEffect(() => {
 		if (products) {
@@ -220,6 +220,9 @@ const MyTokens = ({
 							console.log('铸造成功')
 							const status = await reqConfirmMinted(productId)
 							if (status.status === 0) {
+								const submitButton = document.getElementById(item.product_id)
+								submitButton.setAttribute('disabled', true)
+								submitButton.innerHTML = '已铸造'
 								message.success('铸造成功且更新铸造状态成功~')
 								console.log('铸造成功且更新铸造状态成功')
 							} else {
@@ -234,6 +237,8 @@ const MyTokens = ({
 						}
 					} else if (value === '重新提交') {
 						const result = await reqResubmit(item.product_id)
+						object.setAttribute('disabled', true)
+						object.offsetParent.setAttribute('disabled', true)
 						if (result.status === 0) {
 							//删除成功后,禁用提交按钮并修改其中内容为审核中
 							object.setAttribute('disabled', true)
@@ -260,6 +265,8 @@ const MyTokens = ({
 						const result = await reqDelete(item.product_id)
 						if (result.status === 0) {
 							//提交成功后,禁用提交按钮
+							const submitButton = document.getElementById(item.product_id)
+							submitButton.setAttribute('disabled', true)
 							object.setAttribute('disabled', true)
 							object.offsetParent.setAttribute('disabled', true)
 							object.innerHTML = '已删除'
@@ -313,6 +320,7 @@ const MyTokens = ({
 					delete_disabled_status = true
 					examine_disabled_status = true
 					examine_status_content = '已铸造'
+					examine_status_action = '已铸造'
 					examine_status_color = '#4bbf73'
 				}
 				// console.log(examine_status_name)
