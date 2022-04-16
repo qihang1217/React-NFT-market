@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Col, Row,Collapse} from "antd";
+import {Col, Collapse, Row} from "antd";
 
 const { Panel } = Collapse;
 
@@ -18,10 +18,10 @@ class ProductDetail extends Component {
 						<Panel header="作品信息" key="1">
 							<p>{text}</p>
 						</Panel>
-						<Panel header="This is panel header 2" key="2">
+						<Panel header="作品描述" key="3">
 							<p>{text}</p>
 						</Panel>
-						<Panel header="This is panel header 3" key="3">
+						<Panel header="拥有者信息" key="2">
 							<p>{text}</p>
 						</Panel>
 					</Collapse>

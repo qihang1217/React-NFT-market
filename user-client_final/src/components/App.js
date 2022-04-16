@@ -8,6 +8,7 @@ import OwnedEverythings from "../abis/OwnedEverythings.json";
 import "antd/dist/antd.css";
 
 import loadable from "../utils/Loadable";
+import storageUtils from "../utils/storageUtils";
 
 const ColorMint = loadable(() => import('./ColorMint/ColorMint'));
 const MarketPlace = loadable(() => import('./MarketPlace/MarketPlace'));
@@ -138,24 +139,25 @@ class App extends Component {
 	
 	//获取在ifps上存放的源数据,并且添加到state中
 	setMetaData = async () => {
-		if (this.state.OwnedEverythings.length !== 0) {
-			this.state.OwnedEverythings.map(async (ownedEverything) => {
+		const data = this.state.OwnedEverythings
+		if (data.length !== 0) {
+			let res = await Promise.all(data.map(async (ownedEverything) => {
 				const result = await fetch(ownedEverything.tokenURI);
 				const metaData = await result.json();
-				this.setState({
-					OwnedEverythings: this.state.OwnedEverythings.map((ownedEverything) =>
-						ownedEverything.tokenId.toNumber() === Number(metaData.tokenId)
-							? {
-								...ownedEverything,
-								metaData,
-							}
-							: ownedEverything
-					),
-				});
-			});
+				if (ownedEverything.tokenId.toNumber() === Number(metaData.tokenId)) {
+					ownedEverything = {
+						...ownedEverything,
+						metaData,
+					}
+				}
+				return ownedEverything
+			}));
+			storageUtils.saveProducts(res)
+			console.log(res)
+			console.log(storageUtils.getFinish())
+			storageUtils.saveFinish(true)
 		}
-		
-	};
+	}
 	
 	
 	//连接到Matemask
@@ -452,7 +454,6 @@ class App extends Component {
 									render={() => (
 										<MarketPlace
 											accountAddress={this.state.accountAddress}
-											OwnedEverythings={this.state.OwnedEverythings}
 											totalTokensMinted={this.state.totalTokensMinted}
 											changeTokenPrice={this.changeTokenPrice}
 											toggleForSale={this.toggleForSale}

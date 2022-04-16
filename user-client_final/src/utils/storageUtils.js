@@ -2,6 +2,8 @@ import store from 'store'
 
 const USER_KEY = 'user_key'
 const TOKEN_KEY = 'token_key'
+const PRODUCT_KEY = 'product_key'
+const FINISH_KEY = 'finish_key'
 
 export default {
 	/*
@@ -21,7 +23,7 @@ export default {
 	},
 	
 	/*
-	删除保存的token
+	删除保存的user
 	*/
 	removeUser() {
 		// localStorage.removeItem(USER_KEY)
@@ -32,7 +34,6 @@ export default {
 	保存token
 	*/
 	saveToken(token) {
-		// localStorage.setItem(USER_KEY, JSON.stringify(User))
 		store.set(TOKEN_KEY, token)
 	},
 	
@@ -40,15 +41,54 @@ export default {
 	返回一个token对象, 如果没有返回一个{}
 	*/
 	getToken() {
-		// return JSON.parse(localStorage.getItem(USER_KEY) || '{}')
 		return store.get(TOKEN_KEY) || null
 	},
 	
 	/*
-	删除保存的user
+	删除保存的token
 	*/
 	removeToken() {
-		// localStorage.removeItem(USER_KEY)
 		store.remove(TOKEN_KEY)
+	},
+	/*
+	保存Products
+	*/
+	saveProducts(token) {
+		store.set(PRODUCT_KEY, token)
+	},
+	
+	/*
+	返回一个Products对象
+	*/
+	getProducts() {
+		return store.get(PRODUCT_KEY) || null
+	},
+	
+	/*
+	删除保存的Products
+	*/
+	removeProducts() {
+		store.remove(PRODUCT_KEY)
+	},
+	
+	/*
+	保存Finish
+	*/
+	saveFinish(finish) {
+		store.set(FINISH_KEY, finish)
+	},
+	
+	/*
+	返回一个Finish对象
+	*/
+	getFinish() {
+		return store.get(FINISH_KEY) || false
+	},
+	
+	/*
+	删除保存的Finish
+	*/
+	removeFinish() {
+		store.remove(FINISH_KEY)
 	},
 }

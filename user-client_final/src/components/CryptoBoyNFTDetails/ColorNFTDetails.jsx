@@ -14,10 +14,10 @@ class ColorNFTDetails extends Component {
 
     render() {
         return (
-            <div key={this.props.ownedEverything.tokenId.toNumber()} className="mt-4">
+            <div key={parseInt(this.props.ownedEverything.tokenId)} className="mt-4">
                 <p>
                     <span className="font-weight-bold">Token Id</span> :{" "}
-                    {this.props.ownedEverything.tokenId.toNumber()}
+                    {parseInt(this.props.ownedEverything.tokenId._hex, 16)}
                 </p>
                 <p>
                     <span className="font-weight-bold">Name</span> :{" "}
@@ -49,15 +49,16 @@ class ColorNFTDetails extends Component {
                 </p>
                 <p>
                     <span className="font-weight-bold">Price</span> :{" "}
-                    {window.web3.utils.fromWei(
-                        this.props.ownedEverything.price.toString(),
-                        "Ether"
-                    )}{" "}
+                    {
+                        window.web3.utils.fromWei(
+                            parseInt(this.props.ownedEverything.price._hex, 16).toString(),
+                            "Ether"
+                        )}{" "}
                     Ξ
                 </p>
                 <p>
                     <span className="font-weight-bold">No. of Transfers</span> :{" "}
-                    {this.props.ownedEverything.numberOfTransfers.toNumber()}
+                    {parseInt(this.props.ownedEverything.numberOfTransfers._hex, 16)}
                 </p>
                 <div>
                     {this.props.accountAddress === this.props.ownedEverything.currentOwner ? (
@@ -65,7 +66,7 @@ class ColorNFTDetails extends Component {
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 this.callChangeTokenPriceFromApp(
-                                    this.props.ownedEverything.tokenId.toNumber(),
+                                    parseInt(this.props.ownedEverything.tokenId._hex, 16),
                                     this.state.newCryptoBoyPrice
                                 );
                             }}
@@ -107,7 +108,7 @@ class ColorNFTDetails extends Component {
                                 style={{fontSize: "0.8rem", letterSpacing: "0.14rem"}}
                                 onClick={() =>
                                     this.props.toggleForSale(
-                                        this.props.ownedEverything.tokenId.toNumber()
+                                        parseInt(this.props.ownedEverything.tokenId._hex, 16)
                                     )
                                 }
                             >
@@ -119,7 +120,7 @@ class ColorNFTDetails extends Component {
                                 style={{fontSize: "0.8rem", letterSpacing: "0.14rem"}}
                                 onClick={() =>
                                     this.props.toggleForSale(
-                                        this.props.ownedEverything.tokenId.toNumber()
+                                        parseInt(this.props.ownedEverything.tokenId._hex, 16)
                                     )
                                 }
                             >
@@ -133,18 +134,20 @@ class ColorNFTDetails extends Component {
                         this.props.ownedEverything.forSale ? (
                             <button
                                 className="btn btn-outline-primary mt-3 w-50"
-                                value={this.props.ownedEverything.price}
+                                value={parseInt(this.props.ownedEverything.price._hex, 16).toString()}
                                 style={{fontSize: "0.8rem", letterSpacing: "0.14rem"}}
-                                onClick={(e) =>
+                                onClick={(e) => {
+                                    console.log(e.target.value)
                                     this.props.buyOwnedEverything(
-                                        this.props.ownedEverything.tokenId.toNumber(),
+                                        parseInt(this.props.ownedEverything.tokenId._hex, 16),
                                         e.target.value
                                     )
+                                }
                                 }
                             >
                                 Buy For{" "}
                                 {window.web3.utils.fromWei(
-                                    this.props.ownedEverything.price.toString(),
+                                    parseInt(this.props.ownedEverything.price._hex, 16).toString(),
                                     "Ether"
                                 )}{" "}
                                 Ξ
@@ -158,7 +161,7 @@ class ColorNFTDetails extends Component {
                                 >
                                     Buy For{" "}
                                     {window.web3.utils.fromWei(
-                                        this.props.ownedEverything.price.toString(),
+                                        parseInt(this.props.ownedEverything.price._hex, 16).toString(),
                                         "Ether"
                                     )}{" "}
                                     Ξ
