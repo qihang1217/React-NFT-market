@@ -79,14 +79,14 @@ class InsideLogin extends Component {
                 <div className="w3l-hotair-form"
                      style={{width: "100%", height: `${this.state.height}`, display: "block"}}>
                     {/*表单开头 */}
-                    <h4>Welocome to NFT market</h4>
+                    <h4>欢迎来到数藏万物</h4>
                     <div className="container">
                         {/*表单样式*/}
                         <div className="workinghny-form-grid">
                             <div className="main-hotair">
                                 <div className="content-wthree">
-                                    <h4 style={{'text-align': 'center'}}>Log In</h4>
-                                    <p>To Your Account</p>
+                                    <h4 style={{'text-align': 'center'}}>登录</h4>
+                                    <p>到您的账户</p>
 
                                     <Form
                                         name="normal_login" className="login-form"
@@ -100,7 +100,7 @@ class InsideLogin extends Component {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: 'Please input your Username!',
+                                                    message: '请输入您的用户名!',
                                                 },
                                             ]}
                                         >
@@ -111,7 +111,7 @@ class InsideLogin extends Component {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: 'Please input your Password!',
+                                                    message: '请输入密码!',
                                                 },
                                             ]}
                                         >
@@ -119,23 +119,23 @@ class InsideLogin extends Component {
                                             <Input
 
                                                 type="password"
-                                                placeholder="Password"
+                                                placeholder="密码"
                                             />
                                         </Form.Item>
                                         <Form.Item>
                                             <Form.Item name="remember" valuePropName="checked" noStyle>
-                                                <Checkbox>Remember me</Checkbox>
+                                                <Checkbox>记住我</Checkbox>
                                             </Form.Item>
                                             <br/><br/>
                                             <a className="login-form-forgot" href="/">
-                                                Forgot password
+                                                忘记密码
                                             </a>
-                                            Or <a href="/register">register now!</a>
+                                            Or <a href="/register">立即注册!</a>
                                         </Form.Item>
 
                                         <Form.Item>
                                             <Button type="primary" htmlType="submit" className='login-form-button'>
-                                                Log in
+                                                登录
                                             </Button>
                                         </Form.Item>
                                     </Form>

@@ -10,15 +10,15 @@ const {Step} = Steps;
 
 const steps = [
     {
-        title: 'First',
+        title: '第一步',
         content: 'First-content',
     },
     {
-        title: 'Second',
+        title: '第二步',
         content: 'Second-content',
     },
     {
-        title: 'Last',
+        title: '最后一步',
         content: 'Last-content',
     },
 ];

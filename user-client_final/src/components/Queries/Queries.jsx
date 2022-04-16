@@ -53,13 +53,13 @@ const Queries = (props) => {
         <div>
             <div className="card mt-1">
                 <div className="card-body align-items-center d-flex justify-content-center">
-                    <h5>Queries</h5>
+                    <h5>查询</h5>
                 </div>
             </div>
             <div className="p-4 mt-1 border">
                 <div className="row">
                     <div className="col-md-5">
-                        <h5>Get Token Owner</h5>
+                        <h5>获取代币所有者</h5>
                         <form onSubmit={getTokenOwner}>
                             <div className="form-group">
                                 <input
@@ -72,21 +72,21 @@ const Queries = (props) => {
                                 />
                             </div>
                             <button className="mt-3 btn btn-outline-primary" type="submit">
-                                Get Owner
+                                获取所有者
                             </button>
                             {tokenIdForOwnerNotFound ? (
                                 <div className="alert alert-danger alert-dissmissible mt-4">
                                     <button type="button" className="close" data-dismiss="alert">
                                         <span>&times;</span>
                                     </button>
-                                    <strong>Non-Existent Token Id</strong>
+                                    <strong>不存在的代币号</strong>
                                 </div>
                             ) : null}
                         </form>
                         <p className="mt-4">{tokenOwner}</p>
                     </div>
                     <div className="col-md-7">
-                        <h5>Get Token Metadata</h5>
+                        <h5>获取代币元数据</h5>
                         <form onSubmit={getTokenMetadata}>
                             <div className="form-group">
                                 <input
@@ -99,14 +99,14 @@ const Queries = (props) => {
                                 />
                             </div>
                             <button className="mt-3 btn btn-outline-primary" type="submit">
-                                Get Metadata
+                                获取元数据
                             </button>
                             {tokenIdForMetadataNotFound ? (
                                 <div className="alert alert-danger alert-dissmissible mt-4">
                                     <button type="button" className="close" data-dismiss="alert">
                                         <span>&times;</span>
                                     </button>
-                                    <strong>Non-Existent Token Id</strong>
+                                    <strong>不存在的代币号</strong>
                                 </div>
                             ) : null}
                         </form>

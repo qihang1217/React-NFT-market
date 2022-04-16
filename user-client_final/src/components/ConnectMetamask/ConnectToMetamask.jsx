@@ -7,11 +7,11 @@ const ConnectToMetamask = ({connectToMetamask}) => {
     return (
         <div className="connect">
             <h1 className="top_title">
-                You need an Ethereum wallet to use OpenSea.
+                您需要一个以太坊钱包才能访问Opensea
             </h1>
             <div>
                 <p className="top_subtitle">
-                    Connect with one of our available wallet providers or create a new one.{" "}
+                    连接我们现有的钱包或创建一个新的{" "}
                     <i style={{"color": "#2081E2"}}>Crypto Boy NFTs</i> and manage them.
                 </p>
             </div>

@@ -18,31 +18,31 @@ const {SubMenu} = Menu;
 const tabItems = [
     {
         key: '/mint',
-        title: 'Mint NFT',
+        title: '铸造NFT',
     },
     {
         key: '/upload_mint',
-        title: 'upload_mint',
+        title: '上传铸造',
     },
     {
         key: '/color_mint',
-        title: 'color_mint',
+        title: '色彩铸造',
     },
     {
         key: '/marketplace',
-        title: 'Marketplace',
+        title: '市场交易',
     },
     {
         key: '/my-tokens',
-        title: 'My Tokens',
+        title: '我的代币',
     },
     {
         key: '/queries',
-        title: 'Queries',
+        title: '查询',
     },
     {
         key: '/museum',
-        title: 'NTF博物馆',
+        title: 'NFT博物馆',
     },
 ]
 
