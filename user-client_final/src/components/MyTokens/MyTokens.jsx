@@ -9,6 +9,7 @@ import FileViewer from 'react-file-viewer';
 import FileNFT from "../FileNFT/FileNFT";
 import ConnectToMetamask from "../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../ContractNotDeployed/ContractNotDeployed";
+import storageUtils from "../../utils/storageUtils";
 
 const empty = require('./empty.svg')
 
@@ -18,7 +19,6 @@ const MyTokens = ({
 	                  contractDetected,
 	                  loading,
 	                  accountAddress,
-	                  OwnedEverythings,
 	                  totalTokensOwnedByAccount,
 	                  toggleForSale,
 	                  changeTokenPrice,
@@ -29,7 +29,7 @@ const MyTokens = ({
 	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);
 	const [chainDataCard, setChainDataCard] = useState([]);
-	
+	let OwnedEverythings = storageUtils.getProducts()
 	//加载个人在链上拥有的nft数据
 	useEffect(() => {
 		if (OwnedEverythings.length !== 0) {
@@ -46,15 +46,16 @@ const MyTokens = ({
 		);
 		
 		const ChainDataCard = MyOwnedEverythings.map((item) => {
-			const {
+			let {
 				tokenName,
 				price,
 			} = item;
+			price = parseInt(price._hex, 16).toString()
 			
 			//进行上架或者下架操作
 			const handleUnderOrUp = () => {
 				toggleForSale(
-					item.tokenId.toNumber()
+					parseInt(item.tokenId._hex, 16),
 				)
 			}
 			
@@ -73,7 +74,7 @@ const MyTokens = ({
 			const handlePriceChangeSubmit = (value) => {
 				const price = value.price
 				callChangeTokenPriceFromApp(
-					item.tokenId.toNumber(),
+					parseInt(item.tokenId._hex, 16),
 					price
 				);
 			}

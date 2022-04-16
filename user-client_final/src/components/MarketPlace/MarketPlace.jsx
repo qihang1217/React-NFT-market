@@ -14,9 +14,6 @@ const MarketPlace = ({
                      }) => {
 	const [insideLoading, setInsideLoading] = useState(false);
 	let OwnedEverythings = storageUtils.getProducts()
-	useEffect(() => {
-		storageUtils.removeFinish()
-	}, [])
 	
 	useEffect(() => {
 		if (OwnedEverythings.length !== 0) {

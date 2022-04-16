@@ -372,6 +372,7 @@ class App extends Component {
 	}
 	
 	componentWillMount = async () => {
+		storageUtils.removeFinish()
 		await this.loadWeb3();
 		await this.loadBlockchainData();
 		await this.setMetaData();
@@ -471,7 +472,6 @@ class App extends Component {
 												contractDetected={this.state.contractDetected}
 												loading={this.state.loading}
 												accountAddress={this.state.accountAddress}
-												OwnedEverythings={this.state.OwnedEverythings}
 												totalTokensOwnedByAccount={
 													this.state.totalTokensOwnedByAccount
 												}
