@@ -3,14 +3,7 @@ import {delete_padding, revive_padding} from "../../utils/ControlPadding";
 import head from "./image/head.png"
 import "./MyAccount.less";
 import {message, Tabs,} from 'antd';
-import {
-	AppstoreOutlined,
-	FormatPainterOutlined,
-	HeartOutlined,
-	LoadingOutlined,
-	PayCircleOutlined,
-	PlusOutlined
-} from '@ant-design/icons';
+import {AppstoreOutlined, FormatPainterOutlined, HeartOutlined, PayCircleOutlined,} from '@ant-design/icons';
 import MyMintedTokens from "../MyTokens/MyMintedTokens";
 import MyAllTokens from "../MyTokens/MyAllTokens";
 import AccountDetails from "../AccountDetails/AccountDetails"
@@ -23,18 +16,6 @@ function getBase64(img, callback) {
 	const reader = new FileReader();
 	reader.addEventListener('load', () => callback(reader.result));
 	reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-	const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-	if (!isJpgOrPng) {
-		message.error('只能上传JPG/PNG文件!');
-	}
-	const isLt2M = file.size / 1024 / 1024 < 2;
-	if (!isLt2M) {
-		message.error('照片必须小于2MB!');
-	}
-	return isJpgOrPng && isLt2M;
 }
 
 
@@ -117,13 +98,6 @@ class MyAccount extends Component {
 	
 	
 	render() {
-		const {loading, imageUrl} = this.state;
-		const uploadButton = (
-			<div>
-				{loading ? <LoadingOutlined/> : <PlusOutlined/>}
-				<div style={{marginTop: 8}}>上传</div>
-			</div>
-		);
 		const user = storageUtils.getUser()
 		return (
 			<>

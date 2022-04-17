@@ -14,7 +14,6 @@ const ColorMint = loadable(() => import('./ColorMint/ColorMint'));
 const MarketPlace = loadable(() => import('./MarketPlace/MarketPlace'));
 const Home = loadable(() => import('./Home/Home'));
 const Navbar = loadable(() => import('./Navbar/Navbar'));
-const MyTokens = loadable(() => import('./MyTokens/MyMintedTokens'));
 const Queries = loadable(() => import('./Queries/Queries'));
 const UploadMint = loadable(() => import('./UploadMint/UploadMint'));
 const MyMintedTokens = loadable(() => import('./MyAccount/MyAccount'));
