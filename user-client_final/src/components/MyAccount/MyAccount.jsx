@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {delete_padding, revive_padding} from "../../utils/ControlPadding";
 import head from "./image/head.png"
 import "./MyAccount.less";
-import {message, Tabs,} from 'antd';
+import {Tabs,} from 'antd';
 import {AppstoreOutlined, FormatPainterOutlined, HeartOutlined, PayCircleOutlined,} from '@ant-design/icons';
 import MyMintedTokens from "../MyTokens/MyMintedTokens";
 import MyAllTokens from "../MyTokens/MyAllTokens";
@@ -20,16 +20,6 @@ function getBase64(img, callback) {
 
 
 class MyAccount extends Component {
-	
-	constructor(props) {
-		super(props);
-		this.state = {
-			loadingVisible: 'flex',
-			iframeVisible: 'none',
-			input_value: '余启航',
-		}
-	}
-	
 	
 	handleHeight = () => {
 		const screenHeight = document.documentElement.clientHeight;
@@ -56,45 +46,6 @@ class MyAccount extends Component {
 		revive_padding()
 		window.removeEventListener('resize', this.handleHeight);
 	}
-	
-	onCopy = () => {
-		const spanText = document.getElementById('code').innerText;
-		const oInput = document.createElement('input');
-		oInput.value = spanText;
-		document.body.appendChild(oInput);
-		oInput.select(); // 选择对象
-		document.execCommand('Copy'); // 执行浏览器复制命令
-		oInput.className = 'oInput';
-		oInput.style.display = 'none';
-		document.body.removeChild(oInput);
-		message.success('复制成功!');
-	}
-	
-	onSave = () => {
-		message.success('保存成功!');
-	}
-	
-	input_change(e) {
-		this.setState({
-			input_value: e.target.value
-		})
-	}
-	
-	handleChange = info => {
-		if (info.file.status === 'uploading') {
-			this.setState({loading: true});
-			return;
-		}
-		if (info.file.status === 'done') {
-			// Get this url from response in real world.
-			getBase64(info.file.originFileObj, imageUrl =>
-				this.setState({
-					imageUrl,
-					loading: false,
-				}),
-			);
-		}
-	};
 	
 	
 	render() {
