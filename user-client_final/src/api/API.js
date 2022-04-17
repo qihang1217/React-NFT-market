@@ -68,3 +68,8 @@ export const reqProductMint = (productId) => {
 export const reqConfirmMinted = (productId) => {
     return HttpUtil.get(ApiUtil.API_CONFIRM_MINTED + `?productId=${productId}`)
 }
+
+//更新用户个人信息
+export const reqUpdateUserInfo = (userId, key, value) => {
+    return HttpUtil.post(ApiUtil.API_UPDATE_USER_INFO, {userId, key, value})
+}

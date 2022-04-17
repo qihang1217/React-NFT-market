@@ -21,10 +21,10 @@ class InsideLogin extends Component {
 
     // 提交登录表单
     async handleSubmit(e) {
-        let md5 = require("../../pages/model/md5"); //引入md5加密模块
+        let md5 = require("../../utils/md5"); //引入md5加密模块
         e.password = md5(e.password);
         e['token'] = storageUtils.getToken()
-        const response=await reqLogin(e)
+        const response = await reqLogin(e)
         console.log(response);
         if (response.status === 0 && response.message === '验证成功') {
             message.success('登陆成功~');

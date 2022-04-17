@@ -156,7 +156,7 @@ const Register = () => {
         //清除存储的数据
         sessionStorage.removeItem('first_register');
         sessionStorage.removeItem('second_register');
-        let md5 = require("./model/md5.js"); //引入md5加密模块
+        let md5 = require("../utils/md5.js"); //引入md5加密模块
         values.password = md5(values.password);
         // console.log(values)
         const response = await registerAccount(values)

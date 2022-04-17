@@ -295,5 +295,20 @@ def delete_product():
     return jsonify(response)
 
 
+@app.route(apiPrefix + 'user/update_info', methods=['POST'], strict_slashes=False)
+def update_user_info():
+    json_str = request.get_data(as_text=True)
+    product_data = json.loads(json_str)
+    print(product_data)
+    key = product_data.get('key')
+    value = product_data.get('value')
+    user_id = product_data.get('userId')
+    status = DBUtil.update_user_info(user_id,key,value)
+    response = {
+        'status': status,
+    }
+    return jsonify(response)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

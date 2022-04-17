@@ -355,3 +355,15 @@ def set_minted_product_by_id(product_id):
         return -1
     finally:
         db.session.close()
+
+
+def update_user_info(user_id,key, value):
+    try:
+        Users.query.filter(Users.user_id == user_id).update({key: value})
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
+    finally:
+        db.session.close()
