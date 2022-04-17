@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {delete_padding, revive_padding} from "../../utils/ControlPadding";
 import head from "./image/head.png"
 import "./MyAccount.less";
-import {message, Tabs, Upload,} from 'antd';
+import {message, Tabs,} from 'antd';
 import {
 	AppstoreOutlined,
 	FormatPainterOutlined,
@@ -15,6 +15,7 @@ import MyMintedTokens from "../MyTokens/MyMintedTokens";
 import MyAllTokens from "../MyTokens/MyAllTokens";
 import AccountDetails from "../AccountDetails/AccountDetails"
 import storageUtils from "../../utils/storageUtils";
+import MyAccountInformation from "./MyAccountInformation/MyAccountInformation";
 
 const {TabPane} = Tabs;
 
@@ -239,118 +240,8 @@ class MyAccount extends Component {
 								}
 								key="3"
 							>
-								<div className="tab3">
-									<form className="ant-form ant-form-horizontal"
-									      style={{justifyContent: 'center', marginLeft: '500px', marginTop: '50px'}}>
-										<div className="ant-row ant-form-item">
-											<div className="ant-col ant-col-4 ant-form-item-label">
-												<label title="名称：" className="ant-form-item-required">用户名：</label>
-											</div>
-											<div className="ant-col ant-col-8 ant-form-item-control-wrapper">
-												<div className="ant-form-item-control">
-                                                    <span className="ant-form-item-children">
-                                                        <input placeholder="请输入用户名" type="text"
-                                                               maxLength="21" className="ant-input"
-                                                               value={user.user_name}
-                                                               onChange={this.input_change.bind(this)}
-                                                        />
-                                                    </span>
-												</div>
-											</div>
-										</div>
-										<div className="ant-row ant-form-item">
-											<div className="ant-col ant-col-4 ant-form-item-label">
-												<label title="年龄：" className="ant-form-item-required">年龄：</label>
-											</div>
-											<div className="ant-col ant-col-8 ant-form-item-control-wrapper">
-                                                <span className="ant-form-item-children">
-                                                    <input placeholder="请输入年龄" type="text"
-                                                           maxLength="21" className="ant-input"
-                                                           value={user.age}
-                                                           onChange={this.input_change.bind(this)}/>
-                                                </span>
-											</div>
-										</div>
-										<div className="ant-row ant-form-item">
-											<div className="ant-col ant-col-4 ant-form-item-label">
-												<label title="性别：" className="ant-form-item-required">性别：</label>
-											</div>
-											<div className="ant-col ant-col-8 ant-form-item-control-wrapper">
-												<div className="ant-form-item-control">
-                                                                <span className="ant-form-item-children">
-                                                                    <input placeholder="请输入性别" type="text"
-                                                                           maxLength="21" className="ant-input"
-                                                                           value={user.gender}
-                                                                           onChange={this.input_change.bind(this)}/>
-                                                                </span>
-												</div>
-											</div>
-										</div>
-										<div className="ant-row ant-form-item">
-											<div className="ant-col ant-col-4 ant-form-item-label">
-												<label title="用户头像：" className="">用户头像：</label>
-											</div>
-											<div className="ant-col ant-col-8 ant-form-item-control-wrapper">
-												<div className="ant-form-item-control">
-                                                                <span className="ant-form-item-children">
-                                                                    <span className="upload-list-inline">
-                                                                        <div
-	                                                                        className="ant-upload ant-upload-select ant-upload-select-text">
-                                                                            <Upload
-	                                                                            name="avatar"
-	                                                                            listType="picture-card"
-	                                                                            className="avatar-uploader"
-	                                                                            showUploadList={false}
-	                                                                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-	                                                                            beforeUpload={beforeUpload}
-	                                                                            onChange={this.handleChange}
-                                                                            >
-                                                                                {imageUrl ?
-	                                                                                <img src={imageUrl} alt="avatar"
-	                                                                                     style={{width: '100%'}}/> : uploadButton}
-                                                                            </Upload>
-                                                                        </div>
-                                                                    </span>
-                                                                </span>
-												</div>
-											</div>
-										</div>
-										<div className="ant-row ant-form-item">
-											<div className="ant-col ant-col-4 ant-form-item-label">
-												<label title="描述：" className="">
-													个人简介：
-												</label>
-											</div>
-											<div className="ant-col ant-col-8 ant-form-item-control-wrapper">
-												<div className="ant-form-item-control">
-                                                    <span className="ant-form-item-children">
-                                                        <textarea placeholder="请输入个人简介" maxLength="300"
-                                                                  className="ant-input" style={{
-	                                                        height: '73px',
-	                                                        minHeight: '73px',
-	                                                        maxHeight: '199px',
-	                                                        overflowY: 'hidden'
-                                                        }}>
-                                                        </textarea>
-                                                    </span>
-												</div>
-											</div>
-										</div>
-										<div className="ant-row ant-form-item">
-											<div
-												className="ant-col ant-col-14 ant-col-offset-4 ant-form-item-control-wrapper">
-												<div className="ant-form-item-control">
-													<span className="ant-form-item-children">
-														<button type="button" className="confirm ant-btn"
-														        onClick={this.onSave}>
-															<span>保存</span>
-														</button>
-													</span>
-												</div>
-											</div>
-										</div>
-									</form>
-								
+								<div className="tab3 tab">
+									<MyAccountInformation/>
 								</div>
 							</TabPane>
 							<TabPane
