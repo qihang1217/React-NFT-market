@@ -15,10 +15,16 @@ class FrontendAuth extends Component {
         // 如果该路由不用进行权限校验，登录状态下登陆页除外
         // 因为登陆后，无法跳转到登陆页
         // 这部分代码，是为了在非登陆状态下，访问不需要权限校验的路由
+        // console.log(pathname)
         const targetRouterConfig = routerConfig.find(
-            (item) => item.path === pathname
+            (item) => {
+                //todo:完善路由匹配校验逻辑
+                if (pathname.includes('/ownedEverything/detail/'))
+                    return true
+                return item.path.startsWith(pathname)
+            }
         );
-        // console.log(targetRouterConfig);
+        console.log(targetRouterConfig);
         if (targetRouterConfig && !targetRouterConfig.auth && !isLogin) {
             const {component} = targetRouterConfig;
             return <Route exact path={pathname} component={component}/>;
@@ -33,7 +39,9 @@ class FrontendAuth extends Component {
                 return <Redirect to="/"/>;
             } else {
                 // 如果路由合法，就跳转到相应的路由
+                // console.log(targetRouterConfig)
                 if (targetRouterConfig) {
+                    // console.log(targetRouterConfig)
                     return (
                         <Route path={pathname} component={targetRouterConfig.component}/>
                     );

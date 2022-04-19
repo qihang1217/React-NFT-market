@@ -505,7 +505,7 @@ class App extends Component {
 						</div>
 					</Content>
 					<Footer style={{textAlign: 'center', display: this.state.footerVisible}}>
-						数藏万物 ©2021
+						数藏万物 ©2022
 					</Footer>
 				</Router>
 			</>

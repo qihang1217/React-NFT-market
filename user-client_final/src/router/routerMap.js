@@ -1,4 +1,5 @@
 import loadable from "../utils/Loadable";
+import ProductDetail from "../components/ProductDetail/ProductDetail";
 
 const App = loadable(() => import('../components/App'));
 const register = loadable(() => import('../pages/Register'));
@@ -48,17 +49,21 @@ export const routerMap = [
         auth: true,
     },
     {
-        path: "/404",
-        component: ErrorPage,
+	    path: "/404",
+	    component: ErrorPage,
     },
-    {
-        path: "/login",
-        component: Login,
-    },
-    {
-        path: "/register",
-        component: register,
-    }
+	{
+		path: "/login",
+		component: Login,
+	},
+	{
+		path: "/register",
+		component: register,
+	},
+	{
+		path: "/ownedEverything/detail/",
+		component: ProductDetail,
+	},
 ]
 
 export default routerMap;

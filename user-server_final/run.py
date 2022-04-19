@@ -64,7 +64,6 @@ def api_upload():
             new_filename = str(unix_time) + str(randint(1000, 9999)) + '.' + ext  # 修改文件名
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             product_data = request.form.to_dict()
-            print(product_data)
             DBUtil.save_upload_product(product_data, new_filename, file_type)
             return jsonify({"message": "上传成功", "status": 0})
         else:

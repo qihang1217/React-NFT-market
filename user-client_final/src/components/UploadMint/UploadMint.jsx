@@ -71,7 +71,7 @@ class UploadMint extends React.Component{
         let user_data = storageUtils.getUser()
         // console.log(user_data)
         formData.append('token', token)
-        formData.append('user_data', user_data)
+        formData.append('user_data', JSON.stringify(user_data))
         formData.append('work_name', values.work_name)
         formData.append('price', values.price)
         formData.append('introduction', values.introduction)
