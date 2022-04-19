@@ -309,5 +309,18 @@ def update_user_info():
     return jsonify(response)
 
 
+# 根据分类id获取分类信息
+@app.route(apiPrefix + '/category/id', methods=['GET'], strict_slashes=False)
+def get_category_by_id():
+    args = request.args.to_dict()
+    category_id = args.get('categoryId')
+    res, status = DBUtil.get_category_by_id(category_id)
+    response = {
+        'status': status,
+        'data': res,
+    }
+    return jsonify(response)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

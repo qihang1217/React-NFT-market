@@ -36,33 +36,20 @@ const MarketPlace = ({
 				</div>
 				<div className="d-flex flex-wrap mb-2">
 					{OwnedEverythings.map((ownedEverything) => {
+						const tokenId = parseInt(ownedEverything.tokenId._hex, 16)
 						return (
 							<div
-								key={parseInt(ownedEverything.tokenId._hex, 16)}
+								key={tokenId}
 								className="w-50 p-4 mt-1 border"
 							>
 								{!insideLoading ? (
 									(ownedEverything.metaData.metaData.type === 'color') ?
 										(<ColorNFTImage
-											colors={
-												ownedEverything.metaData !== undefined
-													? ownedEverything.metaData.metaData.colors
-													: ""
-											}
-										/>) : (
-											<FileNFT
-												tokenURL={
-													ownedEverything.metaData !== undefined
-														? ownedEverything.metaData.metaData.file_url.file_tokenURl
-														: ""
-												}
-												productId={
-													ownedEverything.metaData !== undefined
-														? ownedEverything.metaData.productId
-														: ""
-												}
-											/>
-										)
+											colors={ownedEverything.metaData.metaData.colors}
+										/>) : (<FileNFT
+											tokenURL={ownedEverything.metaData.metaData.file_url.file_tokenURl}
+											tokenId={tokenId}
+										/>)
 								) : (
 									<Loading/>
 								)}

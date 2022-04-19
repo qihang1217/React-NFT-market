@@ -73,3 +73,8 @@ export const reqConfirmMinted = (productId) => {
 export const reqUpdateUserInfo = (userId, key, value) => {
     return HttpUtil.post(ApiUtil.API_UPDATE_USER_INFO, {userId, key, value})
 }
+
+// 根据分类id获取分类
+export const reqCategory = (categoryId) => {
+    return HttpUtil.get(ApiUtil.API_CATEGORY_BY_ID + `?categoryId=${categoryId}`)
+}

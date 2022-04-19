@@ -367,3 +367,15 @@ def update_user_info(user_id,key, value):
         return -1
     finally:
         db.session.close()
+
+
+def get_category_by_id(category_id):
+    try:
+        res = Categories.query.filter(Categories.category_id == category_id).first()
+        db.session.commit()
+        return res.single_to_dict(), 0
+    except Exception as e:
+        print(repr(e))
+        return [{}], -1
+    finally:
+        db.session.close()

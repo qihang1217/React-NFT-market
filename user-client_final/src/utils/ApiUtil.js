@@ -24,5 +24,6 @@ export default class ApiUtil {
     static API_UPLOAD_MINT = ApiUtil.URL_INTERFACE + '/upload_mint';
 	static API_CONFIRM_MINTED = ApiUtil.URL_INTERFACE + '/confirm_minted';
     static API_UPDATE_USER_INFO = ApiUtil.URL_INTERFACE + '/user/update_info';
+    static API_CATEGORY_BY_ID = ApiUtil.URL_INTERFACE + '/category/id';
     
 }

@@ -79,7 +79,7 @@ class UploadMint extends React.Component{
     
         // this.file_type
         const result = await uploadMint(formData)
-        console.log(result)
+        // console.log(result)
         if (result.status === 0 && result.message === '上传成功') {
             message.success('NTF铸造信息提交成功,正在火速为您审核中~');
         } else if (result.status === -1 && result.token_message === '未登录') {

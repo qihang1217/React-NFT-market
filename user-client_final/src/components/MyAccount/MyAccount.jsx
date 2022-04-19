@@ -15,30 +15,14 @@ const {TabPane} = Tabs;
 
 class MyAccount extends Component {
 	
-	handleHeight = () => {
-		const screenHeight = document.documentElement.clientHeight;
-		let height = `${screenHeight - 64}px`;
-		this.setState({
-			height,
-		})
-	}
-	
-	
 	componentDidMount() {
 		//清除外部的边界框
 		delete_padding()
-		const screenHeight = document.documentElement.clientHeight;
-		let height = `${screenHeight - 64}px`;
-		this.setState({
-			height,
-		})
-		window.addEventListener('resize', this.handleHeight);
 	}
 	
 	componentWillUnmount() {
 		//恢复外部的边界框
 		revive_padding()
-		window.removeEventListener('resize', this.handleHeight);
 	}
 	
 	
