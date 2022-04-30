@@ -24,9 +24,12 @@ const MyAllTokens = ({
 	const [insideLoading, setInsideLoading] = useState(true);
 	const [chainDataCard, setChainDataCard] = useState([]);
 	const OwnedEverythings = storageUtils.getProducts()
-	let MyOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
-		OwnedEverything.currentOwner === accountAddress
-	);
+	let MyOwnedEverythings = []
+	if (OwnedEverythings) {
+		MyOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
+			OwnedEverything.currentOwner === accountAddress
+		);
+	}
 	const card_cols = 6
 	//加载个人在链上拥有的nft数据
 	useEffect(() => {
