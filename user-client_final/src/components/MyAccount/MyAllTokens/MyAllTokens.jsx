@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
-import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
-import Loading from "../Loading/Loading";
+import ColorNFTImage from "../../ColorNFTImage/ColorNFTImage";
+import Loading from "../../Loading/Loading";
 import {Button, Card, Col, Empty, Form, Input, Row} from 'antd';
-import './MyTokens.less'
-import FileNFT from "../FileNFT/FileNFT";
-import ConnectToMetamask from "../ConnectMetamask/ConnectToMetamask";
-import ContractNotDeployed from "../ContractNotDeployed/ContractNotDeployed";
-import storageUtils from "../../utils/storageUtils";
+import '../../MyTokenDetail/MyTokenDetail.less'
+import FileNFT from "../../FileNFT/FileNFT";
+import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
+import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
+import storageUtils from "../../../utils/storageUtils";
 
-const empty = require('./empty.svg')
+const empty = require('../../MyTokenDetail/empty.svg')
 
 const MyAllTokens = ({
 	                     connectToMetamask,

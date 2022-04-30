@@ -1,6 +1,6 @@
 import {Form, Input} from "antd";
 import React from "react";
-
+//todo:参考ColorNFTDetails.jsx进行修改并替代其
 class MyTokenDetail extends React.Component {
 	//价格自定义校验
 	validatePrice = (rule, value) => {

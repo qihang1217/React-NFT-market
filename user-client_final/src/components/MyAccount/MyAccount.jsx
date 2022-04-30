@@ -4,9 +4,9 @@ import head from "./image/head.png"
 import "./MyAccount.less";
 import {Tabs,} from 'antd';
 import {AppstoreOutlined, FormatPainterOutlined, HeartOutlined, PayCircleOutlined,} from '@ant-design/icons';
-import MyMintedTokens from "../MyTokens/MyMintedTokens";
-import MyAllTokens from "../MyTokens/MyAllTokens";
-import AccountDetails from "../AccountDetails/AccountDetails"
+import MyMintedTokens from "./MyMintedTokens/MyMintedTokens";
+import MyAllTokens from "./MyAllTokens/MyAllTokens";
+import AccountDetails from "./AccountDetails/AccountDetails"
 import storageUtils from "../../utils/storageUtils";
 import MyAccountInformation from "./MyAccountInformation/MyAccountInformation";
 
