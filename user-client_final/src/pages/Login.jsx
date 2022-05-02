@@ -21,7 +21,7 @@ class Login extends Component {
         e.password = md5(e.password);
         e['token'] = storageUtils.getToken()
         const response = await reqLogin(e)
-        console.log(response);
+        // console.log(response);
         if (response.status === 0 && response.message === '验证成功') {
             message.success('登陆成功~');
             if (response.token_message !== 'success') {

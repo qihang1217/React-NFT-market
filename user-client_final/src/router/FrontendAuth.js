@@ -24,7 +24,7 @@ class FrontendAuth extends Component {
                 return item.path.startsWith(pathname)
             }
         );
-        console.log(targetRouterConfig);
+        // console.log(targetRouterConfig);
         if (targetRouterConfig && !targetRouterConfig.auth && !isLogin) {
             const {component} = targetRouterConfig;
             return <Route exact path={pathname} component={component}/>;

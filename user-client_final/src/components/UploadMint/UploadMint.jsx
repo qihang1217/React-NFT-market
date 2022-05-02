@@ -66,7 +66,7 @@ class UploadMint extends React.Component{
 
     //提交整个表单,此时才上传文件
     onSubmit = async (values) => {
-        console.log(values)
+        // console.log(values)
         let token = storageUtils.getToken()
         let user_data = storageUtils.getUser()
         // console.log(user_data)

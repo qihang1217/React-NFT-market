@@ -78,3 +78,18 @@ export const reqUpdateUserInfo = (userId, key, value) => {
 export const reqCategory = (categoryId) => {
     return HttpUtil.get(ApiUtil.API_CATEGORY_BY_ID + `?categoryId=${categoryId}`)
 }
+
+// 获取所有评论
+export const reqComments = (productId) => {
+    return HttpUtil.get(ApiUtil.API_GET_COMMENTS + `?productId=${productId}`)
+}
+
+// 添加评论
+export const reqAddComment = (timestamp, userId, userName, productId, commentContent) => {
+    return HttpUtil.post(ApiUtil.API_ADD_COMMENT, {timestamp, userId, userName, productId, commentContent})
+}
+
+// 点赞和取消点赞
+export const reqLike = (commentId, action) => {
+    return HttpUtil.get(ApiUtil.API_COMMENT_LIKE + `?commentId=${commentId}&action=${action}`)
+}

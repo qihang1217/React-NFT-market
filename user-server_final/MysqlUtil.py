@@ -84,9 +84,9 @@ class Categories(db.Model, MixToJson):
 
 
 class Products(db.Model, MixToJson):
-    # 创建Roles类，映射到数据库中叫Roles表
+    # 创建Products类，映射到数据库中叫Products表
     __tablename__ = "Products"
-    # 创建字段： role_id， 主键和自增涨
+    # 创建字段： product_id， 主键和自增涨
     product_id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(20))
     owner_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
@@ -108,9 +108,21 @@ class Products(db.Model, MixToJson):
     category_id = db.Column(db.Integer, db.ForeignKey('Categories.category_id'))
 
 
-# 将创建好的实体类映射回数据库
-# db.create_all()
+class Comments(db.Model, MixToJson):
+    # 创建Comments类，映射到数据库中叫Comments表
+    __tablename__ = "Comments"
+    # 创建字段： comment_id， 主键和自增涨
+    comment_id = db.Column(db.Integer, primary_key=True)
+    comment_content = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.String(13), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("Users.user_id"))
+    user_name = db.Column(db.String(20), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey("Products.product_id"))
+    like_count = db.Column(db.Integer, default=0)
 
+
+# 将创建好的实体类映射回数据库
+db.create_all()
 
 staffColumns = ("id", "real_name", "id_name", "age", "email", "phone_number", "gender", "user_name", "password")
 
@@ -347,7 +359,7 @@ def get_product_by_id(product_id):
 
 def set_minted_product_by_id(product_id):
     try:
-        Products.query.filter(Products.product_id == product_id).update({Products.mint_status:True})
+        Products.query.filter(Products.product_id == product_id).update({Products.mint_status: True})
         db.session.commit()
         return 0
     except Exception as e:
@@ -357,7 +369,7 @@ def set_minted_product_by_id(product_id):
         db.session.close()
 
 
-def update_user_info(user_id,key, value):
+def update_user_info(user_id, key, value):
     try:
         Users.query.filter(Users.user_id == user_id).update({key: value})
         db.session.commit()
@@ -377,5 +389,51 @@ def get_category_by_id(category_id):
     except Exception as e:
         print(repr(e))
         return [{}], -1
+    finally:
+        db.session.close()
+
+
+def get_comments_by_product_id(product_id):
+    try:
+        res = class_to_dict(Comments.query.filter(Comments.product_id == product_id).all())
+        db.session.commit()
+        return res, 0
+    except Exception as e:
+        print(repr(e))
+        return [{}], -1
+    finally:
+        db.session.close()
+
+
+def add_comment(comment_data):
+    try:
+        comment = Comments(comment_content=comment_data.get('commentContent'),
+                           create_time=comment_data.get('timestamp'),
+                           user_id=comment_data.get('userId'), user_name=comment_data.get('userName'),
+                           product_id=comment_data.get('productId'))
+        db.session.add(comment)
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
+    finally:
+        db.session.close()
+
+
+def comment_like(comment_id, action):
+    try:
+        comment = Comments.query.filter(Comments.comment_id == comment_id).first()
+        if action == 'add':
+            comment.like_count = comment.like_count + 1
+        elif action == 'reduce':
+            comment.like_count = comment.like_count - 1
+        else:
+            return -1
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
     finally:
         db.session.close()

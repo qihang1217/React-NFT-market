@@ -118,7 +118,7 @@ const Register = () => {
         const checkPromise = new Promise(async (resolve, reject) => {
             const res = await checkedAccount({user_name: value})
             if (res.status === 0 && res.message === '用户名重复') {
-                console.log(res)
+                // console.log(res)
                 resolve(false)
             } else {
                 resolve(true)
@@ -160,7 +160,7 @@ const Register = () => {
         values.password = md5(values.password);
         // console.log(values)
         const response = await registerAccount(values)
-        console.log(response)
+        // console.log(response)
         if (response.status === 0 && response.message === '添加成功') {
             message.success('注册成功~');
             window.location.href = "/login";

@@ -104,7 +104,7 @@ class App extends Component {
 						const ownedEverything = await OwnedEverythingsContract.methods
 						.allOwnedEverythings(i)
 						.call();
-						console.log(ownedEverything)
+						// console.log(ownedEverything)
 						this.setState({
 							OwnedEverythings: [...this.state.OwnedEverythings, ownedEverything],
 						});
@@ -210,7 +210,7 @@ class App extends Component {
 				const cid = await ipfs.add(JSON.stringify(tokenObject));
 				let tokenURI = `http://127.0.0.1:8080/ipfs/${cid.path}`;
 				const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
-				console.log(workName, tokenURI, price, colorsArray)
+				// console.log(workName, tokenURI, price, colorsArray)
 				
 				if (this.state.accountAddress) {
 					this.state.OwnedEverythingsContract.methods

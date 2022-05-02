@@ -322,5 +322,43 @@ def get_category_by_id():
     return jsonify(response)
 
 
+# 获取所有评论
+@app.route(apiPrefix + '/comment/get', methods=['GET'], strict_slashes=False)
+def get_comments():
+    args = request.args.to_dict()
+    product_id = args.get('productId')
+    res, status = DBUtil.get_comments_by_product_id(product_id)
+    response = {
+        'status': status,
+        'data': res,
+    }
+    return jsonify(response)
+
+
+# 添加评论
+@app.route(apiPrefix + '/comment/add', methods=['POST'], strict_slashes=False)
+def add_comment():
+    json_str = request.get_data(as_text=True)
+    comment_data = json.loads(json_str)
+    status = DBUtil.add_comment(comment_data)
+    response = {
+        'status': status,
+    }
+    return jsonify(response)
+
+
+# 评论点赞
+@app.route(apiPrefix + '/comment/like', methods=['GET'], strict_slashes=False)
+def comment_like():
+    args = request.args.to_dict()
+    action = args.get('action')
+    comment_id = args.get('commentId')
+    status = DBUtil.comment_like(comment_id,action)
+    response = {
+        'status': status,
+    }
+    return jsonify(response)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

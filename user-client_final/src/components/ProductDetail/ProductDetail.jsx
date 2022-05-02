@@ -1,25 +1,18 @@
 import React, {Component} from "react";
-import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, List, Row, Timeline} from "antd";
+import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, message, Row, Timeline} from "antd";
 import {EyeOutlined, HistoryOutlined, LockOutlined, MailOutlined, SmileOutlined, StarOutlined} from '@ant-design/icons';
 import './PorductDetail.less'
 import moment from 'moment';
 import storageUtils from "../../utils/storageUtils";
 import loading from "../../components/Loading/Loading";
-import {reqCategory} from "../../api/API";
+import {reqAddComment, reqCategory, reqComments} from "../../api/API";
 import FileViewer from "react-file-viewer";
+import EnhancedComment from "./EnhancedComment";
 
 const {Panel} = Collapse;
 
 const {TextArea} = Input;
 
-const CommentList = ({comments}) => (
-	<List
-		dataSource={comments}
-		header={`${comments.length} 评论`}
-		itemLayout="horizontal"
-		renderItem={props => <Comment {...props} />}
-	/>
-);
 
 const Editor = ({onChange, onSubmit, submitting, value}) => (
 	<>
@@ -33,6 +26,7 @@ const Editor = ({onChange, onSubmit, submitting, value}) => (
 		</Form.Item>
 	</>
 );
+
 
 moment.defineLocale('zh-cn', {
 	relativeTime: {
@@ -61,8 +55,7 @@ class ProductDetail extends Component {
 		categoryName: '',
 	};
 	
-	
-	handleCommentSubmit = () => {
+	handleCommentSubmit = async () => {
 		if (!this.state.commentContent) {
 			return;
 		}
@@ -71,22 +64,17 @@ class ProductDetail extends Component {
 			submitting: true,
 		});
 		const userData = storageUtils.getUser()
-		console.log(moment().fromNow())
-		setTimeout(() => {
-			this.setState({
-				submitting: false,
-				commentContent: '',
-				comments: [
-					...this.state.comments,
-					{
-						author: userData.user_name,
-						avatar: 'https://joeschmoe.io/api/v1/random',
-						content: <p>{this.state.commentContent}</p>,
-						datetime: moment().fromNow(),
-					},
-				],
-			});
-		}, 1000);
+		const timestamp = +new Date()
+		const userId = userData.user_id
+		const userName = userData.user_name
+		const productId = this.state.currentProduct.metaData.productId
+		const commentContent = this.state.commentContent
+		const result = await reqAddComment(timestamp, userId, userName, productId, commentContent)
+		if (result.status === 0) {
+			message.success('评论成功')
+			await this.initComments()
+		}
+		
 	};
 	
 	handleCommentChange = e => {
@@ -148,6 +136,17 @@ class ProductDetail extends Component {
 		}
 	}
 	
+	async initComments() {
+		const productId = this.state.currentProduct.metaData.productId
+		const result = await reqComments(productId)
+		// console.log(result)
+		if (result.status === 0) {
+			this.setState({
+				comments: result.data,
+			})
+		}
+	}
+	
 	getCategory = async (categoryId) => {
 		const result = await reqCategory(categoryId)
 		if (result.status === 0) {
@@ -193,6 +192,7 @@ class ProductDetail extends Component {
 	
 	componentDidMount() {
 		this.initProduct()
+		this.initComments()
 	}
 	
 	render() {
@@ -319,7 +319,10 @@ class ProductDetail extends Component {
 						</Col>
 					</Row>
 					<div className='comment-container'>
-						{comments.length > 0 && <CommentList comments={comments}/>}
+						{comments.length > 0 && comments.map(item => {
+							return (<EnhancedComment comment={item}/>)
+						})
+						}
 						<Comment
 							avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="头像"/>}
 							content={

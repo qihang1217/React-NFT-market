@@ -205,27 +205,27 @@ const MyMintedTokens = ({
 						object.setAttribute('disabled', true)
 						object.offsetParent.setAttribute('disabled', true)
 						object.innerHTML = '铸造中'
-						console.log(object)
+						// console.log(object)
 						const result = await reqProductMint(productId)
 						// console.log(result)
 						const tokenURI = result.tokenURI
 						const status = await mintMyFileNFT(item, tokenURI);
 						if (status === 0) {
 							//	表示铸造成功
-							console.log('铸造成功')
+							// console.log('铸造成功')
 							const status = await reqConfirmMinted(productId)
 							if (status.status === 0) {
 								const submitButton = document.getElementById(item.product_id)
 								submitButton.setAttribute('disabled', true)
 								submitButton.innerHTML = '已铸造'
 								message.success('铸造成功且更新铸造状态成功~')
-								console.log('铸造成功且更新铸造状态成功')
+								// console.log('铸造成功且更新铸造状态成功')
 							} else {
-								console.log('铸造成功但更新铸造状态失败')
+								// console.log('铸造成功但更新铸造状态失败')
 								message.error('铸造成功但更新铸造状态失败~')
 							}
 						} else {
-							console.log('铸造失败')
+							// console.log('铸造失败')
 							message.error('铸造失败,请稍后重试~')
 							object.setAttribute('disabled', false)
 							object.innerHTML = '重新铸造'
@@ -253,7 +253,7 @@ const MyMintedTokens = ({
 				const handleDelete = async (e) => {
 					const value = e.target.innerHTML
 					const object = e.target
-					console.log(e.target)
+					// console.log(e.target)
 					if (value === '删 除') {
 						object.setAttribute('disabled', true)
 						object.offsetParent.setAttribute('disabled', true)

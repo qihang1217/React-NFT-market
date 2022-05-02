@@ -64,7 +64,7 @@ class NFTDetails extends Component {
                                 value={parseInt(this.props.ownedEverything.price._hex, 16).toString()}
                                 style={{fontSize: "0.8rem", letterSpacing: "0.14rem"}}
                                 onClick={(e) => {
-                                    console.log(e.target.value)
+                                    // console.log(e.target.value)
                                     this.props.buyOwnedEverything(
                                         parseInt(this.props.ownedEverything.tokenId._hex, 16),
                                         e.target.value

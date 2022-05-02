@@ -33,7 +33,7 @@ const MyAccountInformation = () => {
 		if (res.status === 0) {
 			//也同步更新store里的数据,保证本地存储数据的正确性
 			user_data[key] = value
-			console.log(user_data)
+			// console.log(user_data)
 			storageUtils.saveUser(user_data)
 			message.success('更新账号信息成功')
 		}
