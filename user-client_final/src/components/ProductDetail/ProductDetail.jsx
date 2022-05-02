@@ -268,7 +268,7 @@ class ProductDetail extends Component {
 								<Panel header="作品描述" key="2">
 									<p>{this.state.description ? this.state.description : '暂无作品描述'}</p>
 								</Panel>
-								<Panel header="历史变化情况" key="3">
+								<Panel header="交易历史" key="3">
 									<div className='trace-container'>
 										<Timeline>
 											<Timeline.Item
