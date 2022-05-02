@@ -34,6 +34,24 @@ const Editor = ({onChange, onSubmit, submitting, value}) => (
 	</>
 );
 
+moment.defineLocale('zh-cn', {
+	relativeTime: {
+		future: '%s内',
+		past: '%s前',
+		s: '几秒',
+		m: '1 分钟',
+		mm: '%d 分钟',
+		h: '1 小时',
+		hh: '%d 小时',
+		d: '1 天',
+		dd: '%d 天',
+		M: '1 个月',
+		MM: '%d 个月',
+		y: '1 年',
+		yy: '%d 年'
+	},
+})
+
 class ProductDetail extends Component {
 	
 	state = {
@@ -43,6 +61,7 @@ class ProductDetail extends Component {
 		categoryName: '',
 	};
 	
+	
 	handleCommentSubmit = () => {
 		if (!this.state.commentContent) {
 			return;
@@ -51,7 +70,8 @@ class ProductDetail extends Component {
 		this.setState({
 			submitting: true,
 		});
-		
+		const userData = storageUtils.getUser()
+		console.log(moment().fromNow())
 		setTimeout(() => {
 			this.setState({
 				submitting: false,
@@ -59,7 +79,7 @@ class ProductDetail extends Component {
 				comments: [
 					...this.state.comments,
 					{
-						author: 'Han Solo',
+						author: userData.user_name,
 						avatar: 'https://joeschmoe.io/api/v1/random',
 						content: <p>{this.state.commentContent}</p>,
 						datetime: moment().fromNow(),
@@ -95,10 +115,10 @@ class ProductDetail extends Component {
 			this.state._traceAddresses = currentProduct._traceAddresses.split(",")
 			this.state._timestamp = currentProduct._timestamp.split(",")
 			this.state.forSale = currentProduct.forSale
-			const filename=this.state.currentProduct.metaData.fileUrl
-			const ext=filename.substring(filename.lastIndexOf('.')+1)
-			const src=this.state.file_url
-			const filetype=this.state.currentProduct.metaData.fileType
+			const filename = this.state.currentProduct.metaData.fileUrl
+			const ext = filename.substring(filename.lastIndexOf('.') + 1)
+			const src = this.state.file_url
+			const filetype = this.state.currentProduct.metaData.fileType
 			if (/^image\/\S+$/.test(filetype)) {
 				this.setState({
 					previewContent: <img src={src} alt={filename} className='file'/>
@@ -115,7 +135,7 @@ class ProductDetail extends Component {
 							<embed src={src}/>
 						</audio>
 				})
-			}else{
+			} else {
 				this.setState({
 					previewContent:
 						<FileViewer
@@ -200,116 +220,118 @@ class ProductDetail extends Component {
 									<div className='view-like'>
 										<div className='right-content'>
 											<div className='view'>
-											<EyeOutlined/> 1
-										</div>
-										<div className='like'>
-											<StarOutlined/> 0
+												<EyeOutlined/> 1
+											</div>
+											<div className='like'>
+												<StarOutlined/> 0
+											</div>
 										</div>
 									</div>
 								</div>
+								<div className='product-des'>
+									<p>{this.state.description}</p>
+								</div>
 							</div>
-							<div className='product-des'>
-								<p>{this.state.description}</p>
+						
+						</Col>
+						<Col md={11}>
+							<Card>
+								<div className='buy-container'>
+									<h1 className='price-title'>{this.state.price} Ξ</h1>
+									<p>
+										<LockOutlined/><span className='price-feature'>安全支付</span>
+									</p>
+									<p>
+										<MailOutlined/><span className='price-feature'>卖家的支持</span>
+									</p>
+									<p>
+										<HistoryOutlined/><span className='price-feature'>支持未来版本</span>
+									</p>
+								</div>
+							</Card>
+							<div className='product-details'>
+								<Collapse
+									defaultActiveKey={['1']}
+									expandIconPosition='right'
+								>
+									<Panel header="作品信息" key="1">
+										<div>
+											<p>
+												<span className="font-weight-bold">数藏万物ID</span> :{" "}
+												{parseInt(this.state.currentProduct.tokenId._hex, 16)}
+											</p>
+											<p>
+												<span className="font-weight-bold">名字</span> :{" "}
+												{this.state.currentProduct.tokenName}
+											</p>
+											<p>
+												<span className="font-weight-bold">铸造者</span> :{" "}
+												{this.state.currentProduct.mintedBy}
+											</p>
+											<p>
+												<span className="font-weight-bold">拥有者</span> :{" "}
+												{this.state.currentProduct.currentOwner}
+											</p>
+											<p>
+												<span className="font-weight-bold">上一个拥有者</span> :{" "}
+												{this.state.currentProduct.previousOwner}
+											</p>
+											<p>
+												<span className="font-weight-bold">累计交易次数</span> :{" "}
+												{parseInt(this.state.currentProduct.numberOfTransfers._hex, 16)}
+											</p>
+											<a href={this.state.currentProduct.tokenURI} target="_blank"
+											   rel="noopener noreferrer">原始信息</a>
+											&nbsp;&nbsp;
+											<a href={this.state.file_url} target="_blank"
+											   rel="noopener noreferrer">源文件</a>
+										</div>
+									</Panel>
+									<Panel header="作品描述" key="2">
+										<p>{this.state.description ? this.state.description : '暂无作品描述'}</p>
+									</Panel>
+									<Panel header="交易历史" key="3">
+										<div className='trace-container'>
+											<Timeline>
+												<Timeline.Item
+													color="green">创建于上链于{this.jsDateFormatter(this.state._timestamp[0])}</Timeline.Item>
+												<Timeline.Item
+													color="green">所属于{this.state._traceAddresses[0]}</Timeline.Item>
+												{this.renderTraceItems(this.state._timestamp, this.state._traceAddresses)}
+												{
+													this.state.forSale ?
+														(
+															<Timeline.Item color="#00CCFF" dot={<SmileOutlined/>}>
+																<p>处于上架状态</p>
+															</Timeline.Item>
+														) :
+														(
+															<Timeline.Item color="gray">
+																<p>处于下架状态</p>
+															</Timeline.Item>
+														)
+												}
+											</Timeline>
+										</div>
+									</Panel>
+								</Collapse>
 							</div>
-						</div>
-					
-					</Col>
-					<Col md={11}>
-						<Card>
-							<div className='buy-container'>
-								<h1 className='price-title'>{this.state.price} Ξ</h1>
-								<p>
-									<LockOutlined/><span className='price-feature'>安全支付</span>
-								</p>
-								<p>
-									<MailOutlined/><span className='price-feature'>卖家的支持</span>
-								</p>
-								<p>
-									<HistoryOutlined/><span className='price-feature'>支持未来版本</span>
-								</p>
-							</div>
-						</Card>
-						<div className='product-details'>
-							<Collapse
-								defaultActiveKey={['1']}
-								expandIconPosition='right'
-							>
-								<Panel header="作品信息" key="1">
-									<div>
-										<p>
-											<span className="font-weight-bold">数藏万物ID</span> :{" "}
-											{parseInt(this.state.currentProduct.tokenId._hex, 16)}
-										</p>
-										<p>
-											<span className="font-weight-bold">名字</span> :{" "}
-											{this.state.currentProduct.tokenName}
-										</p>
-										<p>
-											<span className="font-weight-bold">铸造者</span> :{" "}
-											{this.state.currentProduct.mintedBy}
-										</p>
-										<p>
-											<span className="font-weight-bold">拥有者</span> :{" "}
-											{this.state.currentProduct.currentOwner}
-										</p>
-										<p>
-											<span className="font-weight-bold">上一个拥有者</span> :{" "}
-											{this.state.currentProduct.previousOwner}
-										</p>
-										<p>
-											<span className="font-weight-bold">累计交易次数</span> :{" "}
-											{parseInt(this.state.currentProduct.numberOfTransfers._hex, 16)}
-										</p>
-										<a href={this.state.currentProduct.tokenURI} target="_blank" rel="noopener noreferrer">原始信息</a>
-										&nbsp;&nbsp;
-										<a href={this.state.file_url} target="_blank" rel="noopener noreferrer">源文件</a>
-									</div>
-								</Panel>
-								<Panel header="作品描述" key="2">
-									<p>{this.state.description ? this.state.description : '暂无作品描述'}</p>
-								</Panel>
-								<Panel header="交易历史" key="3">
-									<div className='trace-container'>
-										<Timeline>
-											<Timeline.Item
-												color="green">创建于上链于{this.jsDateFormatter(this.state._timestamp[0])}</Timeline.Item>
-											<Timeline.Item
-												color="green">所属于{this.state._traceAddresses[0]}</Timeline.Item>
-											{this.renderTraceItems(this.state._timestamp, this.state._traceAddresses)}
-											{
-												this.state.forSale ?
-													(
-														<Timeline.Item color="#00CCFF" dot={<SmileOutlined/>}>
-															<p>处于上架状态</p>
-														</Timeline.Item>
-													) :
-													(
-														<Timeline.Item color="gray">
-															<p>处于下架状态</p>
-														</Timeline.Item>
-													)
-											}
-										</Timeline>
-									</div>
-								</Panel>
-							</Collapse>
-						</div>
-					</Col>
-				</Row>
-				<div className='comment-container'>
-					{comments.length > 0 && <CommentList comments={comments}/>}
-					<Comment
-						avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="头像"/>}
-						content={
-							<Editor
-								onChange={this.handleCommentChange}
-								onSubmit={this.handleCommentSubmit}
-								submitting={submitting}
-								value={commentContent}
-							/>
-						}
-					/>
-				</div>
+						</Col>
+					</Row>
+					<div className='comment-container'>
+						{comments.length > 0 && <CommentList comments={comments}/>}
+						<Comment
+							avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="头像"/>}
+							content={
+								<Editor
+									onChange={this.handleCommentChange}
+									onSubmit={this.handleCommentSubmit}
+									submitting={submitting}
+									value={commentContent}
+								/>
+							}
+						/>
+					</div>
 				</div>) : (<loading/>)
 		)
 	}
