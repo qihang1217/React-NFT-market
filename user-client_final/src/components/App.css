@@ -50,5 +50,5 @@ input[type="color"]:hover {
 }
 
 .anticon {
-    vertical-align: 0.125em;
+    vertical-align: 0.125em !important;
 }
