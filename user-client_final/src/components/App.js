@@ -16,7 +16,7 @@ const Home = loadable(() => import('./Home/Home'));
 const Navbar = loadable(() => import('./Navbar/Navbar'));
 const Queries = loadable(() => import('./Queries/Queries'));
 const UploadMint = loadable(() => import('./UploadMint/UploadMint'));
-const MyMintedTokens = loadable(() => import('./MyAccount/MyAccount'));
+const MyAccount = loadable(() => import('./MyAccount/MyAccount'));
 const Mint = loadable(() => import('./Mint/Mint'));
 const Museum = loadable(() => import('./Museum/Museum'));
 const InsideLogin = loadable(() => import('./InsideLogin/InsideLogin'));
@@ -479,7 +479,7 @@ class App extends Component {
 									path="/my"
 									render={() => (
 										this.state.isAuthenticated ? (
-											<MyMintedTokens
+											<MyAccount
 												totalTokensOwnedByAccount={
 													this.state.totalTokensOwnedByAccount
 												}

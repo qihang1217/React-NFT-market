@@ -9,6 +9,7 @@ import MyAllTokens from "./MyAllTokens/MyAllTokens";
 import AccountDetails from "./AccountDetails/AccountDetails"
 import storageUtils from "../../utils/storageUtils";
 import MyAccountInformation from "./MyAccountInformation/MyAccountInformation";
+import Paragraph from "antd/es/typography/Paragraph";
 
 const {TabPane} = Tabs;
 
@@ -44,27 +45,9 @@ class MyAccount extends Component {
 										<div className="username">
 											<div className="info-area-auth">
 												<span className="my-name">{user.user_name}</span>
-												<span className="address-info">账户地址:
-                                                    <span className="address-code"
-                                                          id='code'>{this.props.accountAddress}</span>
-                                                    <span style={{
-	                                                    color: 'rgba(0,145,255,0.85)',
-	                                                    cursor: 'pointer',
-	                                                    marginLeft: '10px'
-                                                    }}>
-                                                        <i className="anticon anticon-copy"
-                                                           aria-label="图标：copy"
-                                                           onClick={() => this.onCopy()}>
-                                                            <svg viewBox="64 64 896 896" data-icon="copy"
-                                                                 width="1em" height="1em"
-                                                                 fill="currentColor" aria-hidden="true"
-                                                                 focusable="false">
-                                                                <path
-	                                                                d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32zM704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z">
-                                                                </path>
-                                                            </svg>
-                                                        </i>
-                                                    </span>
+												<span className="address-info">
+													钱包账户地址<Paragraph copyable className="address-code"
+													                 id='code'>{this.props.accountAddress}</Paragraph>
                                                 </span>
 											</div>
 										</div>
@@ -163,18 +146,6 @@ class MyAccount extends Component {
 									/>
 								</div>
 							</TabPane>
-							{/* <TabPane
-                                            tab={
-                                                <span>
-                                                    <PayCircleOutlined />
-                                                    交易订单
-                                                </span>
-                                            }
-                                            key="5"
-                                        >
-                                            <div className="tab5">
-                                            </div>
-                                        </TabPane> */}
 						</Tabs>
 					</div>
 				</div>
