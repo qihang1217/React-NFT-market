@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, List, Row, Timeline, Tooltip} from "antd";
+import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, List, Row, Timeline} from "antd";
 import {EyeOutlined, HistoryOutlined, LockOutlined, MailOutlined, SmileOutlined, StarOutlined} from '@ant-design/icons';
 import './PorductDetail.less'
 import moment from 'moment';
@@ -8,47 +8,14 @@ import loading from "../../components/Loading/Loading";
 import {reqCategory} from "../../api/API";
 import FileViewer from "react-file-viewer";
 
-const data = [
-	{
-		actions: [<span key="comment-list-reply-to-0">回复</span>],
-		author: 'test1',
-		avatar: 'https://joeschmoe.io/api/v1/random',
-		content: (
-			<p>
-				这只加密猫好酷啊！
-			</p>
-		),
-		datetime: (
-			<Tooltip title={moment().subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-				<span>{moment().subtract(1, 'days').fromNow()}</span>
-			</Tooltip>
-		),
-	},
-	{
-		actions: [<span key="comment-list-reply-to-0">回复</span>],
-		author: 'test2',
-		avatar: 'https://joeschmoe.io/api/v1/random',
-		content: (
-			<p>
-				我也觉得我也觉得
-			</p>
-		),
-		datetime: (
-			<Tooltip title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-				<span>{moment().subtract(2, 'days').fromNow()}</span>
-			</Tooltip>
-		),
-	},
-];
 const {Panel} = Collapse;
-
 
 const {TextArea} = Input;
 
 const CommentList = ({comments}) => (
 	<List
 		dataSource={comments}
-		header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+		header={`${comments.length} 评论`}
 		itemLayout="horizontal"
 		renderItem={props => <Comment {...props} />}
 	/>
@@ -61,13 +28,11 @@ const Editor = ({onChange, onSubmit, submitting, value}) => (
 		</Form.Item>
 		<Form.Item>
 			<Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-				Add Comment
+				评论
 			</Button>
 		</Form.Item>
 	</>
 );
-
-const img = require('./1.png')
 
 class ProductDetail extends Component {
 	
@@ -332,26 +297,9 @@ class ProductDetail extends Component {
 					</Col>
 				</Row>
 				<div className='comment-container'>
-					<List
-						className="comment-list"
-						header={`${data.length} 评论`}
-						itemLayout="horizontal"
-						dataSource={data}
-						renderItem={item => (
-							<li>
-								<Comment
-									actions={item.actions}
-									author={item.author}
-									avatar={item.avatar}
-									content={item.content}
-									datetime={item.datetime}
-								/>
-							</li>
-						)}
-					/>
 					{comments.length > 0 && <CommentList comments={comments}/>}
 					<Comment
-						avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
+						avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="头像"/>}
 						content={
 							<Editor
 								onChange={this.handleChange}
