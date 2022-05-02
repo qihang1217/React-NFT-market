@@ -6,7 +6,7 @@ import {Tabs,} from 'antd';
 import {AppstoreOutlined, FormatPainterOutlined, HeartOutlined, PayCircleOutlined,} from '@ant-design/icons';
 import MyMintedTokens from "./MyMintedTokens/MyMintedTokens";
 import MyAllTokens from "./MyAllTokens/MyAllTokens";
-import AccountDetails from "./AccountDetails/AccountDetails"
+import MyWalletDetails from "./MyWalletDetails/MyWalletDetails"
 import storageUtils from "../../utils/storageUtils";
 import MyAccountInformation from "./MyAccountInformation/MyAccountInformation";
 import Paragraph from "antd/es/typography/Paragraph";
@@ -140,7 +140,7 @@ class MyAccount extends Component {
 								key="4"
 							>
 								<div className="tab4 tab">
-									<AccountDetails
+									<MyWalletDetails
 										accountAddress={this.props.accountAddress}
 										accountBalance={this.props.accountBalance}
 									/>

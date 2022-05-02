@@ -41,6 +41,9 @@ const MyAccountInformation = () => {
 	
 	return (
 		<>
+			<div className='content-mainTitle'>
+				<span>您在<span id='nft_name' style={{fontSize: 32}}>数藏万物</span>的账号信息</span>
+			</div>
 			<EditableParagraph
 				name={'用户名'}
 				data={user_name}
