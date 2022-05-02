@@ -39,12 +39,12 @@ class ProductDetail extends Component {
 	state = {
 		comments: [],
 		submitting: false,
-		value: '',
+		commentContent: '',
 		categoryName: '',
 	};
 	
-	handleSubmit = () => {
-		if (!this.state.value) {
+	handleCommentSubmit = () => {
+		if (!this.state.commentContent) {
 			return;
 		}
 		
@@ -55,13 +55,13 @@ class ProductDetail extends Component {
 		setTimeout(() => {
 			this.setState({
 				submitting: false,
-				value: '',
+				commentContent: '',
 				comments: [
 					...this.state.comments,
 					{
 						author: 'Han Solo',
 						avatar: 'https://joeschmoe.io/api/v1/random',
-						content: <p>{this.state.value}</p>,
+						content: <p>{this.state.commentContent}</p>,
 						datetime: moment().fromNow(),
 					},
 				],
@@ -69,9 +69,9 @@ class ProductDetail extends Component {
 		}, 1000);
 	};
 	
-	handleChange = e => {
+	handleCommentChange = e => {
 		this.setState({
-			value: e.target.value,
+			commentContent: e.target.value,
 		});
 	};
 	
@@ -176,7 +176,7 @@ class ProductDetail extends Component {
 	}
 	
 	render() {
-		const {comments, submitting, value, currentProduct} = this.state;
+		const {comments, submitting, commentContent, currentProduct} = this.state;
 		
 		return (
 			currentProduct ?
@@ -302,10 +302,10 @@ class ProductDetail extends Component {
 						avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="头像"/>}
 						content={
 							<Editor
-								onChange={this.handleChange}
-								onSubmit={this.handleSubmit}
+								onChange={this.handleCommentChange}
+								onSubmit={this.handleCommentSubmit}
 								submitting={submitting}
-								value={value}
+								value={commentContent}
 							/>
 						}
 					/>
