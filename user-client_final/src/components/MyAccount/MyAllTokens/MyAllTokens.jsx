@@ -7,6 +7,7 @@ import FileNFT from "../../FileNFT/FileNFT";
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
+import {card_cols} from "../../../constants/constants";
 
 const empty = require('../../MyTokenDetail/empty.svg')
 
@@ -30,7 +31,6 @@ const MyAllTokens = ({
 			OwnedEverything.currentOwner === accountAddress
 		);
 	}
-	const card_cols = 6
 	//加载个人在链上拥有的nft数据
 	useEffect(() => {
 		if (OwnedEverythings) {
@@ -76,6 +76,8 @@ const MyAllTokens = ({
 					const sale_status_button_style = (accountAddress === item.currentOwner) ?
 						(!!item.forSale) : null
 					
+					const tokenId = parseInt(item.tokenId._hex, 16)
+					
 					return (<Col span={card_cols}>
 							<Card
 								className='inside-card'
@@ -96,6 +98,7 @@ const MyAllTokens = ({
 														? item.metaData.metaData.file_url.file_tokenURl
 														: ""
 												}
+												tokenId={tokenId}
 											/>
 										)
 								) : (
