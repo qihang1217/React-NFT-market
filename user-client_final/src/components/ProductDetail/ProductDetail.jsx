@@ -6,6 +6,7 @@ import moment from 'moment';
 import storageUtils from "../../utils/storageUtils";
 import loading from "../../components/Loading/Loading";
 import {reqCategory} from "../../api/API";
+import FileViewer from "react-file-viewer";
 
 const data = [
 	{
@@ -118,7 +119,6 @@ class ProductDetail extends Component {
 		this.state.currentProduct = products[id - 1]
 		let currentProduct = products[id - 1]
 		if (currentProduct) {
-			console.log(currentProduct)
 			this.state.price = window.web3.utils.fromWei(
 				parseInt(currentProduct.price._hex, 16).toString(),
 				"Ether"
@@ -130,6 +130,35 @@ class ProductDetail extends Component {
 			this.state._traceAddresses = currentProduct._traceAddresses.split(",")
 			this.state._timestamp = currentProduct._timestamp.split(",")
 			this.state.forSale = currentProduct.forSale
+			const filename=this.state.currentProduct.metaData.fileUrl
+			const ext=filename.substring(filename.lastIndexOf('.')+1)
+			const src=this.state.file_url
+			const filetype=this.state.currentProduct.metaData.fileType
+			if (/^image\/\S+$/.test(filetype)) {
+				this.setState({
+					previewContent: <img src={src} alt={filename} className='file'/>
+				})
+			} else if (/^video\/\S+$/.test(filetype)) {
+				this.setState({
+					previewContent: <video src={src} loop preload controls className='file'/>
+				})
+			} else if (/^audio\/\S+$/.test(filetype)) {
+				this.setState({
+					previewContent:
+						<audio controls preload className='file'>
+							<source src={src}/>
+							<embed src={src}/>
+						</audio>
+				})
+			}else{
+				this.setState({
+					previewContent:
+						<FileViewer
+							fileType={ext}
+							filePath={src}
+						/>
+				})
+			}
 			await this.getCategory(currentProduct.metaData.categoryId)
 		}
 	}
@@ -190,7 +219,9 @@ class ProductDetail extends Component {
 					<Row>
 						<Col md={13}>
 							<div className='product-content'>
-								<img src={img} className='content-container' alt={'作品'}/>
+								<div className='file-content'>
+									{this.state.previewContent}
+								</div>
 								<div className='name-content'>
 									<p className='name-title'>{this.state.workName}</p>
 									<span>{this.state.categoryName}</span>
@@ -240,6 +271,32 @@ class ProductDetail extends Component {
 							>
 								<Panel header="作品信息" key="1">
 									<div>
+										<p>
+											<span className="font-weight-bold">数藏万物ID</span> :{" "}
+											{parseInt(this.state.currentProduct.tokenId._hex, 16)}
+										</p>
+										<p>
+											<span className="font-weight-bold">名字</span> :{" "}
+											{this.state.currentProduct.tokenName}
+										</p>
+										<p>
+											<span className="font-weight-bold">铸造者</span> :{" "}
+											{this.state.currentProduct.mintedBy}
+										</p>
+										<p>
+											<span className="font-weight-bold">拥有者</span> :{" "}
+											{this.state.currentProduct.currentOwner}
+										</p>
+										<p>
+											<span className="font-weight-bold">上一个拥有者</span> :{" "}
+											{this.state.currentProduct.previousOwner}
+										</p>
+										<p>
+											<span className="font-weight-bold">累计交易次数</span> :{" "}
+											{parseInt(this.state.currentProduct.numberOfTransfers._hex, 16)}
+										</p>
+										<a href={this.state.currentProduct.tokenURI} target="_blank" rel="noopener noreferrer">原始信息</a>
+										&nbsp;&nbsp;
 										<a href={this.state.file_url} target="_blank" rel="noopener noreferrer">源文件</a>
 									</div>
 								</Panel>
