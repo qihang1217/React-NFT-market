@@ -15,6 +15,8 @@ contract OwnedEverythings is ERC721 {
     //铸造的代币总数
     uint256 public ownedeverythingCounter;
 
+    string constant sepStr = ",";
+
     // 定义代币结构
     struct ownedeverything {
         uint256 tokenId;
@@ -23,8 +25,8 @@ contract OwnedEverythings is ERC721 {
         address payable mintedBy;
         address payable currentOwner;
         address payable previousOwner;
-        uint256[] _timestamp;
-        address [] _traceAddresses;
+        string _timestamp;
+        string _traceAddresses;
         uint256 price;
         uint256 numberOfTransfers;
         bool forSale;
@@ -50,14 +52,80 @@ contract OwnedEverythings is ERC721 {
         // 如果长度不等，直接返回
         if (aa.length != bb.length) return false;
         // 按位比较
-        for(uint i = 0; i < aa.length; i ++) {
-            if(aa[i] != bb[i]) return false;
+        for (uint i = 0; i < aa.length; i ++) {
+            if (aa[i] != bb[i]) return false;
         }
         return true;
     }
 
+    // 字符串拼接函数
+    function strConcat(string memory _a, string memory _b, string memory _c) internal pure returns (string memory){
+        bytes memory _ba = bytes(_a);
+        bytes memory _bb = bytes(_b);
+        bytes memory _bc = bytes(_c);
+        string memory ret = new string(_ba.length + _bb.length + _bc.length);
+        bytes memory bret = bytes(ret);
+        uint k = 0;
+        for (uint i = 0; i < _ba.length; i++) bret[k++] = _ba[i];
+        for (uint i = 0; i < _bb.length; i++) bret[k++] = _bb[i];
+        for (uint i = 0; i < _bc.length; i++) bret[k++] = _bc[i];
+        return string(ret);
+    }
+
+    //num represents a number from 0-15 and returns ascii representing [0-9A-Fa-f]
+    function encode(uint8 num) private pure returns (byte){
+        //0-9 -> 0-9
+        if (num >= 0 && num <= 9) {
+            return byte(num + 48);
+        }
+        //10-15 -> a-f
+        return byte(num + 87);
+    }
+
+
+    function addressToString(address addr) internal pure returns (string memory){
+        //Convert addr to bytes
+        bytes20 value = bytes20(uint160(addr));
+        bytes memory strBytes = new bytes(42);
+        //Encode hex prefix
+        strBytes[0] = '0';
+        strBytes[1] = 'x';
+        //Encode bytes usig hex encoding
+        for (uint i = 0; i < 20; i++) {
+            uint8 byteValue = uint8(value[i]);
+            strBytes[2 + (i << 1)] = encode((byteValue >> 4) & 0x0f);
+            strBytes[3 + (i << 1)] = encode(byteValue & 0x0f);
+        }
+        return string(strBytes);
+    }
+
+
+    function uintToString(uint256 value) internal pure returns (string memory) {
+        // Inspired by OraclizeAPI's implementation - MIT licence
+        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
+
+        if (value == 0) {
+            return "0";
+        }
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        bytes memory buffer = new bytes(digits);
+        uint256 index = digits - 1;
+        temp = value;
+        while (temp != 0) {
+            buffer[index--] = byte(uint8(48 + temp % 10));
+            temp /= 10;
+        }
+        return string(buffer);
+    }
+
+
     // 铸造一个新的代币
-    function mintownedeverything(string memory _name, string memory _tokenURI, uint256 _price, string[] calldata _colors,string memory _tokenType) external {
+    function mintownedeverything(string memory _name, string memory _tokenURI, uint256 _price, string[] calldata _colors, string memory _tokenType) external {
         // 检查函数调用者是否不是零地址帐户
         require(msg.sender != address(0));
         // 递增计数器
@@ -89,16 +157,6 @@ contract OwnedEverythings is ERC721 {
         // 设置的代币 URI 存在
         tokenURIExists[_tokenURI] = true;
 
-        //溯源字段
-        // 设置代币的初始时间戳列表
-        uint256[] memory _timestamp = new uint256[](1);
-        _timestamp[0] = block.timestamp;
-
-        // 设置代币的初始拥有者列表
-        address[] memory _traceAddresses = new address[](1);
-        _traceAddresses[0] = msg.sender;
-
-
         // 创建一个新的代币（结构）并传入新值
         allOwnedEverythings[ownedeverythingCounter] = ownedeverything(
             ownedeverythingCounter,
@@ -107,8 +165,8 @@ contract OwnedEverythings is ERC721 {
             msg.sender,
             msg.sender,
             address(0),
-            _timestamp,
-            _traceAddresses,
+            uintToString(block.timestamp),
+            addressToString(msg.sender),
             _price,
             0,
             true);
@@ -173,9 +231,9 @@ contract OwnedEverythings is ERC721 {
         // 更新令牌的当前所有者
         ownedeverything.currentOwner = msg.sender;
         // 将当前时间添加进时间戳数组中
-        allOwnedEverythings[_tokenId]._timestamp.push(block.timestamp);
+        ownedeverything._timestamp = strConcat(allOwnedEverythings[_tokenId]._timestamp, ',', uintToString(block.timestamp));
         // 将当前所有者添加进拥有者数组中
-        allOwnedEverythings[_tokenId]._traceAddresses.push(msg.sender);
+        ownedeverything._traceAddresses = strConcat(allOwnedEverythings[_tokenId]._traceAddresses, ',', addressToString(msg.sender));
         // 更新此令牌被转移的次数
         ownedeverything.numberOfTransfers += 1;
         // 在映射中设置和更新该令牌

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
-import ColorNFTDetails from "../CryptoBoyNFTDetails/ColorNFTDetails";
+import NFTDetails from "./NFTDetails/NFTDetails";
 import Loading from "../Loading/Loading";
 import FileNFT from "../FileNFT/FileNFT"
 import storageUtils from "../../utils/storageUtils";
@@ -53,7 +53,7 @@ const MarketPlace = ({
 								) : (
 									<Loading/>
 								)}
-								<ColorNFTDetails
+								<NFTDetails
 									ownedEverything={ownedEverything}
 									accountAddress={accountAddress}
 									changeTokenPrice={changeTokenPrice}

@@ -66,12 +66,6 @@ const Editor = ({onChange, onSubmit, submitting, value}) => (
 	</>
 );
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-
 const img = require('./1.png')
 
 class ProductDetail extends Component {
@@ -132,27 +126,12 @@ class ProductDetail extends Component {
 			this.state.workName = currentProduct.tokenName
 			this.state.description = currentProduct.metaData.description
 			this.state.categoryId = currentProduct.metaData.categoryId
+			this.state.file_url = currentProduct.metaData.metaData.file_url.file_tokenURl
+			this.state._traceAddresses = currentProduct._traceAddresses.split(",")
+			this.state._timestamp = currentProduct._timestamp.split(",")
+			this.state.forSale = currentProduct.forSale
 			await this.getCategory(currentProduct.metaData.categoryId)
-			
 		}
-		// if (product.product_id) { // 如果NFT有数据, 获取对应的分类
-		// 	// console.log(product)
-		// } else { // 如果当前product状态没有数据, 根据id参数中请求获取NFT并更新
-		// 	const id = this.props.match.params.id
-		// 	const result = await reqProduct(id)
-		// 	// console.log(result)
-		// 	if (result.status === 0) {
-		// 		// console.log(result)
-		// 		product = result.data
-		// 		this.setState({
-		// 			product
-		// 		})
-		// 		this.getCategory(product.category_id) // 获取对应的分类
-		// 	}
-		// }
-		// if (product.file_url) {
-		// 	this.renderFile(product)
-		// }
 	}
 	
 	getCategory = async (categoryId) => {
@@ -163,50 +142,46 @@ class ProductDetail extends Component {
 		}
 	}
 	
+	/** * 格式化时间为：yyyy-MM-dd HH:mm:ss * @param date * @returns {string} */
+	jsDateFormatter = (timestamp) => {
+		const inputTime = parseInt(timestamp) * 1000
+		const time = new Date(inputTime);
+		const year = time.getFullYear();
+		const month = time.getMonth() + 1;
+		const day = time.getDate();
+		const hour = time.getHours();
+		const minute = time.getMinutes();
+		const second = time.getSeconds();
+		return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day) + ' ' + (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute) + ':' + (second < 10 ? '0' + second : second)
+	}
+	
+	// 渲染交易溯源过程
+	renderTraceItems(timeItems, addressItems) {
+		//将时间戳和地址数组进行组装,形成对象数组
+		const dataList = [];
+		for (let i = 0; i < timeItems.length; i++) {
+			let tempObject = {time: timeItems[i], address: addressItems[i]}
+			dataList.push(tempObject)
+		}
+		//批量渲染
+		return dataList.map((item, index) => {
+			if (index !== 0) {
+				return (
+					<Timeline.Item>
+						{this.jsDateFormatter(item.time)}{" 所属转移至"}{item.address}
+					</Timeline.Item>
+				)
+			} else {
+				return null
+			}
+		})
+	}
+	
 	componentDidMount() {
 		this.initProduct()
 	}
 	
 	render() {
-		// 	"tokenId": {
-		// 	"_hex": "0x02"
-		// },
-		// 	"tokenName": "test2",
-		// 	"tokenURI": "http://127.0.0.1:8080/ipfs/QmTTPHgosUGjBvfDwFssNFHSsgGmYuVCPvPenWffgDoxun",
-		// 	"mintedBy": "0x5b8DE1723c51b6fC102481f77E7C47c06Cc596Ae",
-		// 	"currentOwner": "0x536f0890f5f74135949a206Ffc72bD449Fb1F59E",
-		// 	"previousOwner": "0x5b8DE1723c51b6fC102481f77E7C47c06Cc596Ae",
-		// 	"price": {
-		// 	"_hex": "0x3782dace9d900000"
-		// },
-		// 	"numberOfTransfers": {
-		// 	"_hex": "0x01"
-		// },
-		// 	"forSale": true,
-		// 	"metaData": {
-		// 	"tokenName": "数藏万物",
-		// 		"tokenSymbol": "OW_EThing",
-		// 		"tokenId": "2",
-		// 		"workName": "test2",
-		// 		"productId": 9,
-		// 		"categoryId": 9,
-		// 		"ownerId": 1,
-		// 		"price": 2,
-		// 		"description": "test2",
-		// 		"fileType": "image/jpeg",
-		// 		"fileUrl": "16500949144699.jpg",
-		// 		"deleteStatus": false,
-		// 		"examineStatus": true,
-		// 		"passStatus": true,
-		// 		"usableChances": 1,
-		// 		"metaData": {
-		// 		"type": "upload_file",
-		// 			"file_url": {
-		// 			"file_tokenURl": "http://127.0.0.1:8080/ipfs/QmaZrJdnBsc2UZ3mv2gpUHZtRrJ1pgcwoT4FFWqF3q43be"
-		// 		}
-		// 	}
-		// }
-		// }
 		const {comments, submitting, value, currentProduct} = this.state;
 		
 		return (
@@ -215,13 +190,13 @@ class ProductDetail extends Component {
 					<Row>
 						<Col md={13}>
 							<div className='product-content'>
-								<img src={img} className='content-container'/>
+								<img src={img} className='content-container' alt={'作品'}/>
 								<div className='name-content'>
 									<p className='name-title'>{this.state.workName}</p>
 									<span>{this.state.categoryName}</span>
 								</div>
 								<div className='user-content'>
-									<Avatar size={64} src={<img src="https://joeschmoe.io/api/v1/random"/>}/>
+									<Avatar size={64} src={<img src="https://joeschmoe.io/api/v1/random" alt={'头像'}/>}/>
 									<div className='user-des'>
 										<p>admin1</p>
 										<Button type='primary'>关注</Button>
@@ -258,24 +233,44 @@ class ProductDetail extends Component {
 								</p>
 							</div>
 						</Card>
-						<Collapse accordion>
-							<Panel header="作品信息" key="1">
-								<p>{text}</p>
-							</Panel>
-							<Panel header="作品描述" key="3">
-								<p>{text}</p>
-							</Panel>
-							<Panel header="拥有者信息" key="2">
-								<p>{text}</p>
-							</Panel>
-						</Collapse>
-						<div className='trace-container'>
-							<Timeline>
-								<Timeline.Item color="green">创建于上链于2022-4-18</Timeline.Item>
-								<Timeline.Item color="#00CCFF" dot={<SmileOutlined/>}>
-									<p>处于上架状态</p>
-								</Timeline.Item>
-							</Timeline>
+						<div className='product-details'>
+							<Collapse
+								defaultActiveKey={['1']}
+								expandIconPosition='right'
+							>
+								<Panel header="作品信息" key="1">
+									<div>
+										<a href={this.state.file_url} target="_blank" rel="noopener noreferrer">源文件</a>
+									</div>
+								</Panel>
+								<Panel header="作品描述" key="2">
+									<p>{this.state.description ? this.state.description : '暂无作品描述'}</p>
+								</Panel>
+								<Panel header="历史变化情况" key="3">
+									<div className='trace-container'>
+										<Timeline>
+											<Timeline.Item
+												color="green">创建于上链于{this.jsDateFormatter(this.state._timestamp[0])}</Timeline.Item>
+											<Timeline.Item
+												color="green">所属于{this.state._traceAddresses[0]}</Timeline.Item>
+											{this.renderTraceItems(this.state._timestamp, this.state._traceAddresses)}
+											{
+												this.state.forSale ?
+													(
+														<Timeline.Item color="#00CCFF" dot={<SmileOutlined/>}>
+															<p>处于上架状态</p>
+														</Timeline.Item>
+													) :
+													(
+														<Timeline.Item color="gray">
+															<p>处于下架状态</p>
+														</Timeline.Item>
+													)
+											}
+										</Timeline>
+									</div>
+								</Panel>
+							</Collapse>
 						</div>
 					</Col>
 				</Row>

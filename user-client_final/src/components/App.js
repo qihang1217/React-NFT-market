@@ -104,6 +104,7 @@ class App extends Component {
 						const ownedEverything = await OwnedEverythingsContract.methods
 						.allOwnedEverythings(i)
 						.call();
+						console.log(ownedEverything)
 						this.setState({
 							OwnedEverythings: [...this.state.OwnedEverythings, ownedEverything],
 						});
@@ -152,8 +153,6 @@ class App extends Component {
 				return ownedEverything
 			}));
 			storageUtils.saveProducts(res)
-			console.log(res)
-			console.log(storageUtils.getFinish())
 			storageUtils.saveFinish(true)
 		}
 	}
