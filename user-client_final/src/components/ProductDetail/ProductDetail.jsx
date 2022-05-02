@@ -181,7 +181,8 @@ class ProductDetail extends Component {
 			if (index !== 0) {
 				return (
 					<Timeline.Item>
-						{this.jsDateFormatter(item.time)}{" 所属转移至"}{item.address}
+						<p>{this.jsDateFormatter(item.time)}{"时"}</p>
+						<p>{"所属权转移至"}{item.address}</p>
 					</Timeline.Item>
 				)
 			} else {
@@ -201,8 +202,8 @@ class ProductDetail extends Component {
 		return (
 			currentProduct ?
 				(<div className='product-detail'>
-					<Row>
-						<Col md={13}>
+					<Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+						<Col md={12}>
 							<div className='product-content'>
 								<div className='file-content'>
 									{this.state.previewContent}
@@ -234,7 +235,7 @@ class ProductDetail extends Component {
 							</div>
 						
 						</Col>
-						<Col md={11}>
+						<Col md={12}>
 							<Card>
 								<div className='buy-container'>
 									<h1 className='price-title'>{this.state.price} Ξ</h1>
@@ -294,20 +295,20 @@ class ProductDetail extends Component {
 										<div className='trace-container'>
 											<Timeline>
 												<Timeline.Item
-													color="green">创建于上链于{this.jsDateFormatter(this.state._timestamp[0])}</Timeline.Item>
+													color="green">上链于{this.jsDateFormatter(this.state._timestamp[0])}</Timeline.Item>
 												<Timeline.Item
-													color="green">所属于{this.state._traceAddresses[0]}</Timeline.Item>
+													color="green">初始所属于{this.state._traceAddresses[0]}</Timeline.Item>
 												{this.renderTraceItems(this.state._timestamp, this.state._traceAddresses)}
 												{
 													this.state.forSale ?
 														(
 															<Timeline.Item color="#00CCFF" dot={<SmileOutlined/>}>
-																<p>处于上架状态</p>
+																<p>当前处于上架状态</p>
 															</Timeline.Item>
 														) :
 														(
 															<Timeline.Item color="gray">
-																<p>处于下架状态</p>
+																<p>当前处于下架状态</p>
 															</Timeline.Item>
 														)
 												}
