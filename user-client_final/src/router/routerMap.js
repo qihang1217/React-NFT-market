@@ -3,7 +3,6 @@ import loadable from "../utils/Loadable";
 const App = loadable(() => import('../components/App'));
 const register = loadable(() => import('../pages/Register'));
 const Login = loadable(() => import('../pages/Login'));
-const ProductDetail = loadable(() => import('../components/ProductDetail/ProductDetail'));
 
 export const routerMap = [
 	{
@@ -74,8 +73,8 @@ export const routerMap = [
 		component: register,
 	},
 	{
-		path: "/ownedEverything/detail/",
-		component: ProductDetail,
+		path: "/ownedEverything/detail/:id",
+		component: App,
 	},
 ]
 
