@@ -8,6 +8,7 @@ import loading from "../../components/Loading/Loading";
 import {reqAddComment, reqCategory, reqComments} from "../../api/API";
 import FileViewer from "react-file-viewer";
 import EnhancedComment from "./EnhancedComment";
+import {Link} from "react-router-dom";
 
 const {Panel} = Collapse;
 
@@ -198,7 +199,6 @@ class ProductDetail extends Component {
 	
 	render() {
 		const {comments, submitting, commentContent, currentProduct} = this.state;
-		
 		return (
 			currentProduct ?
 				(<div className='product-detail'>
@@ -213,7 +213,13 @@ class ProductDetail extends Component {
 									<span>{this.state.categoryName}</span>
 								</div>
 								<div className='user-content'>
-									<Avatar size={64} src={<img src="https://joeschmoe.io/api/v1/random" alt={'头像'}/>}/>
+									<Link to={{
+										pathname: `/space/${parseInt(currentProduct.currentOwnerId._hex, 16)}/allTokens`,
+										state: {tabKey: 'allTokens'}
+									}}>
+										<Avatar size={64}
+										        src={<img src="https://joeschmoe.io/api/v1/random" alt={'头像'}/>}/>
+									</Link>
 									<div className='user-des'>
 										<p>admin1</p>
 										<Button type='primary'>关注</Button>

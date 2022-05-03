@@ -477,9 +477,10 @@ class App extends Component {
 									)}
 								/>
 								<Route
-									path="/space"
+									path="/space/:id"
 									render={() => (
 										this.state.isAuthenticated ? (
+											//todo:此处添加判断是否为自己的账号,决定渲染哪个组件
 											<MyAccount
 												totalTokensOwnedByAccount={
 													this.state.totalTokensOwnedByAccount
