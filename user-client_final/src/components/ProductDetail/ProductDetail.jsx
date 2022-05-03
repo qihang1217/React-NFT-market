@@ -5,7 +5,7 @@ import './PorductDetail.less'
 import moment from 'moment';
 import storageUtils from "../../utils/storageUtils";
 import loading from "../../components/Loading/Loading";
-import {reqAddComment, reqCategory, reqComments} from "../../api/API";
+import {reqAddComment, reqCategory, reqComments, reqUserById} from "../../api/API";
 import FileViewer from "react-file-viewer";
 import EnhancedComment from "./EnhancedComment";
 import {Link} from "react-router-dom";
@@ -54,6 +54,7 @@ class ProductDetail extends Component {
 		submitting: false,
 		commentContent: '',
 		categoryName: '',
+		userData: '',
 	};
 	
 	handleCommentSubmit = async () => {
@@ -192,9 +193,18 @@ class ProductDetail extends Component {
 		})
 	}
 	
+	// 获取目标id的用户数据
+	reqUserData = async (targetUserId) => {
+		const result = await reqUserById(targetUserId)
+		if (result.status === 0) {
+			this.setState({userData: result.data})
+		}
+	}
+	
 	componentDidMount() {
 		this.initProduct()
 		this.initComments()
+		this.reqUserData(parseInt(this.state.currentProduct.currentOwnerId._hex, 16))
 	}
 	
 	render() {
@@ -221,7 +231,7 @@ class ProductDetail extends Component {
 										        src={<img src="https://joeschmoe.io/api/v1/random" alt={'头像'}/>}/>
 									</Link>
 									<div className='user-des'>
-										<p>admin1</p>
+										<p>{this.state.userData.user_name}</p>
 										<Button type='primary'>关注</Button>
 									</div>
 									<div className='view-like'>
