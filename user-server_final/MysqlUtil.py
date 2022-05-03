@@ -457,3 +457,15 @@ def product_open(product_id, action):
         return -1
     finally:
         db.session.close()
+
+
+def get_user_by_id(user_id):
+    try:
+        user = Users.query.filter(Users.user_id == user_id).first()
+        db.session.commit()
+        return user.single_to_dict(),0
+    except Exception as e:
+        print(repr(e))
+        return [{}],-1
+    finally:
+        db.session.close()

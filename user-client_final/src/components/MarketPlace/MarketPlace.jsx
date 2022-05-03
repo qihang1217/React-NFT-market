@@ -15,11 +15,15 @@ const MarketPlace = ({
 	                     buyOwnedEverything,
                      }) => {
 	const [insideLoading, setInsideLoading] = useState(false);
+	
+	const userId = storageUtils.getUser().user_id;
+	
 	let OwnedEverythings = storageUtils.getProducts()
 	let ElseOwnedEverythings = []
+	
 	if (OwnedEverythings) {
 		ElseOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
-			OwnedEverything.currentOwner !== accountAddress
+			parseInt(OwnedEverything.currentOwnerId._hex, 16) !== userId
 		);
 	}
 	useEffect(() => {

@@ -96,5 +96,10 @@ export const reqLike = (commentId, action) => {
 
 // 公开和不公开
 export const reqOpenOrClose = (productId, action) => {
-    return HttpUtil.get(ApiUtil.API_PRODUCT_Open_Or_Close + `?productId=${productId}&action=${action}`)
+    return HttpUtil.get(ApiUtil.API_PRODUCT_OPEN_OR_CLOSE + `?productId=${productId}&action=${action}`)
+}
+
+// 根据用户id获取用户数据
+export const reqUserById = (userId) => {
+    return HttpUtil.get(ApiUtil.API_USER_BY_ID + `?userId=${userId}`)
 }

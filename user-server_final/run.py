@@ -378,5 +378,18 @@ def product_open():
     return jsonify(response)
 
 
+# 修改可见性
+@app.route(apiPrefix + '/user/id', methods=['GET'], strict_slashes=False)
+def get_user_by_id():
+    args = request.args.to_dict()
+    user_id = args.get('userId')
+    res,status = DBUtil.get_user_by_id(user_id)
+    response = {
+        'status': status,
+        'data': res,
+    }
+    return jsonify(response)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

@@ -18,7 +18,6 @@ const MyAllTokens = ({
 	                     contractDetected,
 	                     loading,
 	                     accountAddress,
-	                     totalTokensOwnedByAccount,
 	                     toggleForSale,
 	                     changeTokenPrice,
 	                     list,
@@ -239,8 +238,8 @@ const MyAllTokens = ({
 				<div className='content-mainTitle'>
 					<span>您的所收藏的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
 				</div>
-				<Card title="已上链的NFT" extra={<span>总数:{totalTokensOwnedByAccount}</span>}>
-					{!totalTokensOwnedByAccount ? (
+				<Card title="已上链的NFT" extra={<span>总数:{MyOwnedEverythings.length}</span>}>
+					{!MyOwnedEverythings.length ? (
 							<Empty
 								image={empty}
 								imageStyle={{
