@@ -295,7 +295,7 @@ class App extends Component {
 				if (this.state.accountAddress) {
 					await new Promise((resolve, reject) => {
 						this.state.OwnedEverythingsContract.methods
-						.mintownedeverything(product_name, tokenURI, stand_price, [], '')
+						.mintownedeverything(product_name, tokenURI, stand_price, [], '',owner_id)
 						.send({from: this.state.accountAddress})
 						.on("confirmation", () => {
 							localStorage.setItem(this.state.accountAddress, new Date().getTime());
@@ -343,9 +343,10 @@ class App extends Component {
 	
 	//购买
 	buyOwnedEverything = (tokenId, price) => {
+		const user_data=storageUtils.getUser()
 		this.setState({loading: true});
 		this.state.OwnedEverythingsContract.methods
-		.buyToken(tokenId)
+		.buyToken(tokenId,user_data.user_id)
 		.send({from: this.state.accountAddress, value: price})
 		.on("confirmation", () => {
 			this.setState({loading: false});

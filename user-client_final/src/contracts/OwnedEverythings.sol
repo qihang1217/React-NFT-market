@@ -25,6 +25,7 @@ contract OwnedEverythings is ERC721 {
         address payable mintedBy;
         address payable currentOwner;
         address payable previousOwner;
+        uint256 currentOwnerId;
         string _timestamp;
         string _traceAddresses;
         uint256 price;
@@ -125,7 +126,7 @@ contract OwnedEverythings is ERC721 {
 
 
     // 铸造一个新的代币
-    function mintownedeverything(string memory _name, string memory _tokenURI, uint256 _price, string[] calldata _colors, string memory _tokenType) external {
+    function mintownedeverything(string memory _name, string memory _tokenURI, uint256 _price, string[] calldata _colors, string memory _tokenType, uint256 _userId) external {
         // 检查函数调用者是否不是零地址帐户
         require(msg.sender != address(0));
         // 递增计数器
@@ -133,9 +134,10 @@ contract OwnedEverythings is ERC721 {
         // 检查是否存在具有上述代币 id => 递增计数器的代币
         require(!_exists(ownedeverythingCounter));
 
+        uint i = 0;
         if (isEqual(_tokenType,'color')){
             // 遍历传入的颜色并检查每种颜色是否已经存在
-            for (uint i = 0; i < _colors.length; i++) {
+            for (i=0; i < _colors.length; i++) {
                 require(!colorExists[_colors[i]]);
             }
         }
@@ -150,7 +152,7 @@ contract OwnedEverythings is ERC721 {
 
         if (isEqual(_tokenType, 'color')) {
             // 循环传入的颜色并使每种颜色都存在，因为代币已经铸造
-            for (uint i = 0; i < _colors.length; i++) {
+            for (i = 0; i < _colors.length; i++) {
                 colorExists[_colors[i]] = true;
             }
         }
@@ -165,6 +167,7 @@ contract OwnedEverythings is ERC721 {
             msg.sender,
             msg.sender,
             address(0),
+            _userId,
             uintToString(block.timestamp),
             addressToString(msg.sender),
             _price,
@@ -203,7 +206,7 @@ contract OwnedEverythings is ERC721 {
     }
 
     // 通过代币传递代币的 id
-    function buyToken(uint256 _tokenId) public payable {
+    function buyToken(uint256 _tokenId,uint256 _userId) public payable {
         // 检查函数调用者是不是零地址账户
         require(msg.sender != address(0));
         // 检查所购买代币的代币id是否存在
@@ -230,6 +233,7 @@ contract OwnedEverythings is ERC721 {
         ownedeverything.previousOwner = ownedeverything.currentOwner;
         // 更新令牌的当前所有者
         ownedeverything.currentOwner = msg.sender;
+        ownedeverything.currentOwnerId = _userId;
         // 将当前时间添加进时间戳数组中
         ownedeverything._timestamp = strConcat(allOwnedEverythings[_tokenId]._timestamp, ',', uintToString(block.timestamp));
         // 将当前所有者添加进拥有者数组中
