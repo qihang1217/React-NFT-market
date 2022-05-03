@@ -1,12 +1,10 @@
 import loadable from "../utils/Loadable";
-import ProductDetail from "../components/ProductDetail/ProductDetail";
-import MyAccountInformation from "../components/MyAccount/MyAccountInformation/MyAccountInformation";
-import MyWalletDetails from "../components/MyAccount/MyWalletDetails/MyWalletDetails";
 
 const App = loadable(() => import('../components/App'));
 const register = loadable(() => import('../pages/Register'));
 const Login = loadable(() => import('../pages/Login'));
 const ErrorPage = loadable(() => import('../components/ErrorPage/ErrorPage'));
+const ProductDetail = loadable(() => import('../components/ProductDetail/ProductDetail'));
 
 export const routerMap = [
 	{
@@ -46,28 +44,28 @@ export const routerMap = [
         component: App,
     },
 	{
-		path: "/my",
+		path: "/space",
 		component: App,
 		requiresAuth: true,
 		children: [
 			{
-				path: '/my/mintedTokens',
+				path: '/space/mintedTokens',
 				component: App,
 				requiresAuth: true,
 			},
 			{
-				path: '/my/allTokens',
+				path: '/space/allTokens',
 				component: App,
 				requiresAuth: true,
 			},
 			{
-				path: '/my/accountInfo',
-				component: MyAccountInformation,
+				path: '/space/accountInfo',
+				component: App,
 				requiresAuth: true,
 			},
 			{
-				path: '/my/walletDetails',
-				component: MyWalletDetails,
+				path: '/space/walletDetails',
+				component: App,
 				requiresAuth: true,
 			},
 		]
