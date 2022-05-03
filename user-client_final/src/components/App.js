@@ -477,7 +477,7 @@ class App extends Component {
 									)}
 								/>
 								<Route
-									path="/my"
+									path="/space"
 									render={() => (
 										this.state.isAuthenticated ? (
 											<MyAccount

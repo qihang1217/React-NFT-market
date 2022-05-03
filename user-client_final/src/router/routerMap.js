@@ -3,13 +3,13 @@ import loadable from "../utils/Loadable";
 const App = loadable(() => import('../components/App'));
 const register = loadable(() => import('../pages/Register'));
 const Login = loadable(() => import('../pages/Login'));
-const ErrorPage = loadable(() => import('../components/ErrorPage/ErrorPage'));
 const ProductDetail = loadable(() => import('../components/ProductDetail/ProductDetail'));
 
 export const routerMap = [
 	{
 		path: "/",
 		component: App,
+		exact: 'exact'
     },
 	{
 		path: "/mint",
@@ -30,11 +30,6 @@ export const routerMap = [
         path: "/marketplace",
         component: App,
     },
-	{
-		path: "/my-tokens",
-		component: App,
-		requiresAuth: true,
-	},
     {
         path: "/queries",
         component: App,
@@ -70,10 +65,6 @@ export const routerMap = [
 			},
 		]
 	},
-    {
-	    path: "/404",
-	    component: ErrorPage,
-    },
 	{
 		path: "/login",
 		component: Login,

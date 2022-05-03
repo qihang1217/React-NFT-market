@@ -27,7 +27,7 @@ class MyAccount extends Component {
 	onTabChanged = (key) => {
 		this.setState({tabKey: key});
 		this.props.history.replace({
-			pathname: '/my/' + key, state: {
+			pathname: '/space/' + key, state: {
 				tabKey: key
 			}
 		});

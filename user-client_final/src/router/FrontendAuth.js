@@ -1,5 +1,6 @@
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
+import ErrorPage from "../components/ErrorPage/ErrorPage";
 
 const FrontendAuth = (routes, authed, authPath = '/login', extraProps = {}, switchProps = {}) =>
     routes ? (
@@ -22,6 +23,7 @@ const FrontendAuth = (routes, authed, authPath = '/login', extraProps = {}, swit
                     }}
                 />
             ))}
+            <Route component={ErrorPage}/>
         </Switch>
     ) : null;
 

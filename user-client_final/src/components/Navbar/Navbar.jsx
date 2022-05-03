@@ -107,7 +107,7 @@ class Navbar extends Component {
                         >
                             <Menu.Item key="1" icon={<IdcardTwoTone/>}>
                                 <Link to={{
-                                    pathname: '/my/walletDetails',
+                                    pathname: '/space/walletDetails',
                                     state: {tabKey: 'walletDetails'}
                                 }}>
                                     主页
@@ -120,7 +120,7 @@ class Navbar extends Component {
                             {/*</Menu.Item>*/}
                             <Menu.Item key="3" icon={<BankTwoTone/>}>
                                 <Link to={{
-                                    pathname: '/my/allTokens',
+                                    pathname: '/space/allTokens',
                                     state: {tabKey: 'allTokens'}
                                 }}>
                                     我的NFT
