@@ -11,6 +11,7 @@ import storageUtils from "../../utils/storageUtils";
 import MyAccountInformation from "./MyAccountInformation/MyAccountInformation";
 import Paragraph from "antd/es/typography/Paragraph";
 import {withRouter} from "react-router-dom";
+import {reqOwnedProducts} from "../../api/API";
 
 const {TabPane} = Tabs;
 
@@ -24,10 +25,26 @@ class MyAccount extends Component {
 		}
 	}
 	
+	//获取个人拥有的nft数据
+	reqProductData = async () => {
+		let result
+		// 发请求获取数据
+		const userData = storageUtils.getUser()
+		const userId = userData['user_id']
+		result = await reqOwnedProducts(userId)
+		if (result.status === 0) {
+			// 取出数据
+			const {total, list} = result.data
+			// 更新状态
+			this.setState({total, list})
+		}
+	}
+	
 	onTabChanged = (key) => {
+		const userId = storageUtils.getUser().user_id
 		this.setState({tabKey: key});
 		this.props.history.replace({
-			pathname: '/space/' + key, state: {
+			pathname: `/space/${userId}/` + key, state: {
 				tabKey: key
 			}
 		});
@@ -36,6 +53,7 @@ class MyAccount extends Component {
 	componentDidMount() {
 		//清除外部的边界框
 		delete_padding()
+		this.reqProductData()
 	}
 	
 	componentWillUnmount() {
@@ -46,7 +64,7 @@ class MyAccount extends Component {
 	
 	render() {
 		const user = storageUtils.getUser()
-		console.log(this.props.location.state)
+		// console.log(this.props.location.state)
 		return (
 			<>
 				<div className='my-account'>
@@ -147,6 +165,8 @@ class MyAccount extends Component {
 										toggleForSale={this.props.toggleForSale}
 										changeTokenPrice={this.props.changeTokenPrice}
 										mintMyFileNFT={this.props.mintMyFileNFT}
+										list={this.state.list}
+										total={this.state.total}
 									/>
 								</div>
 							</TabPane>
@@ -171,6 +191,8 @@ class MyAccount extends Component {
 										}
 										toggleForSale={this.props.toggleForSale}
 										changeTokenPrice={this.props.changeTokenPrice}
+										list={this.state.list}
+										total={this.state.total}
 									/>
 								</div>
 							</TabPane>

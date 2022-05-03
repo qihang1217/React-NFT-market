@@ -28,5 +28,6 @@ export default class ApiUtil {
     static API_GET_COMMENTS = ApiUtil.URL_INTERFACE + '/comment/get';
     static API_ADD_COMMENT = ApiUtil.URL_INTERFACE + '/comment/add';
     static API_COMMENT_LIKE = ApiUtil.URL_INTERFACE + '/comment/like';
+    static API_PRODUCT_Open_Or_Close = ApiUtil.URL_INTERFACE + '/product/open';
     
 }

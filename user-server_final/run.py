@@ -243,6 +243,7 @@ def login_user():
     return jsonify(response)
 
 
+# 获取分类列表
 @app.route(apiPrefix + 'category/list', methods=['GET'], strict_slashes=False)
 def get_category_list():
     res, status = DBUtil.get_categories()
@@ -253,6 +254,7 @@ def get_category_list():
     return jsonify(response)
 
 
+# 获取个人拥有的产品
 @app.route(apiPrefix + 'product/own/list', methods=['GET'], strict_slashes=False)
 def get_own_product_list():
     args = request.args.to_dict()
@@ -266,6 +268,7 @@ def get_own_product_list():
     return jsonify(response)
 
 
+# 重新提交审核申请
 @app.route(apiPrefix + 'product/resubmit', methods=['POST'], strict_slashes=False)
 def resubmit_product():
     json_str = request.get_data(as_text=True)
@@ -280,6 +283,7 @@ def resubmit_product():
     return jsonify(response)
 
 
+# 删除产品
 @app.route(apiPrefix + 'product/delete', methods=['POST'], strict_slashes=False)
 def delete_product():
     json_str = request.get_data(as_text=True)
@@ -294,6 +298,7 @@ def delete_product():
     return jsonify(response)
 
 
+# 修改用户信息
 @app.route(apiPrefix + 'user/update_info', methods=['POST'], strict_slashes=False)
 def update_user_info():
     json_str = request.get_data(as_text=True)
@@ -354,6 +359,19 @@ def comment_like():
     action = args.get('action')
     comment_id = args.get('commentId')
     status = DBUtil.comment_like(comment_id,action)
+    response = {
+        'status': status,
+    }
+    return jsonify(response)
+
+
+# 修改可见性
+@app.route(apiPrefix + '/product/open', methods=['GET'], strict_slashes=False)
+def product_open():
+    args = request.args.to_dict()
+    action = args.get('action')
+    product_id = args.get('productId')
+    status = DBUtil.product_open(product_id,action)
     response = {
         'status': status,
     }

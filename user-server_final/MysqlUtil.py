@@ -97,6 +97,8 @@ class Products(db.Model, MixToJson):
     examine_status = db.Column(db.Boolean, default=False)
     # 用户有一次重复提交的机会
     usable_chances = db.Column(db.Integer, default=2)
+    # 公开状态
+    open_status = db.Column(db.Boolean, default=False)
     # 伪删除状态
     delete_status = db.Column(db.Boolean, default=False)
     # 铸造状态
@@ -295,7 +297,7 @@ def save_upload_product(product_data, upload_file_url, file_type):
     if introduction == 'undefined':
         introduction = ''
     product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, file_type=file_type,
-                       pass_status=False,
+                       pass_status=False,open_status=False,
                        examine_status=False, description=introduction, price=price, category_id=category_id)
     db.session.add(product)
     db.session.commit()
@@ -428,6 +430,24 @@ def comment_like(comment_id, action):
             comment.like_count = comment.like_count + 1
         elif action == 'reduce':
             comment.like_count = comment.like_count - 1
+        else:
+            return -1
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
+    finally:
+        db.session.close()
+
+
+def product_open(product_id, action):
+    try:
+        product = Products.query.filter(Products.product_id == product_id).first()
+        if action == 'open':
+            product.open_status = True
+        elif action == 'close':
+            product.open_status = False
         else:
             return -1
         db.session.commit()

@@ -38,27 +38,27 @@ export const routerMap = [
         component: App,
     },
 	{
-		path: "/space",
+		path: "/space/:id",
 		component: App,
 		requiresAuth: true,
 		children: [
 			{
-				path: '/space/mintedTokens',
+				path: '/space/:id/mintedTokens',
 				component: App,
 				requiresAuth: true,
 			},
 			{
-				path: '/space/allTokens',
+				path: '/space/:id/allTokens',
 				component: App,
 				requiresAuth: true,
 			},
 			{
-				path: '/space/accountInfo',
+				path: '/space/:id/accountInfo',
 				component: App,
 				requiresAuth: true,
 			},
 			{
-				path: '/space/walletDetails',
+				path: '/space/:id/walletDetails',
 				component: App,
 				requiresAuth: true,
 			},

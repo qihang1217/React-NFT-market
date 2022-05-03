@@ -41,7 +41,7 @@ class Navbar extends Component {
 
     //退出登陆
     logout = () => {
-        const isAuthenticated = storageUtils.getToken() ? true : false
+        const isAuthenticated = !!storageUtils.getToken()
         if (isAuthenticated) {
             //已登录
             // 显示确认提示
@@ -88,6 +88,7 @@ class Navbar extends Component {
 
     render() {
         const selectKey = this.props.location.pathname
+        const userId = storageUtils.getUser().user_id
         return (
             <Layout className="layout">
                 <Header theme="light">
@@ -107,7 +108,7 @@ class Navbar extends Component {
                         >
                             <Menu.Item key="1" icon={<IdcardTwoTone/>}>
                                 <Link to={{
-                                    pathname: '/space/walletDetails',
+                                    pathname: `/space/${userId}/walletDetails`,
                                     state: {tabKey: 'walletDetails'}
                                 }}>
                                     主页
@@ -120,7 +121,7 @@ class Navbar extends Component {
                             {/*</Menu.Item>*/}
                             <Menu.Item key="3" icon={<BankTwoTone/>}>
                                 <Link to={{
-                                    pathname: '/space/allTokens',
+                                    pathname: `/space/${userId}/allTokens`,
                                     state: {tabKey: 'allTokens'}
                                 }}>
                                     我的NFT
