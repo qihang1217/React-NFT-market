@@ -10,11 +10,28 @@ import MyWalletDetails from "./MyWalletDetails/MyWalletDetails"
 import storageUtils from "../../utils/storageUtils";
 import MyAccountInformation from "./MyAccountInformation/MyAccountInformation";
 import Paragraph from "antd/es/typography/Paragraph";
+import {Route, withRouter} from "react-router-dom";
 
 const {TabPane} = Tabs;
 
 
 class MyAccount extends Component {
+	
+	constructor(props) {
+		super(props);
+		this.state = {
+			tabKey: 'mintedTokens',
+		}
+	}
+	
+	onTabChanged = (key) => {
+		this.setState({tabKey: key});
+		this.props.history.replace({
+			pathname: '/my/' + key, state: {
+				tabKey: key
+			}
+		});
+	}
 	
 	componentDidMount() {
 		//清除外部的边界框
@@ -46,8 +63,16 @@ class MyAccount extends Component {
 											<div className="info-area-auth">
 												<span className="my-name">{user.user_name}</span>
 												<span className="address-info">
-													钱包账户地址<Paragraph copyable className="address-code"
-													                 id='code'>{this.props.accountAddress}</Paragraph>
+													钱包账户地址
+													<Paragraph
+														copyable={{
+															tooltips: ['复制您的钱包账户地址', '复制成功!'],
+														}}
+														className="address-code"
+														id='code'
+													>
+														{this.props.accountAddress}
+													</Paragraph>
                                                 </span>
 											</div>
 										</div>
@@ -61,7 +86,7 @@ class MyAccount extends Component {
 												<span className="type">粉丝</span>
 											</div>
 											<div className="item">
-												<span className="number">12</span>
+												<span className="number">{this.props.totalTokensOwnedByAccount}</span>
 												<span className="type">数藏万物</span>
 											</div>
 										</div>
@@ -69,7 +94,8 @@ class MyAccount extends Component {
 								</div>
 							</div>
 						</div>
-						<Tabs defaultActiveKey="1" className="tabs" centered size="large" tabBarGutter="90px">
+						<Tabs activeKey={this.state.tabKey} className="tabs" centered size="large" tabBarGutter="90px"
+						      onChange={this.onTabChanged}>
 							<TabPane
 								tab={
 									<span>
@@ -77,19 +103,21 @@ class MyAccount extends Component {
 										我的铸造
 									</span>
 								}
-								key="1"
+								key="mintedTokens"
 							>
 								<div className="tab1 tab">
-									<MyMintedTokens
-										connectToMetamask={this.props.connectToMetamask}
-										metamaskConnected={this.props.metamaskConnected}
-										contractDetected={this.props.contractDetected}
-										loading={this.props.loading}
-										accountAddress={this.props.accountAddress}
-										toggleForSale={this.props.toggleForSale}
-										changeTokenPrice={this.props.changeTokenPrice}
-										mintMyFileNFT={this.props.mintMyFileNFT}
-									/>
+									<Route exact path="/my/mintedTokens" render={() => (
+										<MyMintedTokens
+											connectToMetamask={this.props.connectToMetamask}
+											metamaskConnected={this.props.metamaskConnected}
+											contractDetected={this.props.contractDetected}
+											loading={this.props.loading}
+											accountAddress={this.props.accountAddress}
+											toggleForSale={this.props.toggleForSale}
+											changeTokenPrice={this.props.changeTokenPrice}
+											mintMyFileNFT={this.props.mintMyFileNFT}
+										/>
+									)}/>
 								</div>
 							</TabPane>
 							<TabPane
@@ -99,22 +127,23 @@ class MyAccount extends Component {
 										我的藏品
 									</span>
 								}
-								key="2"
+								key="allTokens"
 							>
 								<div className="tab2 tab">
-									<MyAllTokens
-										connectToMetamask={this.props.connectToMetamask}
-										metamaskConnected={this.props.metamaskConnected}
-										contractDetected={this.props.contractDetected}
-										loading={this.props.loading}
-										accountAddress={this.props.accountAddress}
-										totalTokensOwnedByAccount={
-											this.props.totalTokensOwnedByAccount
-										}
-										toggleForSale={this.props.toggleForSale}
-										changeTokenPrice={this.props.changeTokenPrice}
-										mintMyFileNFT={this.props.mintMyFileNFT}
-									/>
+									<Route exact path="/my/allTokens" render={() => (
+										<MyAllTokens
+											connectToMetamask={this.props.connectToMetamask}
+											metamaskConnected={this.props.metamaskConnected}
+											contractDetected={this.props.contractDetected}
+											loading={this.props.loading}
+											accountAddress={this.props.accountAddress}
+											totalTokensOwnedByAccount={
+												this.props.totalTokensOwnedByAccount
+											}
+											toggleForSale={this.props.toggleForSale}
+											changeTokenPrice={this.props.changeTokenPrice}
+										/>
+									)}/>
 								</div>
 							</TabPane>
 							<TabPane
@@ -124,10 +153,12 @@ class MyAccount extends Component {
 										我的账号
 									</span>
 								}
-								key="3"
+								key="accountInfo"
 							>
 								<div className="tab3 tab">
-									<MyAccountInformation/>
+									<Route exact path="/my/accountInfo" render={() => (
+										<MyAccountInformation/>
+									)}/>
 								</div>
 							</TabPane>
 							<TabPane
@@ -137,13 +168,15 @@ class MyAccount extends Component {
 										我的资产
 									</span>
 								}
-								key="4"
+								key="walletDetails"
 							>
 								<div className="tab4 tab">
-									<MyWalletDetails
-										accountAddress={this.props.accountAddress}
-										accountBalance={this.props.accountBalance}
-									/>
+									<Route exact path="/my/walletDetails" render={() => (
+										<MyWalletDetails
+											accountAddress={this.props.accountAddress}
+											accountBalance={this.props.accountBalance}
+										/>
+									)}/>
 								</div>
 							</TabPane>
 						</Tabs>
@@ -154,4 +187,4 @@ class MyAccount extends Component {
 	}
 }
 
-export default MyAccount;
+export default withRouter(MyAccount);

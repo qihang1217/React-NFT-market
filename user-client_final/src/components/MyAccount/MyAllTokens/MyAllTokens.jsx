@@ -20,7 +20,6 @@ const MyAllTokens = ({
 	                     totalTokensOwnedByAccount,
 	                     toggleForSale,
 	                     changeTokenPrice,
-	                     mintMyFileNFT,
                      }) => {
 	const [insideLoading, setInsideLoading] = useState(true);
 	const [chainDataCard, setChainDataCard] = useState([]);
