@@ -3,14 +3,7 @@ import icon from "./favicon-32x32.png";
 import {Link, withRouter} from "react-router-dom";
 import {Avatar, Layout, Menu, message, Modal} from 'antd';
 import "./Navbar.less"
-import {
-    BankTwoTone,
-    CloseSquareTwoTone,
-    HeartTwoTone,
-    IdcardTwoTone,
-    SettingTwoTone,
-    UserOutlined
-} from '@ant-design/icons';
+import {BankTwoTone, CloseSquareTwoTone, IdcardTwoTone, UserOutlined} from '@ant-design/icons';
 import storageUtils from "../../utils/storageUtils";
 
 const {Header} = Layout;
@@ -113,25 +106,31 @@ class Navbar extends Component {
                                  }
                         >
                             <Menu.Item key="1" icon={<IdcardTwoTone/>}>
-                                <Link to='/my'>
+                                <Link to={{
+                                    pathname: '/my/walletDetails',
+                                    state: {tabKey: 'walletDetails'}
+                                }}>
                                     主页
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<HeartTwoTone/>}>
-                                <Link to='/my'>
-                                    喜欢
-                                </Link>
-                            </Menu.Item>
+                            {/*<Menu.Item key="2" icon={<HeartTwoTone/>}>*/}
+                            {/*    <Link to='/my'>*/}
+                            {/*        喜欢*/}
+                            {/*    </Link>*/}
+                            {/*</Menu.Item>*/}
                             <Menu.Item key="3" icon={<BankTwoTone/>}>
-                                <Link to='/my'>
+                                <Link to={{
+                                    pathname: '/my/allTokens',
+                                    state: {tabKey: 'allTokens'}
+                                }}>
                                     我的NFT
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="4" icon={<SettingTwoTone/>}>
-                                <Link to='/'>
-                                    设置
-                                </Link>
-                            </Menu.Item>
+                            {/*<Menu.Item key="4" icon={<SettingTwoTone/>}>*/}
+                            {/*    <Link to='/'>*/}
+                            {/*        设置*/}
+                            {/*    </Link>*/}
+                            {/*</Menu.Item>*/}
                             <Menu.Item key="5" icon={<CloseSquareTwoTone/>} onClick={this.logout}>
                                 <Link to='/'>
                                     退出登陆

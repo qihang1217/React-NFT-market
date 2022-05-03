@@ -8,14 +8,20 @@ import ReactDOM from "react-dom";
 import FrontendAuth from "./router/FrontendAuth";
 import {ConfigProvider} from "antd";
 import zhCN from "antd/lib/locale/zh_CN"
+import storageUtils from "./utils/storageUtils";
 
+
+var isLogin = false
+if (storageUtils.getToken()) {
+    isLogin = true;
+}
 ReactDOM.render(
     <ConfigProvider locale={zhCN}>
         <React.StrictMode>
             <Router>
                 <Switch>
                     {/*利用高阶组件进行路由有效性检验和响应跳转*/}
-                    <FrontendAuth routerConfig={routerMap}/>
+                    {FrontendAuth(routerMap, isLogin)}
                 </Switch>
             </Router>
         </React.StrictMode>
