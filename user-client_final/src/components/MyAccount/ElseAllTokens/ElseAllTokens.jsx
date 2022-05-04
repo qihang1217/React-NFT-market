@@ -9,6 +9,7 @@ import storageUtils from "../../../utils/storageUtils";
 import {card_cols} from "../../../constants/constants";
 import {reqOwnedProducts} from "../../../api/API";
 
+
 const empty = require('../../MyTokenDetail/empty.svg')
 
 const ElseAllTokens = ({
@@ -16,12 +17,11 @@ const ElseAllTokens = ({
 	                       metamaskConnected,
 	                       contractDetected,
 	                       loading,
-	                       list,
 	                       targetUserId,
                        }) => {
 	const [insideLoading, setInsideLoading] = useState(true);
 	const [chainDataCard, setChainDataCard] = useState([]);
-	const [elseProducts, setElseProducts] = useState(list);
+	const [elseProducts, setElseProducts] = useState([]);
 	
 	const OwnedEverythings = storageUtils.getProducts()
 	
@@ -55,9 +55,11 @@ const ElseAllTokens = ({
 						const current_product = elseProducts.find(inItem => {
 							return (inItem.product_id === item.metaData.productId)
 						})
-						//将不显示的数据设置为null
-						if (!current_product.open_status) {
-							return null
+						if (current_product) {
+							//将不显示的数据设置为null
+							if (!current_product.open_status) {
+								return null
+							}
 						}
 						let {
 							tokenName,
@@ -65,7 +67,8 @@ const ElseAllTokens = ({
 						} = item;
 						price = parseInt(price._hex, 16).toString()
 						const tokenId = parseInt(item.tokenId._hex, 16)
-						return (<Col span={card_cols}>
+						return (
+							<Col span={card_cols}>
 								<Card
 									className='inside-card'
 									hoverable
@@ -111,7 +114,7 @@ const ElseAllTokens = ({
 				tempChainDataCard = tempChainDataCard.filter((item) =>
 					item !== null
 				)
-				console.log(tempChainDataCard)
+				// console.log(tempChainDataCard)
 				setChainDataCard(tempChainDataCard)
 				setInsideLoading(false)
 			}
@@ -140,8 +143,9 @@ const ElseAllTokens = ({
 					<span>Ta的所收藏的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
 				</div>
 				<Card title="已上链的NFT" extra={
-					<span>总数:{ElseOwnedEverythings.length} 不可见:{ElseOwnedEverythings.length - chainDataCard.length}</span>}>
-					{!ElseOwnedEverythings.length ? (
+					<span>总数:{ElseOwnedEverythings.length} 可见数:{chainDataCard.length}</span>}
+				>
+					{!(chainDataCard.length) ? (
 							<Empty
 								image={empty}
 								imageStyle={{
@@ -157,7 +161,6 @@ const ElseAllTokens = ({
 							</Row>
 						)}
 				</Card>
-			
 			</div>)
 	);
 };
