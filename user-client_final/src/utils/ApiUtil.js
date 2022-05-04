@@ -30,5 +30,7 @@ export default class ApiUtil {
     static API_COMMENT_LIKE = ApiUtil.URL_INTERFACE + '/comment/like';
     static API_PRODUCT_OPEN_OR_CLOSE = ApiUtil.URL_INTERFACE + '/product/open';
     static API_USER_BY_ID = ApiUtil.URL_INTERFACE + '/user/id';
+    static API_PRODUCT_LIKE = ApiUtil.URL_INTERFACE + '/product/like';
+    static API_PRODUCT_ViEW = ApiUtil.URL_INTERFACE + '/product/view';
     
 }

@@ -2,7 +2,7 @@ import {Avatar, Comment, Tooltip} from "antd";
 import moment from "moment";
 import React, {createElement, useState} from "react";
 import {LikeFilled, LikeOutlined} from "@ant-design/icons";
-import {reqLike} from "../../api/API";
+import {reqCommentLike} from "../../api/API";
 
 const EnhancedComment = ({comment}) => {
 	const [likes, setLikes] = useState(comment.like_count);
@@ -13,11 +13,11 @@ const EnhancedComment = ({comment}) => {
 		if (action === null) {
 			setLikes(likes + 1);
 			setAction('liked');
-			result = await reqLike(comment.comment_id, 'add')
+			result = await reqCommentLike(comment.comment_id, 'add')
 		} else {
 			setLikes(likes - 1);
 			setAction(null);
-			result = await reqLike(comment.comment_id, 'reduce')
+			result = await reqCommentLike(comment.comment_id, 'reduce')
 		}
 		console.log(result)
 	};

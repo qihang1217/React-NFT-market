@@ -378,7 +378,7 @@ def product_open():
     return jsonify(response)
 
 
-# 修改可见性
+# 根据用户id获取用户信息
 @app.route(apiPrefix + '/user/id', methods=['GET'], strict_slashes=False)
 def get_user_by_id():
     args = request.args.to_dict()
@@ -387,6 +387,44 @@ def get_user_by_id():
     response = {
         'status': status,
         'data': res,
+    }
+    return jsonify(response)
+
+
+# 作品点赞
+@app.route(apiPrefix + '/product/like', methods=['GET'], strict_slashes=False)
+def product_like():
+    args = request.args.to_dict()
+    action = args.get('action')
+    product_id = args.get('productId')
+    status = DBUtil.product_like(product_id,action)
+    response = {
+        'status': status,
+    }
+    return jsonify(response)
+
+
+# 根据用户id获取用户信息
+@app.route(apiPrefix + '/product/id', methods=['GET'], strict_slashes=False)
+def get_product_by_id():
+    args = request.args.to_dict()
+    product_id = args.get('productId')
+    res,status = DBUtil.get_product_by_id(product_id)
+    response = {
+        'status': status,
+        'data': res,
+    }
+    return jsonify(response)
+
+
+# 作品浏览
+@app.route(apiPrefix + '/product/view', methods=['GET'], strict_slashes=False)
+def product_view():
+    args = request.args.to_dict()
+    product_id = args.get('productId')
+    status = DBUtil.product_view(product_id)
+    response = {
+        'status': status,
     }
     return jsonify(response)
 

@@ -89,8 +89,8 @@ export const reqAddComment = (timestamp, userId, userName, productId, commentCon
     return HttpUtil.post(ApiUtil.API_ADD_COMMENT, {timestamp, userId, userName, productId, commentContent})
 }
 
-// 点赞和取消点赞
-export const reqLike = (commentId, action) => {
+// 评论点赞和取消点赞
+export const reqCommentLike = (commentId, action) => {
     return HttpUtil.get(ApiUtil.API_COMMENT_LIKE + `?commentId=${commentId}&action=${action}`)
 }
 
@@ -102,4 +102,14 @@ export const reqOpenOrClose = (productId, action) => {
 // 根据用户id获取用户数据
 export const reqUserById = (userId) => {
     return HttpUtil.get(ApiUtil.API_USER_BY_ID + `?userId=${userId}`)
+}
+
+// 作品点赞和取消点赞
+export const reqProductLike = (productId, action) => {
+    return HttpUtil.get(ApiUtil.API_PRODUCT_LIKE + `?productId=${productId}&action=${action}`)
+}
+
+// 浏览量加1
+export const reqProductView = (productId) => {
+    return HttpUtil.get(ApiUtil.API_PRODUCT_ViEW + `?productId=${productId}`)
 }

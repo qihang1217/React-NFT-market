@@ -108,6 +108,8 @@ class Products(db.Model, MixToJson):
     file_type = db.Column(db.String(100))
     description = db.Column(db.Text)
     category_id = db.Column(db.Integer, db.ForeignKey('Categories.category_id'))
+    like_count = db.Column(db.Integer, default=0)
+    view_count = db.Column(db.Integer, default=0)
 
 
 class Comments(db.Model, MixToJson):
@@ -467,5 +469,36 @@ def get_user_by_id(user_id):
     except Exception as e:
         print(repr(e))
         return [{}],-1
+    finally:
+        db.session.close()
+
+
+def product_like(product_id, action):
+    try:
+        product = Products.query.filter(Products.product_id == product_id).first()
+        if action == 'add':
+            product.like_count = product.like_count + 1
+        elif action == 'reduce':
+            product.like_count = product.like_count - 1
+        else:
+            return -1
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
+    finally:
+        db.session.close()
+
+
+def product_view(product_id):
+    try:
+        product = Products.query.filter(Products.product_id == product_id).first()
+        product.view_count = product.view_count + 1
+        db.session.commit()
+        return 0
+    except Exception as e:
+        print(repr(e))
+        return -1
     finally:
         db.session.close()

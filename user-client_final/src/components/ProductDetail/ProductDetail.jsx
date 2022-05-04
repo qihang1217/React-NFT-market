@@ -1,11 +1,27 @@
 import React, {Component} from "react";
-import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, message, Row, Timeline} from "antd";
-import {EyeOutlined, HistoryOutlined, LockOutlined, MailOutlined, SmileOutlined, StarOutlined} from '@ant-design/icons';
+import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, message, Row, Timeline, Tooltip} from "antd";
+import {
+	EyeOutlined,
+	HeartFilled,
+	HeartOutlined,
+	HistoryOutlined,
+	LockOutlined,
+	MailOutlined,
+	SmileOutlined,
+} from '@ant-design/icons';
 import './PorductDetail.less'
 import moment from 'moment';
 import storageUtils from "../../utils/storageUtils";
 import loading from "../../components/Loading/Loading";
-import {reqAddComment, reqCategory, reqComments, reqUserById} from "../../api/API";
+import {
+	reqAddComment,
+	reqCategory,
+	reqComments,
+	reqProduct,
+	reqProductLike,
+	reqProductView,
+	reqUserById
+} from "../../api/API";
 import FileViewer from "react-file-viewer";
 import EnhancedComment from "./EnhancedComment";
 import {Link} from "react-router-dom";
@@ -55,6 +71,11 @@ class ProductDetail extends Component {
 		commentContent: '',
 		categoryName: '',
 		userData: '',
+		productLikeAction: null,
+		productLike: 0,
+		productView: 0,
+		productData: {},
+		startTime: +new Date(),
 	};
 	
 	handleCommentSubmit = async () => {
@@ -85,7 +106,7 @@ class ProductDetail extends Component {
 		});
 	};
 	
-	async initProduct() {
+	async initChainProduct() {
 		//从路由url获取tokenId
 		const id = this.props.match.params.id
 		//从store中获取products
@@ -98,6 +119,7 @@ class ProductDetail extends Component {
 				parseInt(currentProduct.price._hex, 16).toString(),
 				"Ether"
 			)
+			this.state.productId = currentProduct.metaData.productId
 			this.state.workName = currentProduct.tokenName
 			this.state.description = currentProduct.metaData.description
 			this.state.categoryId = currentProduct.metaData.categoryId
@@ -135,6 +157,19 @@ class ProductDetail extends Component {
 				})
 			}
 			await this.getCategory(currentProduct.metaData.categoryId)
+		}
+	}
+	
+	async initProduct() {
+		const productId = this.state.currentProduct.metaData.productId
+		const result = await reqProduct(productId)
+		// console.log(result)
+		if (result.status === 0) {
+			this.setState({
+				productData: result.data,
+				productView: result.data.view_count,
+				productLike: result.data.like_count,
+			})
 		}
 	}
 	
@@ -201,10 +236,39 @@ class ProductDetail extends Component {
 		}
 	}
 	
+	
+	likesProduct = async () => {
+		let result;
+		console.log(this.state.productId)
+		if (this.state.productLikeAction === null) {
+			this.setState({productLike: this.state.productLike + 1, productLikeAction: 'liked'})
+			result = await reqProductLike(this.state.productId, 'add')
+		} else {
+			this.setState({productLike: this.state.productLike - 1, productLikeAction: null})
+			result = await reqProductLike(this.state.productId, 'reduce')
+		}
+		console.log(result)
+	}
+	
+	increaseView = async () => {
+		const result = await reqProductView(this.state.productId)
+		console.log(result)
+	}
+	
 	componentDidMount() {
+		this.initChainProduct()
 		this.initProduct()
 		this.initComments()
 		this.reqUserData(parseInt(this.state.currentProduct.currentOwnerId._hex, 16))
+		
+	}
+	
+	componentWillUnmount() {
+		const endTime = +new Date()
+		// 大概停留时间大于10秒,则浏览量+1
+		if ((endTime - this.state.startTime) / 1000 >= 10) {
+			this.increaseView()
+		}
 	}
 	
 	render() {
@@ -237,10 +301,15 @@ class ProductDetail extends Component {
 									<div className='view-like'>
 										<div className='right-content'>
 											<div className='view'>
-												<EyeOutlined/> 1
+												<Tooltip title={`${this.state.productData.view_count}次查看`}>
+													<span><EyeOutlined/> {this.state.productData.view_count}</span>
+												</Tooltip>
 											</div>
 											<div className='like'>
-												<StarOutlined/> 0
+												<Button onClick={() => this.likesProduct()}>
+													<span>{this.state.productLikeAction === 'liked' ? <HeartFilled/> :
+														<HeartOutlined/>} {this.state.productLike}</span>
+												</Button>
 											</div>
 										</div>
 									</div>
