@@ -295,7 +295,12 @@ class ProductDetail extends Component {
 										        src={<img src="https://joeschmoe.io/api/v1/random" alt={'头像'}/>}/>
 									</Link>
 									<div className='user-des'>
-										<p>{this.state.userData.user_name}</p>
+										<Link to={{
+											pathname: `/space/${parseInt(currentProduct.currentOwnerId._hex, 16)}/allTokens`,
+											state: {tabKey: 'allTokens'}
+										}}>
+											<p style={{color: '#000'}}>{this.state.userData.user_name}</p>
+										</Link>
 										<Button type='primary'>关注</Button>
 									</div>
 									<div className='view-like'>
