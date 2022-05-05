@@ -4,8 +4,12 @@
 
   .product-content {
     .file-content {
-      width: 80%;
+      width: 100%;
       margin: 0 auto;
+
+      * {
+        max-width: 100%
+      }
     }
 
     .name-content {
@@ -102,6 +106,20 @@
   }
 
   .comment-container {
+
+    .comment-header {
+      margin-bottom: 10px;
+
+      .comment-header-title {
+        font-weight: 400;
+        font-size: 18px;
+
+        .comment-number {
+          margin-right: 10px;
+        }
+      }
+    }
+
     .comment-action {
       padding-left: 8px;
     }

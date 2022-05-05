@@ -65,8 +65,8 @@ export const reqProductMint = (productId) => {
 }
 
 //根据NFT ID确认铸造成功
-export const reqConfirmMinted = (productId) => {
-    return HttpUtil.get(ApiUtil.API_CONFIRM_MINTED + `?productId=${productId}`)
+export const reqConfirmMinted = (productId, tokenURI) => {
+    return HttpUtil.get(ApiUtil.API_CONFIRM_MINTED + `?productId=${productId}&tokenURI=${tokenURI}`)
 }
 
 //更新用户个人信息

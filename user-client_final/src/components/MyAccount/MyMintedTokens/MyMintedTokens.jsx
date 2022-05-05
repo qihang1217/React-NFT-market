@@ -26,10 +26,11 @@ const MyMintedTokens = ({
 	                        total,
                         }) => {
 	const [insideLoading, setInsideLoading] = useState(true);
-	const [products, setProducts] = useState(list);
-	const [productTotal, setProductTotal] = useState(total);
+	const [products, setProducts] = useState([]);
+	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);
 	const [chainDataCard, setChainDataCard] = useState([]);
+	
 	const OwnedEverythings = storageUtils.getProducts()
 	let MyOwnedEverythings = []
 	if (OwnedEverythings) {
@@ -37,6 +38,7 @@ const MyMintedTokens = ({
 			OwnedEverything.currentOwner === accountAddress && OwnedEverything.mintedBy === accountAddress
 		);
 	}
+	let previewContent
 	
 	const loadNftData = (OwnedEverythings) => {
 		if (OwnedEverythings) {
@@ -44,6 +46,7 @@ const MyMintedTokens = ({
 				setProducts(list)
 				setProductTotal(total)
 				//筛选出个人所拥有的数藏万物
+				
 				const ChainDataCard = MyOwnedEverythings.map((item) => {
 					let {
 						tokenName,
@@ -128,6 +131,12 @@ const MyMintedTokens = ({
 							const open_status_button_style = (accountAddress === item.currentOwner) ?
 								(!!openStatus) : null
 							const tokenId = parseInt(item.tokenId._hex, 16)
+							
+							const filename = item.metaData.fileUrl
+							const ext = filename.substring(filename.lastIndexOf('.') + 1);
+							const filetype = item.metaData.fileType
+							const src = item.metaData.tokenUrl
+							previewContent = setPreview(item, filename, ext, filetype, src)
 							return (<Col span={CARD_COLS}>
 									<Card
 										className='inside-card'
@@ -149,6 +158,7 @@ const MyMintedTokens = ({
 																: ""
 														}
 														tokenId={tokenId}
+														previewContent={previewContent}
 													/>
 												)
 										) : (
@@ -226,6 +236,50 @@ const MyMintedTokens = ({
 		}
 	}
 	
+	const setControlsPreview = (item, filename, ext, filetype, src) => {
+		previewContent = (
+			<FileViewer
+				fileType={ext}
+				filePath={src}
+			/>
+		)
+		if (/^image\/\S+$/.test(filetype)) {
+			previewContent = (<img src={src} alt={filename} className='file'/>)
+		} else if (/^video\/\S+$/.test(filetype)) {
+			previewContent = (<video src={src} loop preload controls className='file'/>)
+		} else if (/^audio\/\S+$/.test(filetype)) {
+			previewContent = (
+				<audio controls preload className='file'>
+					<source src={src}/>
+					<embed src={src}/>
+				</audio>
+			)
+		}
+		return previewContent
+	}
+	
+	const setPreview = (item, filename, ext, filetype, src) => {
+		previewContent = (
+			<FileViewer
+				fileType={ext}
+				filePath={src}
+			/>
+		)
+		if (/^image\/\S+$/.test(filetype)) {
+			previewContent = (<img src={src} alt={filename} className='file'/>)
+		} else if (/^video\/\S+$/.test(filetype)) {
+			previewContent = (<video src={src} loop preload className='file'/>)
+		} else if (/^audio\/\S+$/.test(filetype)) {
+			previewContent = (
+				<audio preload className='file'>
+					<source src={src}/>
+					<embed src={src}/>
+				</audio>
+			)
+		}
+		return previewContent
+	}
+	
 	//加载个人在链上拥有的nft数据
 	useEffect(() => {
 		loadNftData(OwnedEverythings)
@@ -234,6 +288,8 @@ const MyMintedTokens = ({
 	
 	//获取个人拥有的nft数据后进行渲染
 	useEffect(() => {
+		setProducts(list)
+		setProductTotal(total)
 		if (products) {
 			const productCard = products.map((item) => {
 				//处理铸造或者重新提交
@@ -254,7 +310,7 @@ const MyMintedTokens = ({
 						if (status === 0) {
 							//	表示铸造成功
 							// console.log('铸造成功')
-							const status = await reqConfirmMinted(productId)
+							const status = await reqConfirmMinted(productId, tokenURI)
 							if (status.status === 0) {
 								const submitButton = document.getElementById(item.product_id)
 								submitButton.setAttribute('disabled', true)
@@ -364,26 +420,7 @@ const MyMintedTokens = ({
 				const ext = filename.substring(filename.lastIndexOf('.') + 1);
 				const filetype = item.file_type
 				const src = ApiUtil.API_FILE_URL + filename
-				let previewContent
-				if (/^image\/\S+$/.test(filetype)) {
-					previewContent = (<img src={src} alt={filename} className='file'/>)
-				} else if (/^video\/\S+$/.test(filetype)) {
-					previewContent = (<video src={src} loop preload controls className='file'/>)
-				} else if (/^audio\/\S+$/.test(filetype)) {
-					previewContent = (
-						<audio controls preload className='file'>
-							<source src={src}/>
-							<embed src={src}/>
-						</audio>
-					)
-				} else {
-					previewContent = (
-						<FileViewer
-							fileType={ext}
-							filePath={src}
-						/>
-					)
-				}
+				previewContent = setControlsPreview(item, filename, ext, filetype, src)
 				return (
 					<Col span={CARD_COLS} key={item.product_id}>
 						<Card
@@ -434,7 +471,7 @@ const MyMintedTokens = ({
 			})
 			setProductCard(productCard)
 		}
-	}, [products]);
+	}, [products, list]);
 	
 	return (
 		!metamaskConnected ? (

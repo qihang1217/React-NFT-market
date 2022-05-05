@@ -106,6 +106,7 @@ class Products(db.Model, MixToJson):
     # 防止文件名可能的重复
     file_url = db.Column(db.String(30), unique=True)
     file_type = db.Column(db.String(100))
+    token_url = db.Column(db.String(80), unique=True)
     description = db.Column(db.Text)
     category_id = db.Column(db.Integer, db.ForeignKey('Categories.category_id'))
     like_count = db.Column(db.Integer, default=0)
@@ -299,7 +300,7 @@ def save_upload_product(product_data, upload_file_url, file_type):
     if introduction == 'undefined':
         introduction = ''
     product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, file_type=file_type,
-                       pass_status=False,open_status=False,
+                       pass_status=False, open_status=False,
                        examine_status=False, description=introduction, price=price, category_id=category_id)
     db.session.add(product)
     db.session.commit()
@@ -361,9 +362,10 @@ def get_product_by_id(product_id):
         db.session.close()
 
 
-def set_minted_product_by_id(product_id):
+def set_minted_product_by_id(product_id, token_url):
     try:
-        Products.query.filter(Products.product_id == product_id).update({Products.mint_status: True})
+        Products.query.filter(Products.product_id == product_id).update(
+            {Products.mint_status: True, Products.token_url: token_url})
         db.session.commit()
         return 0
     except Exception as e:
@@ -465,10 +467,10 @@ def get_user_by_id(user_id):
     try:
         user = Users.query.filter(Users.user_id == user_id).first()
         db.session.commit()
-        return user.single_to_dict(),0
+        return user.single_to_dict(), 0
     except Exception as e:
         print(repr(e))
-        return [{}],-1
+        return [{}], -1
     finally:
         db.session.close()
 

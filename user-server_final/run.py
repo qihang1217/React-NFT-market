@@ -104,8 +104,9 @@ def upload_mint():
 def confirm_minted():
     args = request.args.to_dict()
     product_id = args.get('productId')
+    token_url = args.get('tokenURI')
     # 修改其状态为已铸造
-    status = DBUtil.set_minted_product_by_id(product_id)
+    status = DBUtil.set_minted_product_by_id(product_id,token_url)
     response = {
         'status': status,
     }

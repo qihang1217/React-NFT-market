@@ -8,6 +8,7 @@ import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
 import {CARD_COLS} from "../../../constants/constants";
 import {reqOpenOrClose} from "../../../api/API";
+import FileViewer from 'react-file-viewer';
 
 const empty = require('../image/empty.svg')
 
@@ -24,12 +25,37 @@ const MyAllTokens = ({
 	const [insideLoading, setInsideLoading] = useState(true);
 	const [chainDataCard, setChainDataCard] = useState([]);
 	const [products, setProducts] = useState(list);
+	
 	const OwnedEverythings = storageUtils.getProducts()
 	let MyOwnedEverythings = []
 	if (OwnedEverythings) {
 		MyOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
 			OwnedEverything.currentOwner === accountAddress
 		);
+	}
+	
+	let previewContent
+	
+	const setPreview = (item, filename, ext, filetype, src) => {
+		previewContent = (
+			<FileViewer
+				fileType={ext}
+				filePath={src}
+			/>
+		)
+		if (/^image\/\S+$/.test(filetype)) {
+			previewContent = (<img src={src} alt={filename} className='file'/>)
+		} else if (/^video\/\S+$/.test(filetype)) {
+			previewContent = (<video src={src} loop preload className='file'/>)
+		} else if (/^audio\/\S+$/.test(filetype)) {
+			previewContent = (
+				<audio preload className='file'>
+					<source src={src}/>
+					<embed src={src}/>
+				</audio>
+			)
+		}
+		return previewContent
 	}
 	
 	const loadNftData = (OwnedEverythings) => {
@@ -107,6 +133,11 @@ const MyAllTokens = ({
 						(item.forSale ? ('下架') : ('上架')) : null
 					const sale_status_button_style = (accountAddress === item.currentOwner) ?
 						(!!item.forSale) : null
+					const filename = item.metaData.fileUrl
+					const ext = filename.substring(filename.lastIndexOf('.') + 1);
+					const filetype = item.metaData.fileType
+					const src = item.metaData.tokenUrl
+					previewContent = setPreview(item, filename, ext, filetype, src)
 					
 					if (products) {
 						const current_product = products.find(inItem => {
@@ -142,6 +173,7 @@ const MyAllTokens = ({
 																: ""
 														}
 														tokenId={tokenId}
+														previewContent={previewContent}
 													/>
 												)
 										) : (

@@ -334,6 +334,8 @@ class UploadMint extends React.Component{
                     </Form.Item>
                 </Form>
                 <Modal
+                    className='preview-modal'
+                    width='600px'
                     visible={previewVisible}
                     title={previewTitle}
                     okText='确定使用'

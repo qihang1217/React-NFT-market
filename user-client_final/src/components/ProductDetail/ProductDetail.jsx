@@ -1,5 +1,19 @@
 import React, {Component} from "react";
-import {Avatar, Button, Card, Col, Collapse, Comment, Form, Input, message, Row, Timeline, Tooltip} from "antd";
+import {
+	Avatar,
+	Button,
+	Card,
+	Col,
+	Collapse,
+	Comment,
+	Divider,
+	Form,
+	Input,
+	message,
+	Row,
+	Timeline,
+	Tooltip
+} from "antd";
 import {
 	EyeOutlined,
 	HeartFilled,
@@ -95,6 +109,10 @@ class ProductDetail extends Component {
 		const result = await reqAddComment(timestamp, userId, userName, productId, commentContent)
 		if (result.status === 0) {
 			message.success('评论成功')
+			this.setState({
+				submitting: false,
+				commentContent: '',
+			})
 			await this.initComments()
 		}
 		
@@ -276,7 +294,7 @@ class ProductDetail extends Component {
 		return (
 			currentProduct ?
 				(<div className='product-detail'>
-					<Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+					<Row gutter={24}>
 						<Col md={12}>
 							<div className='product-content'>
 								<div className='file-content'>
@@ -286,6 +304,7 @@ class ProductDetail extends Component {
 									<p className='name-title'>{this.state.workName}</p>
 									<span>{this.state.categoryName}</span>
 								</div>
+								<Divider/>
 								<div className='user-content'>
 									<Link to={{
 										pathname: `/space/${parseInt(currentProduct.currentOwnerId._hex, 16)}/allTokens`,
@@ -323,7 +342,6 @@ class ProductDetail extends Component {
 									<p>{this.state.description}</p>
 								</div>
 							</div>
-						
 						</Col>
 						<Col md={12}>
 							<Card>
@@ -421,7 +439,16 @@ class ProductDetail extends Component {
 							</div>
 						</Col>
 					</Row>
+					{/*评论区分割线*/}
+					<Divider/>
+					
 					<div className='comment-container'>
+						<div className='comment-header'>
+							<span className='comment-header-title'>
+								<span className='comment-number'>{comments.length}</span>
+								评论
+							</span>
+						</div>
 						{comments.length > 0 && comments.map(item => {
 							return (<EnhancedComment comment={item}/>)
 						})

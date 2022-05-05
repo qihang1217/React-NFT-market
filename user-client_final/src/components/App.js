@@ -140,21 +140,19 @@ class App extends Component {
 	//获取在ifps上存放的源数据,并且添加到state中
 	setMetaData = async () => {
 		const data = this.state.OwnedEverythings
-		if (data.length !== 0) {
-			let res = await Promise.all(data.map(async (ownedEverything) => {
-				const result = await fetch(ownedEverything.tokenURI);
-				const metaData = await result.json();
-				if (ownedEverything.tokenId.toNumber() === Number(metaData.tokenId)) {
-					ownedEverything = {
-						...ownedEverything,
-						metaData,
-					}
+		let res = await Promise.all(data.map(async (ownedEverything) => {
+			const result = await fetch(ownedEverything.tokenURI);
+			const metaData = await result.json();
+			if (ownedEverything.tokenId.toNumber() === Number(metaData.tokenId)) {
+				ownedEverything = {
+					...ownedEverything,
+					metaData,
 				}
-				return ownedEverything
-			}));
-			storageUtils.saveProducts(res)
-			storageUtils.saveFinish(true)
-		}
+			}
+			return ownedEverything
+		}));
+		storageUtils.saveProducts(res)
+		storageUtils.saveFinish(true)
 	}
 	
 	
@@ -275,6 +273,7 @@ class App extends Component {
 				description,
 				fileType: file_type,
 				fileUrl: file_url,
+				tokenUrl: file_tokenURl,
 				deleteStatus: delete_status,
 				examineStatus: examine_status,
 				passStatus: pass_status,
