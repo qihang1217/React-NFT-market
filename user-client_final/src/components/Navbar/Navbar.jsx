@@ -3,7 +3,7 @@ import icon from "./favicon-32x32.png";
 import {Link, withRouter} from "react-router-dom";
 import {Avatar, Layout, Menu, message, Modal} from 'antd';
 import "./Navbar.less"
-import {BankTwoTone, CloseSquareTwoTone, IdcardTwoTone, UserOutlined} from '@ant-design/icons';
+import {BankTwoTone, CloseSquareTwoTone, IdcardTwoTone, PayCircleOutlined, UserOutlined} from '@ant-design/icons';
 import storageUtils from "../../utils/storageUtils";
 
 const {Header} = Layout;
@@ -114,11 +114,15 @@ class Navbar extends Component {
                                     主页
                                 </Link>
                             </Menu.Item>
-                            {/*<Menu.Item key="2" icon={<HeartTwoTone/>}>*/}
-                            {/*    <Link to='/my'>*/}
-                            {/*        喜欢*/}
-                            {/*    </Link>*/}
-                            {/*</Menu.Item>*/}
+                            <Menu.Item key="2" style={{color: '#1890ff'}} icon={<PayCircleOutlined/>}>
+                                <Link to={{
+                                    pathname: `/space/${userId}/walletDetails`,
+                                    state: {tabKey: 'walletDetails'}
+                                }}
+                                >
+                                    我的资产
+                                </Link>
+                            </Menu.Item>
                             <Menu.Item key="3" icon={<BankTwoTone/>}>
                                 <Link to={{
                                     pathname: `/space/${userId}/allTokens`,
