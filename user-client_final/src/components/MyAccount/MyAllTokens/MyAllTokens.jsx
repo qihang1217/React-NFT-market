@@ -29,12 +29,13 @@ const MyAllTokens = ({
 			OwnedEverything.currentOwner === accountAddress
 		);
 	}
+	
 	const loadNftData = (OwnedEverythings) => {
 		if (OwnedEverythings) {
 			if (OwnedEverythings.length !== 0) {
 				setProducts(list)
 				//筛选出个人所拥有的数藏万物
-				const ChainDataCard = MyOwnedEverythings.map((item) => {
+				setChainDataCard(MyOwnedEverythings.map((item) => {
 						return (
 							<ChainTokenItem
 								item={item}
@@ -46,8 +47,8 @@ const MyAllTokens = ({
 							/>
 						)
 					}
-				)
-				setChainDataCard(ChainDataCard)
+				))
+				//加载完毕
 				setInsideLoading(false)
 			}
 		}

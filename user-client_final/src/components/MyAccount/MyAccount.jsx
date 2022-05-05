@@ -40,6 +40,7 @@ class MyAccount extends Component {
 			// 取出数据
 			const {total, list} = result.data
 			// 更新状态
+			console.log(this.state)
 			this.setState({myProductsTotal: total, myProductsList: list})
 		}
 	}
@@ -193,6 +194,7 @@ class MyAccount extends Component {
 												toggleForSale={this.props.toggleForSale}
 												changeTokenPrice={this.props.changeTokenPrice}
 												mintMyFileNFT={this.props.mintMyFileNFT}
+												reqProductData={this.reqProductData}
 												list={this.state.myProductsList}
 												total={this.state.myProductsTotal}
 											/>

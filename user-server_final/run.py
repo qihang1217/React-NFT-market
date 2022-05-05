@@ -89,9 +89,6 @@ def upload_mint():
         cid = ipfs.add(filename)
         # print(cid)
         tokenURI = 'http://127.0.0.1:8080/ipfs/' + cid.get('Hash')
-        # print(tokenURI)
-        # 修改其状态为已铸造
-        # status = DBUtil.set_minted_product_by_id(product_id)
     response = {
         'status': status,
         'tokenURI': tokenURI,

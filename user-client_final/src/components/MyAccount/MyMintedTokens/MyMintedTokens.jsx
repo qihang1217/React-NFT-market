@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from "react";
 import Loading from "../../Loading/Loading";
-import {Button, Card, Col, Empty, message, Row} from 'antd';
-import {reqConfirmMinted, reqDelete, reqProductMint, reqResubmit} from "../../../api/API";
-import ApiUtil from "../../../utils/ApiUtil";
-import FileViewer from 'react-file-viewer';
+import {Button, Card, Empty, Row} from 'antd';
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
-import {CARD_COLS} from "../../../constants/constants";
 import ChainTokenItem from "../ChainTokenItem/ChainTokenItem";
+import UnderChainTokenItem from "../UnderChainTokenItem/UnderChainTokenItem";
 
 const empty = require('../image/empty.svg')
 
@@ -21,6 +18,7 @@ const MyMintedTokens = ({
 	                        toggleForSale,
 	                        changeTokenPrice,
 	                        mintMyFileNFT,
+	                        reqProductData,
 	                        list,
 	                        total,
                         }) => {
@@ -37,7 +35,6 @@ const MyMintedTokens = ({
 			OwnedEverything.currentOwner === accountAddress && OwnedEverything.mintedBy === accountAddress
 		);
 	}
-	let previewContent
 	
 	const loadNftData = (OwnedEverythings) => {
 		if (OwnedEverythings) {
@@ -45,7 +42,7 @@ const MyMintedTokens = ({
 				setProducts(list)
 				setProductTotal(total)
 				//筛选出个人所拥有的数藏万物
-				let ChainDataCard = MyOwnedEverythings.map((item) => {
+				setChainDataCard(MyOwnedEverythings.map((item) => {
 					// console.log(item)
 					return (
 						<ChainTokenItem
@@ -57,34 +54,13 @@ const MyMintedTokens = ({
 							insideLoading={insideLoading}
 						/>
 					)
-				})
-				setChainDataCard(ChainDataCard)
+				}))
+				//加载完毕
 				setInsideLoading(false)
 			}
 		}
 	}
 	
-	const setControlsPreview = (item, filename, ext, filetype, src) => {
-		previewContent = (
-			<FileViewer
-				fileType={ext}
-				filePath={src}
-			/>
-		)
-		if (/^image\/\S+$/.test(filetype)) {
-			previewContent = (<img src={src} alt={filename} className='file'/>)
-		} else if (/^video\/\S+$/.test(filetype)) {
-			previewContent = (<video src={src} loop preload controls className='file'/>)
-		} else if (/^audio\/\S+$/.test(filetype)) {
-			previewContent = (
-				<audio controls preload className='file'>
-					<source src={src}/>
-					<embed src={src}/>
-				</audio>
-			)
-		}
-		return previewContent
-	}
 	
 	//加载个人在链上拥有的nft数据
 	useEffect(() => {
@@ -98,182 +74,13 @@ const MyMintedTokens = ({
 		setProductTotal(total)
 		if (products) {
 			const productCard = products.map((item) => {
-				//处理铸造或者重新提交
-				const handleCastOrRetry = async (e) => {
-					const value = e.target.innerHTML
-					const object = e.target
-					// const product=item
-					if (value === '开始铸造') {
-						const productId = item.product_id;
-						object.setAttribute('disabled', true)
-						object.offsetParent.setAttribute('disabled', true)
-						object.innerHTML = '铸造中'
-						// console.log(object)
-						const result = await reqProductMint(productId)
-						// console.log(result)
-						const tokenURI = result.tokenURI
-						const status = await mintMyFileNFT(item, tokenURI);
-						if (status === 0) {
-							//	表示铸造成功
-							// console.log('铸造成功')
-							const status = await reqConfirmMinted(productId, tokenURI)
-							if (status.status === 0) {
-								const submitButton = document.getElementById(item.product_id)
-								submitButton.setAttribute('disabled', true)
-								submitButton.innerHTML = '已铸造'
-								message.success('铸造成功且更新铸造状态成功~')
-								// console.log('铸造成功且更新铸造状态成功')
-							} else {
-								// console.log('铸造成功但更新铸造状态失败')
-								message.error('铸造成功但更新铸造状态失败~')
-							}
-						} else {
-							// console.log('铸造失败')
-							message.error('铸造失败,请稍后重试~')
-							object.setAttribute('disabled', false)
-							object.innerHTML = '重新铸造'
-						}
-					} else if (value === '重新提交') {
-						const result = await reqResubmit(item.product_id)
-						object.setAttribute('disabled', true)
-						object.offsetParent.setAttribute('disabled', true)
-						if (result.status === 0) {
-							//删除成功后,禁用提交按钮并修改其中内容为审核中
-							object.setAttribute('disabled', true)
-							object.offsetParent.setAttribute('disabled', true)
-							object.innerHTML = '审核中'
-							message.success('重新提交审核成功~')
-						} else {
-							message.error('重新提交审核失败,请稍后重试~')
-							object.setAttribute('disabled', true)
-							object.offsetParent.setAttribute('disabled', true)
-							object.innerHTML = '重新提交'
-						}
-					}
-				}
-				
-				//处理删除
-				const handleDelete = async (e) => {
-					const value = e.target.innerHTML
-					const object = e.target
-					// console.log(e.target)
-					if (value === '删 除') {
-						object.setAttribute('disabled', true)
-						object.offsetParent.setAttribute('disabled', true)
-						const result = await reqDelete(item.product_id)
-						if (result.status === 0) {
-							//提交成功后,禁用提交按钮
-							const submitButton = document.getElementById(item.product_id)
-							submitButton.setAttribute('disabled', true)
-							object.setAttribute('disabled', true)
-							object.offsetParent.setAttribute('disabled', true)
-							object.innerHTML = '已删除'
-							message.success('删除成功~')
-						}
-					}
-				}
-				
-				
-				let examine_status_name, examine_status_content, examine_status_action, examine_disabled_status = false,
-					delete_name = '删除', delete_disabled_status = false, examine_status_color = '#000'
-				if (item.pass_status === true) {
-					//审核通过
-					if (item.examine_status === true) {
-						examine_status_name = '审核通过'
-						examine_status_action = '开始铸造'
-						examine_status_color = '#4bbf73'
-						examine_status_content = examine_status_name
-					}
-				} else if (item.pass_status === false) {
-					//审核状态不是通过
-					examine_status_name = '审核中'
-					examine_disabled_status = true
-					if (item.examine_status === true) {
-						//已经审核
-						examine_status_name = '审核未通过'
-						examine_disabled_status = false
-						examine_status_color = '#F63638FF'
-						if (item.usable_chances === 0) {
-							//可用的尝试机会为0
-							examine_status_name = '无剩余审核机会'
-							examine_disabled_status = true
-							examine_status_color = '#F63638FF'
-						}
-					}
-					examine_status_action = '重新提交'
-					examine_status_content = examine_status_name
-				}
-				
-				if (item.delete_status) {
-					//	如果已经删除
-					delete_disabled_status = true
-					examine_disabled_status = true
-					delete_name = '已删除'
-					examine_status_color = '#F63638FF'
-					examine_status_content = delete_name
-				}
-				
-				if (item.mint_status) {
-					//如果已经铸造
-					delete_disabled_status = true
-					examine_disabled_status = true
-					examine_status_content = '已铸造'
-					examine_status_action = '已铸造'
-					examine_status_color = '#4bbf73'
-				}
-				// console.log(examine_status_name)
-				const filename = item.file_url
-				const ext = filename.substring(filename.lastIndexOf('.') + 1);
-				const filetype = item.file_type
-				const src = ApiUtil.API_FILE_URL + filename
-				previewContent = setControlsPreview(item, filename, ext, filetype, src)
 				return (
-					<Col span={CARD_COLS} key={item.product_id}>
-						<Card
-							key={item.product_id}
-							className='inside-card'
-							hoverable
-							bordered
-							//封面
-							cover={
-								previewContent
-							}
-							//下方操作
-							actions={[
-								<Button
-									type='primary'
-									id={item.product_id}
-									disabled={examine_disabled_status}
-									onClick={(e) => {
-										handleCastOrRetry(e)
-									}}
-								>
-									{examine_status_action}
-								</Button>,
-								<Button
-									danger
-									type="primary"
-									disabled={delete_disabled_status}
-									onClick={(e) => {
-										handleDelete(e)
-									}}
-								>
-									{delete_name}
-								</Button>,
-							]}
-						>
-							<div style={{display: 'flex', justifyContent: 'space-between'}}>
-								<div>
-									<div className='top-attribute'>NFT名字</div>
-									<div>{item.product_name}</div>
-								</div>
-								<div className='right-content'>
-									<div className='top-attribute'>状态</div>
-									<span style={{color: examine_status_color}}>{examine_status_content}</span>
-								</div>
-							</div>
-						</Card>
-					</Col>)
+					<UnderChainTokenItem
+						item={item}
+						mintMyFileNFT={mintMyFileNFT}
+						reqProductData={reqProductData}
+					/>
+				)
 			})
 			setProductCard(productCard)
 		}
