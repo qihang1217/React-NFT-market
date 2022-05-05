@@ -329,15 +329,17 @@ class ProductDetail extends Component {
 							<Card>
 								<div className='buy-container'>
 									<h1 className='price-title'>{this.state.price} Ξ</h1>
-									<p>
-										<LockOutlined/><span className='price-feature'>安全支付</span>
-									</p>
-									<p>
-										<MailOutlined/><span className='price-feature'>卖家的支持</span>
-									</p>
-									<p>
-										<HistoryOutlined/><span className='price-feature'>支持未来版本</span>
-									</p>
+									<div className='price-features'>
+										<p>
+											<LockOutlined/><span className='price-feature'>安全支付</span>
+										</p>
+										<p>
+											<MailOutlined/><span className='price-feature'>卖家的支持</span>
+										</p>
+										<p>
+											<HistoryOutlined/><span className='price-feature'>支持未来版本</span>
+										</p>
+									</div>
 								</div>
 							</Card>
 							<div className='product-details'>
@@ -346,7 +348,7 @@ class ProductDetail extends Component {
 									expandIconPosition='right'
 								>
 									<Panel header="作品信息" key="1">
-										<div>
+										<div className='product-container'>
 											<p>
 												<span className="font-weight-bold">数藏万物ID</span> :{" "}
 												{parseInt(this.state.currentProduct.tokenId._hex, 16)}
@@ -371,11 +373,21 @@ class ProductDetail extends Component {
 												<span className="font-weight-bold">累计交易次数</span> :{" "}
 												{parseInt(this.state.currentProduct.numberOfTransfers._hex, 16)}
 											</p>
-											<a href={this.state.currentProduct.tokenURI} target="_blank"
-											   rel="noopener noreferrer">原始信息</a>
-											&nbsp;&nbsp;
-											<a href={this.state.file_url} target="_blank"
-											   rel="noopener noreferrer">源文件</a>
+											<div className='data-href-list'>
+												<a href={this.state.currentProduct.tokenURI} target="_blank"
+												   rel="noopener noreferrer">
+													<Button className='data-href-btn'>
+														原始数据
+													</Button>
+												</a>
+												&nbsp;&nbsp;
+												<a href={this.state.file_url} target="_blank"
+												   rel="noopener noreferrer">
+													<Button className='data-href-btn'>
+														原始文件
+													</Button>
+												</a>
+											</div>
 										</div>
 									</Panel>
 									<Panel header="作品描述" key="2">

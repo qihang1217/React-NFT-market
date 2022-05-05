@@ -6,11 +6,11 @@ import FileNFT from "../../FileNFT/FileNFT";
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
-import {card_cols} from "../../../constants/constants";
+import {CARD_COLS} from "../../../constants/constants";
 import {reqOwnedProducts} from "../../../api/API";
 
 
-const empty = require('../../MyTokenDetail/empty.svg')
+const empty = require('../image/empty.svg')
 
 const ElseAllTokens = ({
 	                       connectToMetamask,
@@ -68,7 +68,7 @@ const ElseAllTokens = ({
 						price = parseInt(price._hex, 16).toString()
 						const tokenId = parseInt(item.tokenId._hex, 16)
 						return (
-							<Col span={card_cols}>
+							<Col span={CARD_COLS}>
 								<Card
 									className='inside-card'
 									hoverable

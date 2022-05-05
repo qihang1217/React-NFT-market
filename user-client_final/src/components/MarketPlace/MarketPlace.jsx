@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import ColorNFTImage from "../ColorNFTImage/ColorNFTImage";
-import NFTDetails from "./NFTDetails/NFTDetails";
+import NFTBrief from "./NFTBrief/NFTBrief";
 import Loading from "../Loading/Loading";
 import FileNFT from "../FileNFT/FileNFT"
 import storageUtils from "../../utils/storageUtils";
-import empty from "../MyTokenDetail/empty.svg";
-import {Empty} from "antd";
+import empty from "../MyAccount/image/empty.svg";
+import './MarketPlace.less'
+import {Col, Empty, Row} from "antd";
 
 const MarketPlace = ({
 	                     accountAddress,
@@ -45,36 +46,40 @@ const MarketPlace = ({
 					<div className='content-mainTitle'>
 						<span>链上总共有<span id='nft_name' style={{fontSize: 32}}>{totalTokensMinted}个数藏万物</span></span>
 					</div>
-					<div className="d-flex flex-wrap mb-2">
+					<Row justify="space-around" gutter={[16, 32]} className="nfts-container">
 						{ElseOwnedEverythings.map((ownedEverything) => {
 							const tokenId = parseInt(ownedEverything.tokenId._hex, 16)
 							return (
-								<div
-									key={tokenId}
-									className="w-50 p-4 mt-1 border"
-								>
-									{!insideLoading ? (
-										(ownedEverything.metaData.metaData.type === 'color') ?
-											(<ColorNFTImage
-												colors={ownedEverything.metaData.metaData.colors}
-										/>) : (<FileNFT
-											tokenURL={ownedEverything.metaData.metaData.file_url.file_tokenURl}
-											tokenId={tokenId}
-										/>)
-								) : (
-									<Loading/>
-								)}
-								<NFTDetails
-									ownedEverything={ownedEverything}
-									accountAddress={accountAddress}
-									changeTokenPrice={changeTokenPrice}
-									toggleForSale={toggleForSale}
-									buyOwnedEverything={buyOwnedEverything}
-								/>
-								</div>
+								<Col span={8}>
+									<div
+										key={tokenId}
+										className="nft-container"
+									>
+										<div>
+											{!insideLoading ? (
+												(ownedEverything.metaData.metaData.type === 'color') ?
+													(<ColorNFTImage
+														colors={ownedEverything.metaData.metaData.colors}
+													/>) : (<FileNFT
+														tokenURL={ownedEverything.metaData.metaData.file_url.file_tokenURl}
+														tokenId={tokenId}
+													/>)
+											) : (
+												<Loading/>
+											)}
+											<NFTBrief
+												ownedEverything={ownedEverything}
+												accountAddress={accountAddress}
+												changeTokenPrice={changeTokenPrice}
+												toggleForSale={toggleForSale}
+												buyOwnedEverything={buyOwnedEverything}
+											/>
+										</div>
+									</div>
+								</Col>
 							);
 						})}
-					</div>
+					</Row>
 				</div>) : (
 				<Empty
 					image={empty}

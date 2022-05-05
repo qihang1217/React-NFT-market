@@ -2,15 +2,14 @@ import React, {useEffect, useState} from "react";
 import ColorNFTImage from "../../ColorNFTImage/ColorNFTImage";
 import Loading from "../../Loading/Loading";
 import {Button, Card, Col, Empty, Form, Input, message, Row} from 'antd';
-import '../../MyTokenDetail/MyTokenDetail.less'
 import FileNFT from "../../FileNFT/FileNFT";
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
-import {card_cols} from "../../../constants/constants";
+import {CARD_COLS} from "../../../constants/constants";
 import {reqOpenOrClose} from "../../../api/API";
 
-const empty = require('../../MyTokenDetail/empty.svg')
+const empty = require('../image/empty.svg')
 
 const MyAllTokens = ({
 	                     connectToMetamask,
@@ -122,7 +121,7 @@ const MyAllTokens = ({
 							const open_status_button_style = (accountAddress === item.currentOwner) ?
 								(!!openStatus) : null
 							const tokenId = parseInt(item.tokenId._hex, 16)
-							return (<Col span={card_cols}>
+							return (<Col span={CARD_COLS}>
 									<Card
 										className='inside-card'
 										hoverable

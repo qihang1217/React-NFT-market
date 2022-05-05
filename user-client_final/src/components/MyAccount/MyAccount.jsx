@@ -84,6 +84,13 @@ class MyAccount extends Component {
 				parseInt(OwnedEverything.currentOwnerId._hex, 16) === currentUserId
 			);
 		}
+		//他人拥有的产品
+		let ElseOwnedEverythings = []
+		if (OwnedEverythings) {
+			ElseOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
+				parseInt(OwnedEverything.currentOwnerId._hex, 16) === this.targetUserId
+			);
+		}
 		return (
 			<>
 				<div className='my-account'>
@@ -241,7 +248,7 @@ class MyAccount extends Component {
 														<span className="type">粉丝</span>
 													</div>
 													<div className="item">
-														<span className="number">{MyOwnedEverythings.length}</span>
+														<span className="number">{ElseOwnedEverythings.length}</span>
 														<span className="type">数藏万物</span>
 													</div>
 												</div>

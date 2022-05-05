@@ -2,17 +2,16 @@ import React, {useEffect, useState} from "react";
 import ColorNFTImage from "../../ColorNFTImage/ColorNFTImage";
 import Loading from "../../Loading/Loading";
 import {Button, Card, Col, Empty, Form, Input, message, Row} from 'antd';
-import '../../MyTokenDetail/MyTokenDetail.less'
 import {reqConfirmMinted, reqDelete, reqOpenOrClose, reqProductMint, reqResubmit} from "../../../api/API";
 import ApiUtil from "../../../utils/ApiUtil";
 import FileViewer from 'react-file-viewer';
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
-import {card_cols} from "../../../constants/constants";
+import {CARD_COLS} from "../../../constants/constants";
 import FileNFT from "../../FileNFT/FileNFT";
 
-const empty = require('../../MyTokenDetail/empty.svg')
+const empty = require('../image/empty.svg')
 
 const MyMintedTokens = ({
 	                        connectToMetamask,
@@ -129,7 +128,7 @@ const MyMintedTokens = ({
 							const open_status_button_style = (accountAddress === item.currentOwner) ?
 								(!!openStatus) : null
 							const tokenId = parseInt(item.tokenId._hex, 16)
-							return (<Col span={card_cols}>
+							return (<Col span={CARD_COLS}>
 									<Card
 										className='inside-card'
 										hoverable
@@ -386,7 +385,7 @@ const MyMintedTokens = ({
 					)
 				}
 				return (
-					<Col span={card_cols} key={item.product_id}>
+					<Col span={CARD_COLS} key={item.product_id}>
 						<Card
 							key={item.product_id}
 							className='inside-card'
