@@ -47,7 +47,6 @@ class App extends Component {
 			totalTokensOwnedByAccount: 0,
 			colorIsUsed: false,
 			colorsUsed: [],
-			lastMintTime: null,
 			footerVisible: '',
 			isAuthenticated: false,
 		};
@@ -340,13 +339,14 @@ class App extends Component {
 		});
 	};
 	
-	//购买
+	//购买(price是wei为单位)
 	buyOwnedEverything = (tokenId, price) => {
+		console.log(tokenId, price, this.state)
 		const user_data=storageUtils.getUser()
 		this.setState({loading: true});
 		this.state.OwnedEverythingsContract.methods
-		.buyToken(tokenId,user_data.user_id)
-		.send({from: this.state.accountAddress, value: price})
+		.buyToken(tokenId, user_data.user_id)
+		.send({from: this.state.accountAddress, value: window.web3.utils.toWei(price.toString(), 'ether')})
 		.on("confirmation", () => {
 			this.setState({loading: false});
 			window.location.reload();
@@ -496,7 +496,11 @@ class App extends Component {
 										/>
 									)}
 								/>
-								<Route path="/ownedEverything/detail/:id" component={ProductDetail}/>
+								<Route path="/ownedEverything/detail/:id" render={() => (
+									<ProductDetail
+										buyOwnedEverything={this.buyOwnedEverything}
+									/>
+								)}/>
 							</Switch>
 						</div>
 					</Content>

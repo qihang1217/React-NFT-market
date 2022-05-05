@@ -57,10 +57,29 @@
   }
 
   .buy-container {
-    .price-title {
-      font-weight: bold;
-      color: #0059b2;
+    position: relative;
+
+    .buy-line {
+      display: flex;
+      align-items: center;
+
+      .price-title {
+        font-weight: bold;
+        color: #0059b2;
+        font-size: 34px;
+      }
+
+      .product-action {
+        position: absolute;
+        right: 0;
+
+        button {
+          height: 42px;
+          width: 100px;
+        }
+      }
     }
+
 
     .price-features {
       margin-top: 20px;

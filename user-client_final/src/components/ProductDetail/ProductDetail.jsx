@@ -38,7 +38,7 @@ import {
 } from "../../api/API";
 import FileViewer from "react-file-viewer";
 import EnhancedComment from "./EnhancedComment";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 const {Panel} = Collapse;
 
@@ -101,9 +101,9 @@ class ProductDetail extends Component {
 			submitting: true,
 		});
 		const userData = storageUtils.getUser()
-		const timestamp = +new Date()
 		const userId = userData.user_id
 		const userName = userData.user_name
+		const timestamp = +new Date()
 		const productId = this.state.currentProduct.metaData.productId
 		const commentContent = this.state.commentContent
 		const result = await reqAddComment(timestamp, userId, userName, productId, commentContent)
@@ -126,6 +126,7 @@ class ProductDetail extends Component {
 	
 	async initChainProduct() {
 		//从路由url获取tokenId
+		// console.log(this.props)
 		const id = this.props.match.params.id
 		//从store中获取products
 		let products = storageUtils.getProducts()
@@ -265,20 +266,24 @@ class ProductDetail extends Component {
 			this.setState({productLike: this.state.productLike - 1, productLikeAction: null})
 			result = await reqProductLike(this.state.productId, 'reduce')
 		}
-		console.log(result)
+		// console.log(result)
 	}
 	
 	increaseView = async () => {
 		const result = await reqProductView(this.state.productId)
-		console.log(result)
+		// console.log(result)
 	}
 	
-	componentDidMount() {
-		this.initChainProduct()
-		this.initProduct()
-		this.initComments()
+	buyProduct = (tokenId, price) => {
+		this.props.buyOwnedEverything(tokenId, price)
+	}
+	
+	async componentDidMount() {
+		await this.initChainProduct()
+		await this.initProduct()
+		await this.initComments()
 		//获取当前拥有者的信息
-		this.reqUserData(parseInt(this.state.currentProduct.currentOwnerId._hex, 16))
+		await this.reqUserData(parseInt(this.state.currentProduct.currentOwnerId._hex, 16))
 	}
 	
 	componentWillUnmount() {
@@ -289,9 +294,29 @@ class ProductDetail extends Component {
 		}
 	}
 	
+	
 	//todo:添加内部购买,自己的则为上下架
 	render() {
-		const {comments, submitting, commentContent, currentProduct} = this.state;
+		const {comments, submitting, commentContent, currentProduct, price} = this.state;
+		let tokenId, currentOwnerId
+		let product_action
+		if (currentProduct) {
+			tokenId = parseInt(currentProduct.tokenId._hex, 16)
+			currentOwnerId = parseInt(currentProduct.currentOwnerId._hex, 16)
+			const userData = storageUtils.getUser()
+			const userId = userData.user_id
+			if (currentOwnerId === userId) {
+				//	该作品是当前用户所有
+				
+			} else {
+				//	不是其所有
+				if (currentProduct.forSale) {
+					product_action = '购买'
+				} else {
+					product_action = '暂未出售'
+				}
+			}
+		}
 		return (
 			currentProduct ?
 				(<div className='product-detail'>
@@ -347,7 +372,23 @@ class ProductDetail extends Component {
 						<Col md={12}>
 							<Card>
 								<div className='buy-container'>
-									<h1 className='price-title'>{this.state.price} Ξ</h1>
+									<div className='buy-line'>
+										<div className='price-title'>{price} Ξ</div>
+										<div className='product-action'>
+											<Button type='primary' shape="round" onClick={() => {
+												const userData = storageUtils.getUser()
+												const userId = userData.user_id
+												if (currentOwnerId === userId) {
+													//	该作品是当前用户所有
+													
+												} else {
+													//	不是其所有可以购买
+													console.log(tokenId, price)
+													this.buyProduct(tokenId, price)
+												}
+											}}>{product_action}</Button>
+										</div>
+									</div>
 									<div className='price-features'>
 										<p>
 											<LockOutlined/><span className='price-feature'>安全支付</span>
@@ -370,7 +411,7 @@ class ProductDetail extends Component {
 										<div className='product-container'>
 											<p>
 												<span className="font-weight-bold">数藏万物ID</span> :{" "}
-												{parseInt(this.state.currentProduct.tokenId._hex, 16)}
+												{tokenId}
 											</p>
 											<p>
 												<span className="font-weight-bold">名字</span> :{" "}
@@ -471,4 +512,4 @@ class ProductDetail extends Component {
 	}
 }
 
-export default ProductDetail;
+export default withRouter(ProductDetail);

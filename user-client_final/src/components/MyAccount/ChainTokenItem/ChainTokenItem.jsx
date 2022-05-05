@@ -2,10 +2,11 @@ import {reqOpenOrClose} from "../../../api/API";
 import {Button, Card, Col, Form, Input, message} from "antd";
 import {CARD_COLS} from "../../../constants/constants";
 import ColorNFTImage from "../../ColorNFTImage/ColorNFTImage";
-import FileNFT from "../../FileNFT/FileNFT";
+import FileNFTContent from "../../FileNFTContent/FileNFTContent";
 import Loading from "../../Loading/Loading";
 import React, {useEffect, useState} from "react";
-import FileViewer from 'react-file-viewer';
+import {setPreview} from "../../../utils/SetPreview";
+
 
 const ChainTokenItem = ({item, accountAddress, toggleForSale, changeTokenPrice, products, insideLoading}) => {
 	let previewContent
@@ -37,28 +38,6 @@ const ChainTokenItem = ({item, accountAddress, toggleForSale, changeTokenPrice, 
 		)
 	}
 	
-	//设置预览
-	const setPreview = (item, filename, ext, filetype, src) => {
-		previewContent = (
-			<FileViewer
-				fileType={ext}
-				filePath={src}
-			/>
-		)
-		if (/^image\/\S+$/.test(filetype)) {
-			previewContent = (<img src={src} alt={filename} className='file'/>)
-		} else if (/^video\/\S+$/.test(filetype)) {
-			previewContent = (<video src={src} loop preload className='file'/>)
-		} else if (/^audio\/\S+$/.test(filetype)) {
-			previewContent = (
-				<audio preload className='file'>
-					<source src={src}/>
-					<embed src={src}/>
-				</audio>
-			)
-		}
-		return previewContent
-	}
 	
 	// 显示或隐藏
 	const handleOpenOrClose = async (e) => {
@@ -152,12 +131,7 @@ const ChainTokenItem = ({item, accountAddress, toggleForSale, changeTokenPrice, 
 									: ""
 							}
 						/>) : (
-							<FileNFT
-								tokenURL={
-									item.metaData
-										? item.metaData.metaData.file_url.file_tokenURl
-										: ""
-								}
+							<FileNFTContent
 								tokenId={tokenId}
 								previewContent={previewContent}
 							/>

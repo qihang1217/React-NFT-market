@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import './FileNFT.less'
+import './FileNFTContent.less'
 
-class FileNFT extends Component {
+class FileNFTContent extends Component {
 	render() {
 		// console.log(this.props.previewContent)
 		return (
@@ -18,4 +18,4 @@ class FileNFT extends Component {
 	}
 }
 
-export default withRouter(FileNFT)
+export default withRouter(FileNFTContent)

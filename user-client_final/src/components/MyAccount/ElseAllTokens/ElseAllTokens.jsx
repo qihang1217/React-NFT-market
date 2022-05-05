@@ -2,12 +2,13 @@ import React, {useEffect, useState} from "react";
 import ColorNFTImage from "../../ColorNFTImage/ColorNFTImage";
 import Loading from "../../Loading/Loading";
 import {Card, Col, Empty, Row} from 'antd';
-import FileNFT from "../../FileNFT/FileNFT";
+import FileNFTContent from "../../FileNFTContent/FileNFTContent";
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
 import {CARD_COLS} from "../../../constants/constants";
 import {reqOwnedProducts} from "../../../api/API";
+import {setPreview} from "../../../utils/SetPreview";
 
 
 const empty = require('../image/empty.svg')
@@ -67,6 +68,13 @@ const ElseAllTokens = ({
 						} = item;
 						price = parseInt(price._hex, 16).toString()
 						const tokenId = parseInt(item.tokenId._hex, 16)
+						
+						const filename = item.metaData.fileUrl
+						const ext = filename.substring(filename.lastIndexOf('.') + 1);
+						const filetype = item.metaData.fileType
+						const src = item.metaData.tokenUrl
+						let previewContent = setPreview(item, filename, ext, filetype, src)
+						
 						return (
 							<Col span={CARD_COLS}>
 								<Card
@@ -82,13 +90,9 @@ const ElseAllTokens = ({
 														: ""
 												}
 											/>) : (
-												<FileNFT
-													tokenURL={
-														item.metaData
-															? item.metaData.metaData.file_url.file_tokenURl
-															: ""
-													}
+												<FileNFTContent
 													tokenId={tokenId}
+													previewContent={previewContent}
 												/>
 											)
 									) : (

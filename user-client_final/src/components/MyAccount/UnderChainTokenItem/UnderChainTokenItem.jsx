@@ -15,7 +15,7 @@ const UnderChainTokenItem = ({item, mintMyFileNFT, reqProductData}) => {
 	let previewContent
 	
 	const setControlsPreview = (item, filename, ext, filetype, src) => {
-		previewContent = (
+		let previewContent = (
 			<FileViewer
 				fileType={ext}
 				filePath={src}

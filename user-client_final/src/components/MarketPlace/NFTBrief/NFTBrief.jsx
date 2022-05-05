@@ -7,42 +7,42 @@ class NFTBrief extends Component {
     
     render() {
         const price = window.web3.utils.fromWei(
-            parseInt(this.props.ownedEverything.price._hex, 16).toString(),
+            parseInt(this.props.item.price._hex, 16).toString(),
             "Ether"
         )
         return (
             <div className='nft-brief'>
-                <div key={parseInt(this.props.ownedEverything.tokenId)} className="mt-4 info-brief">
+                <div key={parseInt(this.props.item.tokenId)} className="mt-4 info-brief">
                     <p>
                         <span className="font-weight-bold">数藏万物ID</span> :{" "}
-                        {parseInt(this.props.ownedEverything.tokenId._hex, 16)}
+                        {parseInt(this.props.item.tokenId._hex, 16)}
                     </p>
                     <p>
                         <span className="font-weight-bold">名字</span> :{" "}
-                        {this.props.ownedEverything.tokenName}
+                        {this.props.item.tokenName}
                     </p>
                     <p>
                         <span className="font-weight-bold">铸造者</span> :{" "}
-                        {this.props.ownedEverything.mintedBy.substr(0, ADDRESS_DISPLAY_LENGTH) +
+                        {this.props.item.mintedBy.substr(0, ADDRESS_DISPLAY_LENGTH) +
                             "..." +
-                            this.props.ownedEverything.mintedBy.slice(
-                                this.props.ownedEverything.mintedBy.length - ADDRESS_DISPLAY_LENGTH
+                            this.props.item.mintedBy.slice(
+                                this.props.item.mintedBy.length - ADDRESS_DISPLAY_LENGTH
                             )}
                     </p>
                     <p>
                         <span className="font-weight-bold">拥有者</span> :{" "}
-                        {this.props.ownedEverything.currentOwner.substr(0, ADDRESS_DISPLAY_LENGTH) +
+                        {this.props.item.currentOwner.substr(0, ADDRESS_DISPLAY_LENGTH) +
                             "..." +
-                            this.props.ownedEverything.currentOwner.slice(
-                                this.props.ownedEverything.currentOwner.length - ADDRESS_DISPLAY_LENGTH
+                            this.props.item.currentOwner.slice(
+                                this.props.item.currentOwner.length - ADDRESS_DISPLAY_LENGTH
                             )}
                     </p>
                     <p>
                         <span className="font-weight-bold">上一个拥有者</span> :{" "}
-                        {this.props.ownedEverything.previousOwner.substr(0, ADDRESS_DISPLAY_LENGTH) +
+                        {this.props.item.previousOwner.substr(0, ADDRESS_DISPLAY_LENGTH) +
                             "..." +
-                            this.props.ownedEverything.previousOwner.slice(
-                                this.props.ownedEverything.previousOwner.length - ADDRESS_DISPLAY_LENGTH
+                            this.props.item.previousOwner.slice(
+                                this.props.item.previousOwner.length - ADDRESS_DISPLAY_LENGTH
                             )}
                     </p>
                     <p>
@@ -50,20 +50,20 @@ class NFTBrief extends Component {
                     </p>
                     <p>
                         <span className="font-weight-bold">累计交易次数</span> :{" "}
-                        {parseInt(this.props.ownedEverything.numberOfTransfers._hex, 16)}
+                        {parseInt(this.props.item.numberOfTransfers._hex, 16)}
                     </p>
                     <div className='trade-button'>
-                        {this.props.accountAddress !== this.props.ownedEverything.currentOwner ? (
-                            this.props.ownedEverything.forSale ? (
+                        {this.props.accountAddress !== this.props.item.currentOwner ? (
+                            this.props.item.forSale ? (
                                 <Button
                                     type='primary'
                                     block
-                                    value={parseInt(this.props.ownedEverything.price._hex, 16).toString()}
+                                    value={parseInt(this.props.item.price._hex, 16).toString()}
                                     onClick={(e) => {
                                         // console.log(e.target.value)
                                         this.props.buyOwnedEverything(
-                                            parseInt(this.props.ownedEverything.tokenId._hex, 16),
-                                            e.target.value
+                                            parseInt(this.props.item.tokenId._hex, 16),
+                                            price
                                         )
                                     }
                                     }
