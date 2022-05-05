@@ -6,6 +6,10 @@ import {Button} from "antd";
 class NFTBrief extends Component {
     
     render() {
+        const price = window.web3.utils.fromWei(
+            parseInt(this.props.ownedEverything.price._hex, 16).toString(),
+            "Ether"
+        )
         return (
             <div className='nft-brief'>
                 <div key={parseInt(this.props.ownedEverything.tokenId)} className="mt-4 info-brief">
@@ -42,13 +46,7 @@ class NFTBrief extends Component {
                             )}
                     </p>
                     <p>
-                        <span className="font-weight-bold">价格</span> :{" "}
-                        {
-                            window.web3.utils.fromWei(
-                                parseInt(this.props.ownedEverything.price._hex, 16).toString(),
-                                "Ether"
-                            )}{" "}
-                        Ξ
+                        <span className="font-weight-bold">价格</span> :{" "}{price}{" "}Ξ
                     </p>
                     <p>
                         <span className="font-weight-bold">累计交易次数</span> :{" "}
@@ -70,12 +68,7 @@ class NFTBrief extends Component {
                                     }
                                     }
                                 >
-                                    用{" "}
-                                    {window.web3.utils.fromWei(
-                                        parseInt(this.props.ownedEverything.price._hex, 16).toString(),
-                                        "Ether"
-                                    )}{" "}
-                                    Ξ拥有它
+                                    用{" "}{price}{" "}Ξ拥有它
                                 </Button>
                             ) : (
                                 <>

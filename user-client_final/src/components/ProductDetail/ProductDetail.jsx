@@ -277,8 +277,8 @@ class ProductDetail extends Component {
 		this.initChainProduct()
 		this.initProduct()
 		this.initComments()
+		//获取当前拥有者的信息
 		this.reqUserData(parseInt(this.state.currentProduct.currentOwnerId._hex, 16))
-		
 	}
 	
 	componentWillUnmount() {
@@ -289,6 +289,7 @@ class ProductDetail extends Component {
 		}
 	}
 	
+	//todo:添加内部购买,自己的则为上下架
 	render() {
 		const {comments, submitting, commentContent, currentProduct} = this.state;
 		return (
