@@ -4,7 +4,6 @@ import {Button, Card, Empty, Row} from 'antd';
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
-import FileViewer from 'react-file-viewer';
 import ChainTokenItem from "../ChainTokenItem/ChainTokenItem";
 
 const empty = require('../image/empty.svg')
@@ -30,31 +29,6 @@ const MyAllTokens = ({
 			OwnedEverything.currentOwner === accountAddress
 		);
 	}
-	
-	let previewContent
-	
-	const setPreview = (item, filename, ext, filetype, src) => {
-		previewContent = (
-			<FileViewer
-				fileType={ext}
-				filePath={src}
-			/>
-		)
-		if (/^image\/\S+$/.test(filetype)) {
-			previewContent = (<img src={src} alt={filename} className='file'/>)
-		} else if (/^video\/\S+$/.test(filetype)) {
-			previewContent = (<video src={src} loop preload className='file'/>)
-		} else if (/^audio\/\S+$/.test(filetype)) {
-			previewContent = (
-				<audio preload className='file'>
-					<source src={src}/>
-					<embed src={src}/>
-				</audio>
-			)
-		}
-		return previewContent
-	}
-	
 	const loadNftData = (OwnedEverythings) => {
 		if (OwnedEverythings) {
 			if (OwnedEverythings.length !== 0) {
