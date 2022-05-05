@@ -302,7 +302,7 @@ class ProductDetail extends Component {
 								</div>
 								<div className='name-content'>
 									<p className='name-title'>{this.state.workName}</p>
-									<span>{this.state.categoryName}</span>
+									<span className='category-name'>{this.state.categoryName}</span>
 								</div>
 								<Divider/>
 								<div className='user-content'>
