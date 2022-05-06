@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import html from './index.js'
+import ErrorPageHtml from './ErrorPageHtml.js'
 import Navbar from "../Navbar/Navbar";
 
 class ErrorPage extends Component {
@@ -32,11 +32,12 @@ class ErrorPage extends Component {
     }
 
     render() {
-        return (<>
+        return (
+            <>
                 <Navbar/>
                 <iframe
-                    srcDoc={html}
-                    style={{width: "100%", height: `${this.state.height}`, display: "block"}}
+                    srcDoc={ErrorPageHtml}
+                    style={{width: "100%", height: `${this.state.height}`, display: "block", border: 0}}
                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                     scrolling="auto"
                 />
