@@ -57,12 +57,13 @@ const UnderChainTokenItem = ({item, mintMyFileNFT, reqProductData}) => {
 				//上传成功
 				const tokenURI = result.tokenURI
 				//铸造nft
-				const status = await mintMyFileNFT(item, tokenURI);
+				const {status, tokenId} = await mintMyFileNFT(item, tokenURI);
+				console.log(tokenId)
 				if (status === 0) {
 					//	表示铸造成功
 					
 					//告知服务器铸造成功
-					const status = await reqConfirmMinted(productId, tokenURI)
+					const status = await reqConfirmMinted(productId, tokenId, tokenURI)
 					if (status.status === 0) {
 						message.success('铸造成功且更新铸造状态成功~')
 						reqProductData()

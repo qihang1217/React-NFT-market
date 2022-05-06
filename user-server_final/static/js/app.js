@@ -1,8 +1,3 @@
-/*
- *  作者: 行歌
- *  微信公众号: 码语派
- */
-
 let camera, renderer, scene
 let controls
 let pointLight1, pointLight2, pointLight3
@@ -12,7 +7,6 @@ let ambientLight
 let ceilingLight
 let clock = new THREE.Clock()
 let paths = ''
-
 
 let player, activeCamera
 let speed = 6 //移动速度
@@ -35,9 +29,9 @@ let joystick //移动设备控制器
 
 let control, gui
 
-function init() {
-
+async function init() {
   createScene()
+  await initUrls()
   createObjects()
   createColliders()
   createPlayer()
@@ -100,36 +94,36 @@ function createMenu() {
 }
 
 
-function clearScene(){
-	// 从scene中删除模型并释放内存
-	if(gallerys.length > 0){		
-		for(var i = 0; i< gallerys.length; i++){
-			var currObj = gallerys[i];
-			// 判断类型
-			if(currObj instanceof THREE.Scene){
-				var children = currObj.children;
-				for(var i = 0; i< children.length; i++){
-					deleteGroup(children[i]);
-				}	
-			}else{				
-				deleteGroup(currObj);
-			}
-			scene.remove(currObj);
-		}
-	}
+function clearScene() {
+  // 从scene中删除模型并释放内存
+  if (gallerys.length > 0) {
+    for (var i = 0; i < gallerys.length; i++) {
+      var currObj = gallerys[i];
+      // 判断类型
+      if (currObj instanceof THREE.Scene) {
+        var children = currObj.children;
+        for (var i = 0; i < children.length; i++) {
+          deleteGroup(children[i]);
+        }
+      } else {
+        deleteGroup(currObj);
+      }
+      scene.remove(currObj);
+    }
+  }
 }
 
 // 删除group，释放内存
 function deleteGroup(group) {
-	//console.log(group);
-    if (!group) return;
-    // 删除掉所有的模型组内的mesh
-    group.traverse(function (item) {
-        if (item instanceof THREE.Mesh) {
-            item.geometry.dispose(); // 删除几何体
-            item.material.dispose(); // 删除材质
-        }
-    });
+  //console.log(group);
+  if (!group) return;
+  // 删除掉所有的模型组内的mesh
+  group.traverse(function (item) {
+    if (item instanceof THREE.Mesh) {
+      item.geometry.dispose(); // 删除几何体
+      item.material.dispose(); // 删除材质
+    }
+  });
 }
 
 function createJoyStick() {//虚拟摇杆控件
@@ -374,7 +368,7 @@ function createObjects(paths) {//创建画廊对象
           case 'ceiling'://天花板
             initCeiling(child)
             break
-          
+
         }
         //设置展画边框贴图
         if (child.name.includes('paint')) {//根据元素名paint设置边框贴图 里面那层
@@ -390,15 +384,48 @@ function createObjects(paths) {//创建画廊对象
   )
 }
 
+let urls = []
+let detailsUrls = []
 
+function get(url) {
+  return new Promise((resolve, reject) => {
+    fetch(url)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(response.status + " : " + response.statusText);
+      }
+    })
+    .then(result => resolve(result))
+    .catch(error => {
+      reject(error);
+    })
+  });
+}
+
+async function initUrls() {
+  const result = await get("http://127.0.0.1:5000/api/v1/museum/data")
+  if (result.status === 0) {
+    // console.log(result.data)
+    urls = result.data.map(item => {
+      return item.token_url
+    })
+    detailsUrls = result.data.map(item => {
+      return 'http://localhost:3000/ownedEverything/detail/' + item.token_id
+    })
+  }
+  console.log(urls)
+  console.log(detailsUrls)
+}
 
 function initDraws(child) {
   child.material = new THREE.MeshStandardMaterial({//物理材质
     color: 0xF5F5DC//
   })
   draws.push(child)
-  const index = child.name.split('draw')[1]
-  const texture = new THREE.TextureLoader().load(`../static/img/${index}.jpg`)//加载图片index在模型中的索引
+  const index = child.name.split('draw')[1]//以draw为分隔符并取后面的，也就是对应数字
+  const texture = new THREE.TextureLoader().load(urls[index - 1])//加载图片index在模型中的索引
   texture.encoding = THREE.sRGBEncoding//在导入材质时,会默认将贴图编码格式定义为Three.LinearEncoding,故需将带颜色信息的贴图ng，故需将带颜色信息的贴图(baseColorTexture, emissiveTexture, 和 specularGlossinessTexture)手动指定为Three.sRGBEncoding
   texture.flipY = false//不旋转图像的y轴，以避免图片颠倒
   const material = new THREE.MeshPhongMaterial({//创建一种光亮表面的材质效果
@@ -430,13 +457,14 @@ function initWalls(child) {
 }
 
 function initCeiling(child) {
-  if(paths =='../static/model/galleryInRedTexture.glb'){
+  if (paths == '../static/model/galleryInRedTexture.glb') {
     child.material = new THREE.MeshStandardMaterial({//物理材质
-      color: 0x322B23})
-  }
-  else{
+      color: 0x322B23
+    })
+  } else {
     child.material = new THREE.MeshStandardMaterial({//物理材质
-      color: 0xF5F5DC})
+      color: 0xF5F5DC
+    })
   }
   child.material.roughness = 0.5
   child.material.metalness = 0.5
@@ -538,6 +566,9 @@ function updateCamera(dt) {//
 }
 //因为LookAt并不平滑，没有插值过程，你每次移动之后重新看向物体，不就抖动了嘛。解决的话，自己写一个类似lookat平滑看向物体的方法
 //此问题尚未解决
+function sleep(d) {
+  for (var t = Date.now(); Date.now() - t <= d;) ;
+}
 
 function onmousedown(event) {
   var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
@@ -545,46 +576,12 @@ function onmousedown(event) {
   var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());// 创建光线投射，计算出鼠标移过了什么物体
   var intersects = raycaster.intersectObjects(draws);
   if (intersects.length > 0) {
-    if (intersects[0].object.name == draws[0].name) {
-      alert(1)
+    console.log(intersects[0].object.name, draws)
+    for (i = 0; i < draws.length; i++) {
+      if (intersects[0].object.name === draws[i].name) {
+        window.open(detailsUrls[i])
+      }
     }
-    if (intersects[0].object.name == draws[1].name) {
-      alert(2)
-    }
-    if (intersects[0].object.name == draws[2].name) {
-      alert(3)
-    }
-    if (intersects[0].object.name == draws[3].name) {
-      alert(4)
-    }
-    if (intersects[0].object.name == draws[4].name) {
-      alert(5)
-    }
-    if (intersects[0].object.name == draws[5].name) {
-      alert(6)
-    }
-    if (intersects[0].object.name == draws[6].name) {
-      alert(7)
-    }
-    if (intersects[0].object.name == draws[7].name) {
-      alert(8)
-    }
-    if (intersects[0].object.name == draws[8].name) {
-      alert(9)
-    }
-    if (intersects[0].object.name == draws[9].name) {
-      alert(10)
-    }
-    if (intersects[0].object.name == draws[10].name) {
-      alert(11)
-    }
-    if (intersects[0].object.name == draws[11].name) {
-      alert(12)
-    }
-    if (intersects[0].object.name == draws[12].name) {
-      alert(13)
-    }
-
   }
 }
 

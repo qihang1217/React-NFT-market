@@ -101,9 +101,10 @@ def upload_mint():
 def confirm_minted():
     args = request.args.to_dict()
     product_id = args.get('productId')
+    tokenId = args.get('tokenId')
     token_url = args.get('tokenURI')
     # 修改其状态为已铸造
-    status = DBUtil.set_minted_product_by_id(product_id,token_url)
+    status = DBUtil.set_minted_product_by_id(product_id,tokenId,token_url)
     response = {
         'status': status,
     }
@@ -167,6 +168,16 @@ def api_museum():
     if request.method == 'GET':
         return render_template('index.html')
 
+
+@app.route(apiPrefix+'museum/data', methods=['GET'], strict_slashes=False)
+def get_museum_product_data():
+    res, status = DBUtil.get_museum_product_data()
+    # print(res)
+    response = {
+        'status': status,
+        'data': res,
+    }
+    return jsonify(response)
 
 ########## Token接口
 def generate_auth_token(data):

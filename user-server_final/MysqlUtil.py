@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import random
 import pymysql
 from run import db
 
@@ -46,8 +47,8 @@ class MixToJson:
 
     # 配合double_to_dict一起使用
     @staticmethod
-    def to_json(all_vendors):
-        v = [ven.dobule_to_dict() for ven in all_vendors]
+    def double_to_json(all_vendors):
+        v = [ven.double_to_dict() for ven in all_vendors]
         return v
 
 
@@ -88,6 +89,7 @@ class Products(db.Model, MixToJson):
     __tablename__ = "Products"
     # 创建字段： product_id， 主键和自增涨
     product_id = db.Column(db.Integer, primary_key=True)
+    token_id = db.Column(db.Integer, unique=True)
     product_name = db.Column(db.String(20))
     owner_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     price = db.Column(db.Integer)
@@ -362,10 +364,10 @@ def get_product_by_id(product_id):
         db.session.close()
 
 
-def set_minted_product_by_id(product_id, token_url):
+def set_minted_product_by_id(product_id,tokenId, token_url):
     try:
         Products.query.filter(Products.product_id == product_id).update(
-            {Products.mint_status: True, Products.token_url: token_url})
+            {Products.mint_status: True, Products.token_url: token_url,Products.tokenId:tokenId})
         db.session.commit()
         return 0
     except Exception as e:
@@ -502,5 +504,22 @@ def product_view(product_id):
     except Exception as e:
         print(repr(e))
         return -1
+    finally:
+        db.session.close()
+
+
+def get_museum_product_data():
+    try:
+        product = Products.double_to_json(Products.query.filter(Products.file_type.op('regexp')(r'^image\/\S+$')).all())
+        if len(product)>=13:
+            product_data=random.sample(product, 13)
+        else:
+            product_data = random.sample(product, len(product))
+        # print(product_data)
+        db.session.commit()
+        return product_data,0
+    except Exception as e:
+        print(repr(e))
+        return [{}],-1
     finally:
         db.session.close()

@@ -301,16 +301,16 @@ class App extends Component {
 							resolve(0)
 						})
 					})
-					return 0
+					return {status: 0, tokenId}
 				}
 			} catch (e) {
 				console.error(e);
 				message.error("铸造失败,请稍后重试")
 				this.setState({loading: false});
-				return -1
+				return {status: -1, tokenId: null}
 			}
 		}
-		return -1
+		return {status: -1, tokenId: null}
 	}
 	
 	
@@ -322,6 +322,7 @@ class App extends Component {
 		.send({from: this.state.accountAddress})
 		.on("confirmation", () => {
 			this.setState({loading: false});
+			console.log(storageUtils.getProducts())
 			window.location.reload();
 		});
 	};
@@ -499,6 +500,7 @@ class App extends Component {
 								<Route path="/ownedEverything/detail/:id" render={() => (
 									<ProductDetail
 										buyOwnedEverything={this.buyOwnedEverything}
+										toggleForSale={this.toggleForSale}
 									/>
 								)}/>
 							</Switch>

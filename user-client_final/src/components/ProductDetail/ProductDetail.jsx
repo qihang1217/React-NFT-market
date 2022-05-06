@@ -92,6 +92,8 @@ class ProductDetail extends Component {
 		startTime: +new Date(),
 	};
 	
+	listenProductId
+	
 	handleCommentSubmit = async () => {
 		if (!this.state.commentContent) {
 			return;
@@ -131,25 +133,28 @@ class ProductDetail extends Component {
 		//从store中获取products
 		let products = storageUtils.getProducts()
 		//获取具体的product
-		this.state.currentProduct = products[id - 1]
+		this.setState({currentProduct: products[id - 1]})
 		let currentProduct = products[id - 1]
 		if (currentProduct) {
-			this.state.price = window.web3.utils.fromWei(
-				parseInt(currentProduct.price._hex, 16).toString(),
-				"Ether"
-			)
-			this.state.productId = currentProduct.metaData.productId
-			this.state.workName = currentProduct.tokenName
-			this.state.description = currentProduct.metaData.description
-			this.state.categoryId = currentProduct.metaData.categoryId
-			this.state.file_url = currentProduct.metaData.metaData.file_url.file_tokenURl
-			this.state._traceAddresses = currentProduct._traceAddresses.split(",")
-			this.state._timestamp = currentProduct._timestamp.split(",")
-			this.state.forSale = currentProduct.forSale
-			const filename = this.state.currentProduct.metaData.fileUrl
+			this.setState({
+				price: window.web3.utils.fromWei(
+					parseInt(currentProduct.price._hex, 16).toString(),
+					"Ether"
+				)
+			})
+			this.setState({productId: currentProduct.metaData.productId})
+			this.setState({workName: currentProduct.tokenName})
+			this.setState({description: currentProduct.metaData.description})
+			this.setState({categoryId: currentProduct.metaData.categoryId})
+			this.setState({file_url: currentProduct.metaData.metaData.file_url.file_tokenURl})
+			this.setState({_traceAddresses: currentProduct._traceAddresses.split(",")})
+			this.setState({_timestamp: currentProduct._timestamp.split(",")})
+			this.setState({forSale: currentProduct.forSale})
+			
+			const filename = currentProduct.metaData.fileUrl
 			const ext = filename.substring(filename.lastIndexOf('.') + 1)
-			const src = this.state.file_url
-			const filetype = this.state.currentProduct.metaData.fileType
+			const src = currentProduct.metaData.metaData.file_url.file_tokenURl
+			const filetype = currentProduct.metaData.fileType
 			if (/^image\/\S+$/.test(filetype)) {
 				this.setState({
 					previewContent: <img src={src} alt={filename} className='file'/>
@@ -278,12 +283,31 @@ class ProductDetail extends Component {
 		this.props.buyOwnedEverything(tokenId, price)
 	}
 	
+	//进行上架或者下架操作
+	handleUnderOrUp = (tokenId) => {
+		this.props.toggleForSale(
+			tokenId,
+		)
+	}
+	
+	listenProduct = () => {
+		let products = storageUtils.getProducts()
+		//获取具体的product
+		const id = this.props.match.params.id
+		let currentProduct = products[id - 1]
+		if (currentProduct !== JSON.parse(sessionStorage.getItem('currentProduct'))) {
+			this.setState({currentProduct: currentProduct})
+		}
+	}
+	
 	async componentDidMount() {
 		await this.initChainProduct()
 		await this.initProduct()
 		await this.initComments()
 		//获取当前拥有者的信息
 		await this.reqUserData(parseInt(this.state.currentProduct.currentOwnerId._hex, 16))
+		sessionStorage.setItem('currentProduct', JSON.stringify(this.state.currentProduct))
+		this.listenProductId = setInterval(this.listenProduct, 1000)
 	}
 	
 	componentWillUnmount() {
@@ -292,10 +316,25 @@ class ProductDetail extends Component {
 		if ((endTime - this.state.startTime) / 1000 >= 10) {
 			this.increaseView()
 		}
+		clearInterval(this.listenProductId)
+	}
+	
+	handleProductAction = (currentOwnerId, currentProduct, tokenId, price) => {
+		const userData = storageUtils.getUser()
+		const userId = userData.user_id
+		if (currentOwnerId === userId) {
+			//	该作品是当前用户所有
+			this.handleUnderOrUp(tokenId)
+		} else {
+			//	不是其所有可以购买
+			if (currentProduct.forSale) {
+				//可出售
+				this.buyProduct(tokenId, price)
+			}
+		}
 	}
 	
 	
-	//todo:添加内部购买,自己的则为上下架
 	render() {
 		const {comments, submitting, commentContent, currentProduct, price} = this.state;
 		let tokenId, currentOwnerId
@@ -307,7 +346,11 @@ class ProductDetail extends Component {
 			const userId = userData.user_id
 			if (currentOwnerId === userId) {
 				//	该作品是当前用户所有
-				
+				if (currentProduct.forSale) {
+					product_action = '下架'
+				} else {
+					product_action = '上架'
+				}
 			} else {
 				//	不是其所有
 				if (currentProduct.forSale) {
@@ -376,16 +419,7 @@ class ProductDetail extends Component {
 										<div className='price-title'>{price} Ξ</div>
 										<div className='product-action'>
 											<Button type='primary' shape="round" onClick={() => {
-												const userData = storageUtils.getUser()
-												const userId = userData.user_id
-												if (currentOwnerId === userId) {
-													//	该作品是当前用户所有
-													
-												} else {
-													//	不是其所有可以购买
-													console.log(tokenId, price)
-													this.buyProduct(tokenId, price)
-												}
+												this.handleProductAction(currentOwnerId, currentProduct, tokenId, price)
 											}}>{product_action}</Button>
 										</div>
 									</div>
