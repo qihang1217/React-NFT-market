@@ -338,7 +338,7 @@ class ProductDetail extends Component {
 	render() {
 		const {comments, submitting, commentContent, currentProduct, price} = this.state;
 		let tokenId, currentOwnerId
-		let product_action
+		let product_action, product_action_disabled = false
 		if (currentProduct) {
 			tokenId = parseInt(currentProduct.tokenId._hex, 16)
 			currentOwnerId = parseInt(currentProduct.currentOwnerId._hex, 16)
@@ -357,6 +357,7 @@ class ProductDetail extends Component {
 					product_action = '购买'
 				} else {
 					product_action = '暂未出售'
+					product_action_disabled = true
 				}
 			}
 		}
@@ -418,9 +419,10 @@ class ProductDetail extends Component {
 									<div className='buy-line'>
 										<div className='price-title'>{price} Ξ</div>
 										<div className='product-action'>
-											<Button type='primary' shape="round" onClick={() => {
-												this.handleProductAction(currentOwnerId, currentProduct, tokenId, price)
-											}}>{product_action}</Button>
+											<Button type='primary' shape="round" disabled={product_action_disabled}
+											        onClick={() => {
+												        this.handleProductAction(currentOwnerId, currentProduct, tokenId, price)
+											        }}>{product_action}</Button>
 										</div>
 									</div>
 									<div className='price-features'>

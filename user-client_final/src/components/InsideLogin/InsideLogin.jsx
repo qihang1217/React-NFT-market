@@ -34,7 +34,7 @@ class InsideLogin extends Component {
                 storageUtils.saveToken(response.token)
             }
             //页面跳转到原界面
-            this.props.history.push(this.props.location.pathname)
+            window.location.reload()
         } else if (response.status === -1 && response.message === '用户不存在') {
             message.error('账号或密码错误,请稍后重试~');
         } else if (response.status === -1 && response.message === '验证失败') {
