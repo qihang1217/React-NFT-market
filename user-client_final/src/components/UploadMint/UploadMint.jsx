@@ -44,17 +44,26 @@ const props = {
 var formData = new FormData();
 
 
-class UploadMint extends React.Component{
-    state = {
-        previewVisible: false,
-        previewTitle: '',
-        previewContent: null,
-        data: null,
+class UploadMint extends React.Component {
+    constructor(props) {
+        super(props);
+        this.file_type = ''
+        this.state = {
+            previewVisible: false,
+            previewTitle: '',
+            previewContent: null,
+            data: null,
+        }
     }
-    file_type = ''
-
-    handleOk = () => this.setState({ previewVisible: false });
-
+    
+    
+    handleOk = () => {
+        this.setState({previewVisible: false});
+        //暂停播放
+        const player = document.getElementById('previewId')
+        player.pause()
+    }
+    
     handleCancel = () => {
         this.setState({previewVisible: false})
         //点击外部删除按钮,删除提交的文件
@@ -62,6 +71,9 @@ class UploadMint extends React.Component{
         if (delete_button) {
             delete_button.click();
         }
+        //暂停播放
+        const player = document.getElementById('previewId')
+        player.pause()
     }
 
     //提交整个表单,此时才上传文件
@@ -159,7 +171,7 @@ class UploadMint extends React.Component{
                     message.error(`${file.name} 视频文件大小不能超过${audio_limit}M`);
                     return [];
                 }else {
-                    previewContent = <video src={src} loop controls preload/>
+                    previewContent = <video src={src} id="previewId" loop controls preload/>
                     this.file_type = 'video'
                 }
             }else if (/^audio\/\S+$/.test(type)) {
@@ -169,7 +181,7 @@ class UploadMint extends React.Component{
                     return [];
                 } else {
                     previewContent = (
-                        <audio controls preload>
+                        <audio id="previewId" controls preload>
                             <source src={src}/>
                             <embed src={src}/>
                         </audio>

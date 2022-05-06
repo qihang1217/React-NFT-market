@@ -126,11 +126,11 @@ class MyAccount extends Component {
 												</div>
 												<div className="num-info">
 													<div className="item">
-														<span className="number">32</span>
+														<span className="number">0</span>
 														<span className="type">关注</span>
 													</div>
 													<div className="item">
-														<span className="number">47</span>
+														<span className="number">0</span>
 														<span className="type">粉丝</span>
 													</div>
 													<div className="item">
@@ -242,11 +242,11 @@ class MyAccount extends Component {
 												</div>
 												<div className="num-info">
 													<div className="item">
-														<span className="number">32</span>
+														<span className="number">0</span>
 														<span className="type">关注</span>
 													</div>
 													<div className="item">
-														<span className="number">47</span>
+														<span className="number">0</span>
 														<span className="type">粉丝</span>
 													</div>
 													<div className="item">
