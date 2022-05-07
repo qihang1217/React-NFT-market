@@ -36,9 +36,9 @@ import {
 	reqProductView,
 	reqUserById
 } from "../../api/API";
-import FileViewer from "react-file-viewer";
 import EnhancedComment from "./EnhancedComment";
 import {Link, withRouter} from "react-router-dom";
+import {setPreview} from "../../utils/SetPreview";
 
 const {Panel} = Collapse;
 
@@ -155,31 +155,8 @@ class ProductDetail extends Component {
 			const ext = filename.substring(filename.lastIndexOf('.') + 1)
 			const src = currentProduct.metaData.metaData.file_url.file_tokenURl
 			const filetype = currentProduct.metaData.fileType
-			if (/^image\/\S+$/.test(filetype)) {
-				this.setState({
-					previewContent: <img src={src} alt={filename} className='file'/>
-				})
-			} else if (/^video\/\S+$/.test(filetype)) {
-				this.setState({
-					previewContent: <video src={src} loop preload controls className='file'/>
-				})
-			} else if (/^audio\/\S+$/.test(filetype)) {
-				this.setState({
-					previewContent:
-						<audio controls preload className='file'>
-							<source src={src}/>
-							<embed src={src}/>
-						</audio>
-				})
-			} else {
-				this.setState({
-					previewContent:
-						<FileViewer
-							fileType={ext}
-							filePath={src}
-						/>
-				})
-			}
+			const previewContent = setPreview(currentProduct, filename, ext, filetype, src)
+			this.setState({previewContent: previewContent})
 			await this.getCategory(currentProduct.metaData.categoryId)
 		}
 	}

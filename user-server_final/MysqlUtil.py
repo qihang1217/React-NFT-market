@@ -292,13 +292,14 @@ def check_users(user_data):
         db.session.close()
 
 
-def save_upload_product(product_data, upload_file_url, file_type):
+def save_upload_product(product_data, upload_file_url):
     user_data = eval(product_data.get('user_data'))
     user_id = user_data.get('user_id')
     work_name = product_data.get('work_name')
     introduction = product_data.get('introduction')
     price = product_data.get('price')
     category_id = product_data.get('category_id')
+    file_type=product_data.get('file_type')
     if introduction == 'undefined':
         introduction = ''
     product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, file_type=file_type,
@@ -367,7 +368,7 @@ def get_product_by_id(product_id):
 def set_minted_product_by_id(product_id,tokenId, token_url):
     try:
         Products.query.filter(Products.product_id == product_id).update(
-            {Products.mint_status: True, Products.token_url: token_url,Products.tokenId:tokenId})
+            {Products.mint_status: True, Products.token_url: token_url,Products.token_id:tokenId})
         db.session.commit()
         return 0
     except Exception as e:

@@ -94,7 +94,7 @@ class UploadMint extends React.Component {
         formData.append('price', values.price)
         formData.append('introduction', values.introduction)
         formData.append('category_id', values.category_id)
-    
+        formData.append('file_type', this.file_type)
         // this.file_type
         const result = await uploadMint(formData)
         // console.log(result)

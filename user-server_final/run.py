@@ -56,7 +56,6 @@ def api_upload():
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)  # 文件夹不存在就创建
         f = request.files.get('file')  # 从表单的file字段获取文件
-        file_type = request.files.get('file').content_type  # 获取文件类型(例如image/jpeg)
         if f and allowed_file(f.filename):  # 判断是否是允许上传的文件类型
             file_name = f.filename
             ext = file_name.rsplit('.', 1)[1]  # 获取文件后缀
@@ -64,7 +63,7 @@ def api_upload():
             new_filename = str(unix_time) + str(randint(1000, 9999)) + '.' + ext  # 修改文件名
             f.save(os.path.join(file_dir, new_filename))  # 保存文件到upload目录
             product_data = request.form.to_dict()
-            DBUtil.save_upload_product(product_data, new_filename, file_type)
+            DBUtil.save_upload_product(product_data, new_filename)
             return jsonify({"message": "上传成功", "status": 0})
         else:
             return jsonify({"message": "上传失败", "status": -1, "detail_message": "文件类型不合格"})

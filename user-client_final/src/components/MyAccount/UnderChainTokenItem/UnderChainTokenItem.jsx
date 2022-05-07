@@ -3,7 +3,7 @@ import {Button, Card, Col, message} from "antd";
 import ApiUtil from "../../../utils/ApiUtil";
 import {CARD_COLS} from "../../../constants/constants";
 import React, {useEffect, useState} from "react";
-import FileViewer from 'react-file-viewer';
+import {setControlsPreview} from "../../../utils/SetPreview";
 
 const UnderChainTokenItem = ({item, mintMyFileNFT, reqProductData}) => {
 	const [examine_status_name, setExamine_status_name] = useState('')
@@ -13,28 +13,6 @@ const UnderChainTokenItem = ({item, mintMyFileNFT, reqProductData}) => {
 	const [examine_status_color, setExamine_status_color] = useState('#000')
 	
 	let previewContent
-	
-	const setControlsPreview = (item, filename, ext, filetype, src) => {
-		let previewContent = (
-			<FileViewer
-				fileType={ext}
-				filePath={src}
-			/>
-		)
-		if (/^image\/\S+$/.test(filetype)) {
-			previewContent = (<img src={src} alt={filename} className='file'/>)
-		} else if (/^video\/\S+$/.test(filetype)) {
-			previewContent = (<video src={src} loop preload controls className='file'/>)
-		} else if (/^audio\/\S+$/.test(filetype)) {
-			previewContent = (
-				<audio controls preload className='file'>
-					<source src={src}/>
-					<embed src={src}/>
-				</audio>
-			)
-		}
-		return previewContent
-	}
 	
 	const filename = item.file_url
 	const ext = filename.substring(filename.lastIndexOf('.') + 1);

@@ -1,5 +1,6 @@
 import React from "react";
 import FileViewer from 'react-file-viewer';
+import ModelViewer from "../components/ModelViewer/ModelViewer";
 
 export const setPreview = (item, filename, ext, filetype, src) => {
 	let previewContent = (
@@ -8,16 +9,50 @@ export const setPreview = (item, filename, ext, filetype, src) => {
 			filePath={src}
 		/>
 	)
-	if (/^image\/\S+$/.test(filetype)) {
+	if (filetype === 'image') {
 		previewContent = (<img src={src} alt={filename} className='file'/>)
-	} else if (/^video\/\S+$/.test(filetype)) {
+	} else if (filetype === 'video') {
 		previewContent = (<video src={src} loop preload className='file'/>)
-	} else if (/^audio\/\S+$/.test(filetype)) {
+	} else if (filetype === 'audio') {
 		previewContent = (
 			<audio preload className='file'>
 				<source src={src}/>
 				<embed src={src}/>
 			</audio>
+		)
+	} else if (filetype === 'model') {
+		previewContent = (
+			<ModelViewer
+				src={src}
+			/>
+		)
+	}
+	return previewContent
+}
+
+export const setControlsPreview = (item, filename, ext, filetype, src) => {
+	let previewContent = (
+		<FileViewer
+			fileType={ext}
+			filePath={src}
+		/>
+	)
+	if (filetype === 'image') {
+		previewContent = (<img src={src} alt={filename} className='file'/>)
+	} else if (filetype === 'video') {
+		previewContent = (<video src={src} loop preload controls className='file'/>)
+	} else if (filetype === 'audio') {
+		previewContent = (
+			<audio controls preload className='file'>
+				<source src={src}/>
+				<embed src={src}/>
+			</audio>
+		)
+	} else if (filetype === 'model') {
+		previewContent = (
+			<ModelViewer
+				src={src}
+			/>
 		)
 	}
 	return previewContent

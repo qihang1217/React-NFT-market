@@ -2,10 +2,9 @@ import React, {useEffect} from "react";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {AnimationMixer, Box3, Clock, Color, HemisphereLight, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import './ModelViewer.less'
 
-
-const Three_3D = ({src}) => {
-	//3dmodel.js
+const ModelViewer = ({src}) => {
 	// if ( WEBGL.isWebGLAvailable() === false ) {
 	// 	document.body.appendChild( WEBGL.getWebGLErrorMessage() );
 	// }
@@ -18,7 +17,7 @@ const Three_3D = ({src}) => {
 	const clock = new Clock();
 	let mixer = null;
 	
-	function init() {
+	function init(qualifiedName, value) {
 		if (!src) {
 			return false;
 		}
@@ -53,13 +52,12 @@ const Three_3D = ({src}) => {
 		
 		renderer = new WebGLRenderer({antialias: true});
 		renderer.setPixelRatio(window.devicePixelRatio);
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		// let model_container=document.getElementById(src)
+		// renderer.setSize(model_container.offsetWidth , model_container.offsetHeight);
 		renderer.gammaOutput = true;
 		container.appendChild(renderer.domElement);
 		// console.log(renderer.domElement)
-		window.addEventListener('resize', onWindowResize, false);
-		
-		
+		// window.addEventListener('resize', onWindowResize, false);
 		camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
 		camera.position.set(0, 0, 400);
 		
@@ -69,21 +67,20 @@ const Three_3D = ({src}) => {
 	}
 	
 	function render() {
-		requestAnimationFrame(this.render);
-		var delta = clock.getDelta();
+		requestAnimationFrame(render);
+		const delta = clock.getDelta();
 		if (mixer != null) {
 			mixer.update(delta);
 		}
-		;
-		this.renderer.render(this.scene, this.camera);
+		renderer.render(scene, camera);
 		mixer.update(clock.getDelta());
 	}
 	
-	function onWindowResize() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-	}
+	// function onWindowResize() {
+	// 	camera.aspect = window.innerWidth / window.innerHeight;
+	// 	camera.updateProjectionMatrix();
+	// 	renderer.setSize(window.innerWidth, window.innerHeight);
+	// }
 	
 	function animate() {
 		requestAnimationFrame(animate);
@@ -123,8 +120,8 @@ const Three_3D = ({src}) => {
 	}, [])
 	
 	return (
-		<div id={src}/>
+		<div id={src} style={{width: '100%', height: '100%'}} className='model-viewer'/>
 	);
 }
 
-export default Three_3D
+export default ModelViewer
