@@ -4,7 +4,6 @@ import {Button, Card, Empty, Row} from 'antd';
 import ConnectToMetamask from "../../ConnectMetamask/ConnectToMetamask";
 import ContractNotDeployed from "../../ContractNotDeployed/ContractNotDeployed";
 import storageUtils from "../../../utils/storageUtils";
-import ChainTokenItem from "../ChainTokenItem/ChainTokenItem";
 import UnderChainTokenItem from "../UnderChainTokenItem/UnderChainTokenItem";
 
 const empty = require('../image/empty.svg')
@@ -26,47 +25,15 @@ const MyMintedTokens = ({
 	const [products, setProducts] = useState([]);
 	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);
-	const [chainDataCard, setChainDataCard] = useState([]);
 	
+	const userId = storageUtils.getUser().user_id;
 	const OwnedEverythings = storageUtils.getProducts()
 	let MyOwnedEverythings = []
 	if (OwnedEverythings) {
 		MyOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
-			OwnedEverything.currentOwner === accountAddress && OwnedEverything.mintedBy === accountAddress
+			(parseInt(OwnedEverything.currentOwnerId._hex, 16) === userId) && OwnedEverything.mintedBy === accountAddress
 		);
 	}
-	
-	const loadNftData = (OwnedEverythings) => {
-		if (OwnedEverythings) {
-			if (OwnedEverythings.length !== 0) {
-				setProducts(list)
-				setProductTotal(total)
-				//筛选出个人所拥有的数藏万物
-				setChainDataCard(MyOwnedEverythings.map((item) => {
-					// console.log(item)
-					return (
-						<ChainTokenItem
-							item={item}
-							accountAddress={accountAddress}
-							toggleForSale={toggleForSale}
-							changeTokenPrice={changeTokenPrice}
-							products={products}
-							insideLoading={insideLoading}
-						/>
-					)
-				}))
-				//加载完毕
-				setInsideLoading(false)
-			}
-		}
-	}
-	
-	
-	//加载个人在链上拥有的nft数据
-	useEffect(() => {
-		loadNftData(OwnedEverythings)
-	}, [OwnedEverythings]);
-	
 	
 	//获取个人拥有的nft数据后进行渲染
 	useEffect(() => {
@@ -96,7 +63,7 @@ const MyMintedTokens = ({
 		) : (
 			<div className='my-token'>
 				<div className='content-mainTitle'>
-					<span>您的所创造的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
+					<span>您将要创造的<span id='nft_name' style={{fontSize: 32}}>数藏万物</span></span>
 				</div>
 				<Card className='under-chain' title="待上链的NFT" extra={<span>总数:{productTotal}</span>}>
 					{
@@ -116,25 +83,6 @@ const MyMintedTokens = ({
 						)
 					}
 				</Card>
-				<Card title="已上链的NFT" extra={<span>总数:{MyOwnedEverythings.length}</span>}>
-					{!MyOwnedEverythings.length ? (
-							<Empty
-								image={empty}
-								imageStyle={{
-									height: 120,
-								}}
-								description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
-								}
-							>
-								<Button type="primary" href="/mint">立即创建</Button>
-							</Empty>) :
-						(
-							<Row gutter={[24, 16]}>
-								{chainDataCard}
-							</Row>
-						)}
-				</Card>
-			
 			</div>)
 	);
 };

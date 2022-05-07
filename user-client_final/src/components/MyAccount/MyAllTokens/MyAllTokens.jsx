@@ -22,11 +22,12 @@ const MyAllTokens = ({
 	const [chainDataCard, setChainDataCard] = useState([]);
 	const [products, setProducts] = useState(list);
 	
+	const userId = storageUtils.getUser().user_id;
 	const OwnedEverythings = storageUtils.getProducts()
 	let MyOwnedEverythings = []
 	if (OwnedEverythings) {
 		MyOwnedEverythings = OwnedEverythings.filter((OwnedEverything) =>
-			OwnedEverything.currentOwner === accountAddress
+			parseInt(OwnedEverything.currentOwnerId._hex, 16) === userId
 		);
 	}
 	
