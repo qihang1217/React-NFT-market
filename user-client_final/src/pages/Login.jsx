@@ -11,6 +11,7 @@ import storageUtils from "../utils/storageUtils";
 class Login extends Component {
     constructor(props) {
         super(props);
+        message.error('未登录,请先登录~', 1);
         this.state = {};
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -39,11 +40,8 @@ class Login extends Component {
             message.error('登陆错误,请稍后重试~');
         }
     }
-
-    componentWillMount() {
-        message.error('未登录,请先登录~', 1);
-    }
-
+    
+    
     componentWillUnmount() {
         // 清除定时器
         clearInterval(this.intervalId)

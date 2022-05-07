@@ -26,7 +26,7 @@ import {
 import './PorductDetail.less'
 import moment from 'moment';
 import storageUtils from "../../utils/storageUtils";
-import loading from "../../components/Loading/Loading";
+import Loading from "../../components/Loading/Loading";
 import {
 	reqAddComment,
 	reqCategory,
@@ -520,7 +520,7 @@ class ProductDetail extends Component {
 							}
 						/>
 					</div>
-				</div>) : (<loading/>)
+				</div>) : (<Loading/>)
 		)
 	}
 }

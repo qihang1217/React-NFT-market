@@ -9,7 +9,7 @@ const FrontendAuth = (routes, authed, authPath = '/login', extraProps = {}, swit
                 <Route
                     key={route.key || i}
                     path={route.path}
-                    exact={route.exact}
+                    exact={!!route.exact}
                     strict={route.strict}
                     render={props => {
                         if (!route.requiresAuth || authed || route.path === authPath) {

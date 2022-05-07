@@ -255,7 +255,7 @@ class UploadMint extends React.Component {
     renderCategoryOption() {
         const categorys = this.state.categorys || [{}]
         return categorys.map(item =>
-            <Option value={item.category_id}>{item.category_name}</Option>
+            <Option value={item.category_id} key={item.category_id}>{item.category_name}</Option>
         )
     }
 
@@ -313,7 +313,7 @@ class UploadMint extends React.Component {
                             },
                         ]}
                     >
-                        <Input maxlength="20" placeholder="数藏万物名称"/>
+                        <Input maxLength="20" placeholder="数藏万物名称"/>
                     </Form.Item>
                     <Form.Item
                         name="category_id"
@@ -353,7 +353,7 @@ class UploadMint extends React.Component {
                         <Input type="number" placeholder="请输入价格"/>
                     </Form.Item>
                     <Form.Item name='introduction' label="作品介绍">
-                        <Input.TextArea maxlength="100" placeholder="请输入您的作品描述"/>
+                        <Input.TextArea maxLength="100" placeholder="请输入您的作品描述"/>
                     </Form.Item>
                     <Form.Item wrapperCol={{...layout.wrapperCol, offset: 6}}>
                         <Button type="primary" htmlType="submit">

@@ -40,10 +40,10 @@ export const setControlsPreview = (item, filename, ext, filetype, src) => {
 	if (filetype === 'image') {
 		previewContent = (<img src={src} alt={filename} className='file'/>)
 	} else if (filetype === 'video') {
-		previewContent = (<video src={src} loop preload controls className='file'/>)
+		previewContent = (<video src={src} loop preload='true' controls className='file'/>)
 	} else if (filetype === 'audio') {
 		previewContent = (
-			<audio controls preload className='file'>
+			<audio controls preload='true' className='file'>
 				<source src={src}/>
 				<embed src={src}/>
 			</audio>

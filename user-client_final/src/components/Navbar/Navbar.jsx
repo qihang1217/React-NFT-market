@@ -101,7 +101,7 @@ class Navbar extends Component {
                     <Menu theme="light" mode="horizontal" defaultSelectedKeys={[selectKey]}>
                         {/*代码重构封装*/}
                         {this.renderTabBarItems(tabItems)}
-                        <SubMenu key="SubMenu" style={{"align-items": "center"}}
+                        <SubMenu key="SubMenu" style={{"alignItems": "center"}}
                                  title={
                                      <Avatar shape="square" icon={<UserOutlined/>}/>
                                  }

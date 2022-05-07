@@ -13,6 +13,9 @@ import storageUtils from "../../utils/storageUtils";
 class InsideLogin extends Component {
     constructor(props) {
         super(props);
+        if (!!!storageUtils.getToken()) {
+            message.error('未登录,请先登录~', 1);
+        }
         this.state = {
             height: `${document.documentElement.clientHeight - 64}px`
         };
@@ -52,11 +55,6 @@ class InsideLogin extends Component {
         })
     }
 
-    componentWillMount() {
-        if (!!!storageUtils.getToken()) {
-            message.error('未登录,请先登录~', 1);
-        }
-    }
 
     componentDidMount() {
         //清除外部的边界框
@@ -86,7 +84,7 @@ class InsideLogin extends Component {
                         <div className="workinghny-form-grid">
                             <div className="main-hotair">
                                 <div className="content-wthree">
-                                    <h4 style={{'text-align': 'center'}}>登录</h4>
+                                    <h4 style={{'textAlign': 'center'}}>登录</h4>
                                     <p>到您的账户</p>
 
                                     <Form

@@ -58,9 +58,8 @@ const MarketPlace = ({
 							let previewContent = setPreview(item, filename, ext, filetype, src)
 							
 							return (
-								<Col span={8}>
+								<Col span={8} key={tokenId}>
 									<div
-										key={tokenId}
 										className="nft-container"
 									>
 										<div>
