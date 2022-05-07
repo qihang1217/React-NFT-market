@@ -415,8 +415,8 @@ async function initUrls() {
       return 'http://localhost:3000/ownedEverything/detail/' + item.token_id
     })
   }
-  console.log(urls)
-  console.log(detailsUrls)
+  // console.log(urls)
+  // console.log(detailsUrls)
 }
 
 function initDraws(child) {
@@ -576,7 +576,7 @@ function onmousedown(event) {
   var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());// 创建光线投射，计算出鼠标移过了什么物体
   var intersects = raycaster.intersectObjects(draws);
   if (intersects.length > 0) {
-    console.log(intersects[0].object.name, draws)
+    // console.log(intersects[0].object.name, draws)
     for (i = 0; i < draws.length; i++) {
       if (intersects[0].object.name === draws[i].name) {
         window.open(detailsUrls[i])

@@ -9,7 +9,7 @@ const ModelViewer = ({src}) => {
 	// 	document.body.appendChild( WEBGL.getWebGLErrorMessage() );
 	// }
 	
-	console.log(src)
+	// console.log(src)
 	let container, controls;
 	let camera, scene, renderer, light, bbox;
 	let rotating = true;
@@ -42,7 +42,7 @@ const ModelViewer = ({src}) => {
 			// setContent(gltf.scene)
 			scene.add(gltf.scene);
 			mixer = new AnimationMixer(gltf.scene);
-			console.log(gltf.animations.length);
+			// console.log(gltf.animations.length);
 			mixer.clipAction(gltf.animations[0]).play();
 			console.dir(mixer.clipAction(gltf.animations[0]))
 			render();

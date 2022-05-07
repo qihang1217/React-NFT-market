@@ -40,7 +40,7 @@ class MyAccount extends Component {
 			// 取出数据
 			const {total, list} = result.data
 			// 更新状态
-			console.log(this.state)
+			// console.log(this.state)
 			this.setState({myProductsTotal: total, myProductsList: list})
 		}
 	}

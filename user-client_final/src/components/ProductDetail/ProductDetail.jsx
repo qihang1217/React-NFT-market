@@ -240,7 +240,7 @@ class ProductDetail extends Component {
 	
 	likesProduct = async () => {
 		let result;
-		console.log(this.state.productId)
+		// console.log(this.state.productId)
 		if (this.state.productLikeAction === null) {
 			this.setState({productLike: this.state.productLike + 1, productLikeAction: 'liked'})
 			result = await reqProductLike(this.state.productId, 'add')

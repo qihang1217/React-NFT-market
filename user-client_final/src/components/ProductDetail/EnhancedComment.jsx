@@ -19,7 +19,7 @@ const EnhancedComment = ({comment}) => {
 			setAction(null);
 			result = await reqCommentLike(comment.comment_id, 'reduce')
 		}
-		console.log(result)
+		// console.log(result)
 	};
 	
 	const actions = [

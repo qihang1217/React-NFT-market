@@ -322,7 +322,7 @@ class App extends Component {
 		.send({from: this.state.accountAddress})
 		.on("confirmation", () => {
 			this.setState({loading: false});
-			console.log(storageUtils.getProducts())
+			// console.log(storageUtils.getProducts())
 			window.location.reload();
 		});
 	};
@@ -342,7 +342,7 @@ class App extends Component {
 	
 	//购买(price是wei为单位)
 	buyOwnedEverything = (tokenId, price) => {
-		console.log(tokenId, price, this.state)
+		// console.log(tokenId, price, this.state)
 		const user_data=storageUtils.getUser()
 		this.setState({loading: true});
 		this.state.OwnedEverythingsContract.methods

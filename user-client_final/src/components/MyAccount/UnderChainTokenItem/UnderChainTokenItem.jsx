@@ -36,7 +36,7 @@ const UnderChainTokenItem = ({item, mintMyFileNFT, reqProductData}) => {
 				const tokenURI = result.tokenURI
 				//铸造nft
 				const {status, tokenId} = await mintMyFileNFT(item, tokenURI);
-				console.log(tokenId)
+				// console.log(tokenId)
 				if (status === 0) {
 					//	表示铸造成功
 					
