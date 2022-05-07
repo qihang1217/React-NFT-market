@@ -30,7 +30,7 @@ apiPrefix = '/api/v1/'
 UPLOAD_FOLDER = 'upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'mp3', 'docx', 'pdf'}  # 允许上传的文件后缀
+ALLOWED_EXTENSIONS = {'bmp', 'png', 'gif', 'jpg', 'jpeg', 'mp4', 'mp3', 'docx', 'pdf','glb'}  # 允许上传的文件后缀
 
 ########## 颜色铸造API
 

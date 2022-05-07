@@ -6,6 +6,7 @@ import FileViewer from "react-file-viewer";
 import {ALLOWED_EXTENSIONS} from "../../constants/constants";
 import "./UploadMint.less"
 import storageUtils from "../../utils/storageUtils";
+import ModelViewer from "../ModelViewer/ModelViewer";
 
 const {Option} = Select;
 const {Dragger} = Upload;
@@ -56,14 +57,17 @@ class UploadMint extends React.Component {
         }
     }
     
-    
+    //处理确认,使用预览框的文件
     handleOk = () => {
         this.setState({previewVisible: false});
         //暂停播放
         const player = document.getElementById('previewId')
-        player.pause()
+        if (player) {
+            player.pause()
+        }
     }
     
+    //处理取消,不使用使用预览框的文件
     handleCancel = () => {
         this.setState({previewVisible: false})
         //点击外部删除按钮,删除提交的文件
@@ -73,7 +77,9 @@ class UploadMint extends React.Component {
         }
         //暂停播放
         const player = document.getElementById('previewId')
-        player.pause()
+        if (player) {
+            player.pause()
+        }
     }
 
     //提交整个表单,此时才上传文件
@@ -202,6 +208,13 @@ class UploadMint extends React.Component {
                     )
                     this.file_type = 'text'
                 }
+            } else if (ext === 'glb') {
+                previewContent = (
+                    <ModelViewer
+                        src={src}
+                    />
+                )
+                this.file_type = 'model'
             } else {
                 previewContent = (
                     <FileViewer
@@ -260,6 +273,9 @@ class UploadMint extends React.Component {
                         <span>上传你的作品，让你的<span id='nft_name' style={{fontSize: 32}}>作品</span>独一无二！</span>
                     </div>
                 </div>
+                {/*<ModelViewer*/}
+                {/*    src={'http://localhost:5000/upload_folder/1.glb'}*/}
+                {/*/>*/}
                 <Form {...layout} onFinish={this.onSubmit}>
                     <Form.Item
                         name="upload-file"
@@ -283,7 +299,7 @@ class UploadMint extends React.Component {
                                 支持单次或批量上传,仅支持图片、音频、视频或文本
                             </p>
                             <p className="ant-upload-hint">
-                                (具体为bmp, png, gif, jpg, jpeg, mp4, mp3,docx,pdf格式)
+                                (具体为bmp,png,gif,jpg,jpeg,mp4,mp3,docx,pdf,glb格式)
                             </p>
                         </Dragger>
                     </Form.Item>
