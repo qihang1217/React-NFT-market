@@ -157,6 +157,10 @@ class MyAccount extends Component {
 									>
 										<div className="tab4 tab">
 											<MyWalletDetails
+												connectToMetamask={this.props.connectToMetamask}
+												metamaskConnected={this.props.metamaskConnected}
+												contractDetected={this.props.contractDetected}
+												loading={this.props.loading}
 												accountAddress={this.props.accountAddress}
 												accountBalance={this.props.accountBalance}
 											/>
