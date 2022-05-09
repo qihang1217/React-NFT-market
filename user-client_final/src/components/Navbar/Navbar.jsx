@@ -16,7 +16,7 @@ const tabItems = [
     // },
     {
         key: '/upload_mint',
-        title: '作品铸造',
+        title: '作品上传',
     },
     // {
     //     key: '/color_mint',
@@ -115,21 +115,21 @@ class Navbar extends Component {
                                     主页
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<HeartTwoTone/>} style={{color: '#1890ff'}}>
+                            <Menu.Item key="2" icon={<FormatPainterOutlined/>} style={{color: '#1890ff'}}>
+                                <Link to={{
+                                    pathname: `/space/${userId}/mintedTokens`,
+                                    state: {tabKey: 'mintedTokens'}
+                                }}>
+                                    我的铸造
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="3" icon={<HeartTwoTone/>} style={{color: '#1890ff'}}>
                                 <Link to={{
                                     pathname: `/space/${userId}/allTokens`,
                                     state: {tabKey: 'allTokens'}
                                 }}
                                 >
                                     我的藏品
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item key="3" icon={<FormatPainterOutlined/>} style={{color: '#1890ff'}}>
-                                <Link to={{
-                                    pathname: `/space/${userId}/mintedTokens`,
-                                    state: {tabKey: 'mintedTokens'}
-                                }}>
-                                    我的铸造
                                 </Link>
                             </Menu.Item>
                             {/*<Menu.Item key="4" icon={<SettingTwoTone/>}>*/}

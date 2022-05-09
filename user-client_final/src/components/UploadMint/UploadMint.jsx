@@ -299,7 +299,7 @@ class UploadMint extends React.Component {
                                 支持单次或批量上传,仅支持图片、音频、视频或文本
                             </p>
                             <p className="ant-upload-hint">
-                                (具体为bmp,png,gif,jpg,jpeg,mp4,mp3,docx,pdf,glb格式)
+                                {`具体为${ALLOWED_EXTENSIONS}格式`}
                             </p>
                         </Dragger>
                     </Form.Item>

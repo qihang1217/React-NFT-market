@@ -83,7 +83,7 @@ const MyAllTokens = ({
 								description={<span>您还没有专属于您的NFT哦,快去创建一个吧~</span>
 								}
 							>
-								<Button type="primary" href="/mint">立即创建</Button>
+								<Button type="primary" href="/upload_mint">立即创建</Button>
 							</Empty>) :
 						(
 							<Row gutter={[24, 16]}>

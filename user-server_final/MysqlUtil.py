@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import random
 import pymysql
+from sqlalchemy import and_
 from run import db
 
 pymysql.install_as_MySQLdb()
@@ -299,7 +300,7 @@ def save_upload_product(product_data, upload_file_url):
     introduction = product_data.get('introduction')
     price = product_data.get('price')
     category_id = product_data.get('category_id')
-    file_type=product_data.get('file_type')
+    file_type = product_data.get('file_type')
     if introduction == 'undefined':
         introduction = ''
     product = Products(product_name=work_name, owner_id=user_id, file_url=upload_file_url, file_type=file_type,
@@ -365,10 +366,10 @@ def get_product_by_id(product_id):
         db.session.close()
 
 
-def set_minted_product_by_id(product_id,tokenId, token_url):
+def set_minted_product_by_id(product_id, tokenId, token_url):
     try:
         Products.query.filter(Products.product_id == product_id).update(
-            {Products.mint_status: True, Products.token_url: token_url,Products.token_id:tokenId})
+            {Products.mint_status: True, Products.token_url: token_url, Products.token_id: tokenId})
         db.session.commit()
         return 0
     except Exception as e:
@@ -511,16 +512,17 @@ def product_view(product_id):
 
 def get_museum_product_data():
     try:
-        product = Products.double_to_json(Products.query.filter(Products.file_type.op('regexp')(r'^image\/\S+$')).all())
-        if len(product)>=13:
-            product_data=random.sample(product, 13)
+        product = Products.double_to_json(Products.query.filter(and_(Products.file_type == 'image',
+                                                                     Products.token_id.isnot(None))).all())
+        if len(product) >= 13:
+            product_data = random.sample(product, 13)
         else:
             product_data = random.sample(product, len(product))
         # print(product_data)
         db.session.commit()
-        return product_data,0
+        return product_data, 0
     except Exception as e:
         print(repr(e))
-        return [{}],-1
+        return [{}], -1
     finally:
         db.session.close()
