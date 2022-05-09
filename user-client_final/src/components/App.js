@@ -458,6 +458,9 @@ class App extends Component {
 									path="/marketplace"
 									render={() => (
 										<MarketPlace
+											connectToMetamask={this.connectToMetamask}
+											metamaskConnected={this.state.metamaskConnected}
+											contractDetected={this.state.contractDetected}
 											accountAddress={this.state.accountAddress}
 											totalTokensMinted={this.state.totalTokensMinted}
 											changeTokenPrice={this.changeTokenPrice}

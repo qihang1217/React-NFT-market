@@ -14,14 +14,11 @@ const MyMintedTokens = ({
 	                        contractDetected,
 	                        loading,
 	                        accountAddress,
-	                        toggleForSale,
-	                        changeTokenPrice,
 	                        mintMyFileNFT,
 	                        reqProductData,
 	                        list,
 	                        total,
                         }) => {
-	const [insideLoading, setInsideLoading] = useState(true);
 	const [products, setProducts] = useState([]);
 	const [productTotal, setProductTotal] = useState(0);
 	const [productCard, setProductCard] = useState([]);

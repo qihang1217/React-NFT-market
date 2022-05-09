@@ -8,6 +8,8 @@ import empty from "../MyAccount/image/empty.svg";
 import './MarketPlace.less'
 import {Col, Empty, Row} from "antd";
 import {setPreview} from "../../utils/SetPreview";
+import ConnectToMetamask from "../ConnectMetamask/ConnectToMetamask";
+import ContractNotDeployed from "../ContractNotDeployed/ContractNotDeployed";
 
 const MarketPlace = ({
 	                     accountAddress,
@@ -15,6 +17,9 @@ const MarketPlace = ({
 	                     changeTokenPrice,
 	                     toggleForSale,
 	                     buyOwnedEverything,
+	                     metamaskConnected,
+	                     connectToMetamask,
+	                     contractDetected,
                      }) => {
 	const [insideLoading, setInsideLoading] = useState(false);
 	
@@ -42,64 +47,70 @@ const MarketPlace = ({
 	
 	
 	return (
-		storageUtils.getFinish() ? (ElseOwnedEverythings.length !== 0 ? (
-				<div>
-					<div className='content-mainTitle'>
-						<span>链上总共有<span id='nft_name' style={{fontSize: 32}}>{totalTokensMinted}个数藏万物</span></span>
-					</div>
-					<Row justify="space-around" gutter={[16, 32]} className="nfts-container">
-						{ElseOwnedEverythings.map((item) => {
-							const tokenId = parseInt(item.tokenId._hex, 16)
-							
-							const filename = item.metaData.fileUrl
-							const ext = filename.substring(filename.lastIndexOf('.') + 1);
-							const filetype = item.metaData.fileType
-							const src = item.metaData.tokenUrl
-							let previewContent = setPreview(item, filename, ext, filetype, src)
-							
-							return (
-								<Col span={8} key={tokenId}>
-									<div
-										className="nft-container"
-									>
-										<div>
-											{!insideLoading ? (
-												(item.metaData.metaData.type === 'color') ?
-													(<ColorNFTImage
-														colors={item.metaData.metaData.colors}
-													/>) : (<FileNFTContent
-														tokenId={tokenId}
-														previewContent={previewContent}
-													/>)
-											) : (
-												<Loading/>
-											)}
-											<NFTBrief
-												item={item}
-												accountAddress={accountAddress}
-												changeTokenPrice={changeTokenPrice}
-												toggleForSale={toggleForSale}
-												buyOwnedEverything={buyOwnedEverything}
-											/>
-										</div>
-									</div>
-								</Col>
-							);
-						})}
-					</Row>
-				</div>) : (
-				<Empty
-					image={empty}
-					imageStyle={{
-						height: 120,
-					}}
-					description={<span>还没有其他人所拥有的NFT~</span>
-					}
-				>
-				</Empty>
-			)
+		!metamaskConnected ? (
+			<ConnectToMetamask connectToMetamask={connectToMetamask}/>
+		) : !contractDetected ? (
+			<ContractNotDeployed/>
 		) : (
-			<Loading/>
+			storageUtils.getFinish() ? (ElseOwnedEverythings.length !== 0 ? (
+					<div>
+						<div className='content-mainTitle'>
+							<span>链上总共有<span id='nft_name' style={{fontSize: 32}}>{totalTokensMinted}个数藏万物</span></span>
+						</div>
+						<Row justify="space-around" gutter={[16, 32]} className="nfts-container">
+							{ElseOwnedEverythings.map((item) => {
+								const tokenId = parseInt(item.tokenId._hex, 16)
+								
+								const filename = item.metaData.fileUrl
+								const ext = filename.substring(filename.lastIndexOf('.') + 1);
+								const filetype = item.metaData.fileType
+								const src = item.metaData.tokenUrl
+								let previewContent = setPreview(item, filename, ext, filetype, src)
+								
+								return (
+									<Col span={8} key={tokenId}>
+										<div
+											className="nft-container"
+										>
+											<div>
+												{!insideLoading ? (
+													(item.metaData.metaData.type === 'color') ?
+														(<ColorNFTImage
+															colors={item.metaData.metaData.colors}
+														/>) : (<FileNFTContent
+															tokenId={tokenId}
+															previewContent={previewContent}
+														/>)
+												) : (
+													<Loading/>
+												)}
+												<NFTBrief
+													item={item}
+													accountAddress={accountAddress}
+													changeTokenPrice={changeTokenPrice}
+													toggleForSale={toggleForSale}
+													buyOwnedEverything={buyOwnedEverything}
+												/>
+											</div>
+										</div>
+									</Col>
+								);
+							})}
+						</Row>
+					</div>) : (
+					<Empty
+						image={empty}
+						imageStyle={{
+							height: 120,
+						}}
+						description={<span>还没有其他人所拥有的NFT~</span>
+						}
+					>
+					</Empty>
+				)
+			) : (
+				<Loading/>
+			)
 		)
 	);
 };
