@@ -343,15 +343,20 @@ class App extends Component {
 	//购买(price是wei为单位)
 	buyOwnedEverything = (tokenId, price) => {
 		// console.log(tokenId, price, this.state)
-		const user_data=storageUtils.getUser()
-		this.setState({loading: true});
-		this.state.OwnedEverythingsContract.methods
-		.buyToken(tokenId, user_data.user_id)
-		.send({from: this.state.accountAddress, value: window.web3.utils.toWei(price.toString(), 'ether')})
-		.on("confirmation", () => {
-			this.setState({loading: false});
-			window.location.reload();
-		});
+		const user_data = storageUtils.getUser()
+		if (user_data.user_id) {
+			this.setState({loading: true});
+			this.state.OwnedEverythingsContract.methods
+			.buyToken(tokenId, user_data.user_id)
+			.send({from: this.state.accountAddress, value: window.web3.utils.toWei(price.toString(), 'ether')})
+			.on("confirmation", () => {
+				this.setState({loading: false});
+				window.location.reload();
+			});
+		} else {
+			message.error('请登录后在进行购买')
+			window.location.href = '/login'
+		}
 	};
 	
 	//删除底部
